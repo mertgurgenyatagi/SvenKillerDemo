@@ -1,0 +1,21 @@
+Hey there.
+
+This file is meant to be an extensive document detailing the developer's artistic vision for a demo of a video game called "Sven Killer". While the developer is unparalleled in his artistic grandiose, his programming skills are unfortunately subpar. For this reason, the use of AI agents will be heavy during production. This document itself is meant for an AI agent, most likely Claude Sonnet 4.5, to construct a production plan for the entire project. This document will describe artistic vision, overall feel, engine of choice and a screenplay describing the first and only "mission" of this demo. The assets will be requested by the planner AI and will be provided by the user. We ask the AI to not be stingy when requesting assets, for the developer is adequately equipped to find them.
+
+The engine of choice is Godot, for the simple reason that it is very code-heavy and does not require the usage of bulky editors. 
+
+The game is a third person walker. The only mechanics are walking and interacting. It is imperative that walking feels realistic and natural, and so do the camera movements. The main inspiration is the God of War game of 2018, with a third person camera over the shoulder and our main player character, Sven, taking up a fair bit of the left side of the screen.
+
+The game will feature a main menu, voiceovers, subtitles, mission sentences on the left and hard transitions between various scenes. The game will also feature an unorthodox mechanic which at times prompts the user with a black screen and a text accompanied by a minimal sound effect, completely interrupting play in a subtle jumpscare. This was inspired by the prompts in Gaspar Noe's film "I Stand Alone", but we do not expect the AI to know about this obscure detail. The game will not have a day-night cycle, the weather and sky attributes will be detailed scene by scene. The HUD will only consist of the player, the environment and NPCs, the mission statements on the left, sometimes a white dot indicating the destination of interest and a hovering indicator when near interactable elements. 
+
+The player animation will be very smooth and all necessary elements will be provided for this upon request. There will be idle, walking, idle to walk, walk to idle, open door, close door, sitting, sit to idle and idle to sit animations (any I have forgotten can be requested).
+
+The graphics can be stylized instead of total realism, however, it is imperative that the game looks pretty. I suspect various shaders will be utilized, however my knowledge of computer graphics is basically non-existent, so I defer to the planning AI.
+
+It is important for the game to be as optimized as possible. We hope the planner AI will find the best ways to do so.
+
+The game will be available to be paused.
+
+Settings will include various audio settings, subtitle turning on or off and subtitle language selection. It should be noted that the voiceovers and prompt texts (not mission statements, the Noe style prompts) will be Swedish and unable to be changed. The settings will not include any sort of graphics settings. There will be no save function. Mouse sensitivity will be able to be set. The camera will have a slight inertia and acceleration. I was thinking of implementing motion blur, however I defer to the planner AI. 
+
+We hope this set of initial information is sufficient for now and the reading AI can proceed to the "sven_killer_screenplay.txt" file. For any missing information, a set of questionnaires will be allowed from the AI before planning can start.

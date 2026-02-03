@@ -1,0 +1,111 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #8
+=====================================
+Final polish, edge cases, and implementation specifics.
+Write "N/A" or "defer to AI" if unsure.
+
+
+1. VHS VIDEO LOOP BEHAVIOR
+   If the voiceover segment is longer than the video clip, should the VHS video loop, freeze on last frame, or cut to black early?
+
+   Answer: The VHS videos play once. For example: 
+   voiceover starts: 0.00 s
+   beach video appears along with voiceover continuing: 5.60 s
+   beach video ends with voiceover continuing: 7.40 s
+   birds video appears along with voiceover continuing: 8.95 s
+   birds video ends with voiceover continuing: 10.40 s
+   voiceover ends: 15.20 s
+
+2. VHS STATIC/NOISE OVERLAY
+   Should the VHS videos have a subtle static/grain overlay for authenticity, or play clean?
+
+   Answer: I will provide them in the finished aesthetics and edits.
+
+
+3. PEDESTRIAN PHONE MODELS
+   For pedestrians on phones — will you provide a phone prop model, or should it be implied (hand near ear)?
+
+   Answer: Will be provided.
+
+
+4. PEDESTRIAN PAIR SPACING
+   When pedestrians walk in pairs, how close should they be? (Side by side touching, ~0.5m apart, etc.)
+
+   Answer: Totally defer to you.
+
+
+5. PEDESTRIAN CONVERSATION SYNC
+   For pairs speaking, should audio play from both characters or just one at a time?
+
+   Answer: One at a time. The other should be mute throughout.
+
+
+6. CHAIR SIT POSITIONS
+   You mentioned couch + kitchen chairs. Should all chairs be sittable, or only specific marked ones?
+
+   Answer: There won't be a lot of chairs anyway, but yeah, only marked ones.
+
+
+7. LIGHT SWITCH VISUAL
+   Should light switches be visible, interactable models on walls, or just triggered by proximity/looking at a spot?
+
+   Answer: First.
+
+
+8. TWO-FLOOR HOUSE — STAIRS
+   You mentioned two floors. Is there a staircase the player can walk, or is Sven confined to one floor at start?
+
+   Answer: Staircase.
+
+
+9. UPSTAIRS CONTENT
+   If there's an accessible upstairs, what's there? (Bedroom, bathroom, empty?) Any interactables?
+
+   Answer: The model will be provided, probably after I fill out this questionnaire.
+
+
+10. STREET LOADING TRIGGER
+    You suggested loading the street after reaching ground floor. Should this be automatic when descending stairs, or when approaching the front door?
+
+    Answer: When descending starts.
+
+
+11. INDOOR CAMERA COLLISION
+    Should the camera clip through walls/furniture, or push forward when obstructed?
+
+    Answer: Shouldn't clip through.
+
+
+12. OUTDOOR CAMERA DISTANCE
+    Should the camera distance/height change when outdoors (wider shot), or stay consistent with indoors?
+
+    Answer: Stay consistent.
+
+
+13. RAIN PARTICLE COLLISION
+    Should rain particles visibly collide with Sven/NPCs (bounce off umbrella, shoulders) or pass through?
+
+    Answer: Pass through.
+
+
+14. UMBRELLA FOR NPCS?
+    Should any pedestrians carry umbrellas given the rain, or everyone getting wet?
+
+    Answer: No they're just raw dogging it.
+
+
+15. VOICEOVER AUDIO FORMAT
+    What format will voiceover files be provided in? (.wav, .ogg, .mp3?)
+
+    Answer: Whatever you require.
+
+
+16. TIMESTAMP FILE FORMAT
+    For video trigger timestamps, what format will you provide? (Seconds, timecode HH:MM:SS:FF, separate file?)
+
+    Answer: Whatever you require.
+
+
+=====================================
+END OF QUESTIONNAIRE #8
+These details will help finalize the implementation plan.
+

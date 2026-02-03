@@ -1,0 +1,129 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #4
+=====================================
+Edge cases, polish details, and a few remaining gaps.
+Write "N/A" or "defer to AI" if unsure.
+
+
+1. VOICEMAIL DISTANCE FALLOFF
+   You said audio drops with distance. Should it cut off entirely past a threshold (e.g., 10m), or always be faintly audible?
+
+   Answer: Totally defer to you.
+
+
+2. VOICEMAIL REPLAY
+   If the player returns to the phone after the voicemail finishes, can they replay it?
+
+   Answer: Yes, but only after it finishes.
+
+
+3. NEWSPAPER RE-INTERACTION
+   After dismissing the newspaper, can the player view it again?
+
+   Answer: Yes.
+
+
+4. TV INTERACTABLE?
+   You mentioned a "massive television" — is it purely decorative, or should it be interactable (turn on/off, show static, etc.)?
+
+   Answer: Not interactable.
+
+
+5. OTHER HOUSE INTERACTABLES
+   Beyond phone, newspaper, and front door — any other objects the player should interact with? (Lights, fridge, windows, etc.)
+
+   Answer: Lights is a great idea! 
+
+
+6. SVEN'S REFLECTION
+   If there are mirrors or reflective surfaces in the house, should Sven's reflection be visible?
+
+   Answer: I would love that.
+
+
+7. SITTING MECHANIC
+   You listed sitting animations. Where can Sven sit? (Couch only? Multiple spots?) Is sitting required or optional?
+
+   Answer: On the couch and some chairs in the kitchen.
+
+
+8. INDOOR AMBIENT SOUND
+   Any specific room tone for the house? (Clock ticking, fridge hum, distant traffic, silence?)
+
+   Answer: Very faint street sounds.
+
+
+9. OUTDOOR AMBIENT LAYERS
+   Beyond rain, what ambient sounds outdoors? (Distant sirens, muffled conversations, wind, footsteps of NPCs?)
+
+   Answer: You decide and tell me about them when I ask you for assets in the future.
+
+
+10. CAR AUDIO DOPPLER
+    Should car engine sounds have a Doppler effect as they pass?
+
+    Answer: Unnecessary.
+
+
+11. PLAYER COLLISION WITH CARS
+    What happens if Sven steps into the road and a car arrives? (Death/game over, car stops, car passes through, invisible barrier?)
+
+    Answer: The screen blacks out and all sounds cut. After a few seconds, Sven respawns at the pavement at the corresponding lateral coordinate and middle of pavement.
+
+
+12. BUS STATION ARRIVAL
+    The screenplay ends mid-walk. When the player reaches the bus station, what happens? (Cutscene, fade to black, "Demo End" text?)
+
+    Answer: Just have it stop and not do anything. The girl stands there and the street continues as usual. Whatever, I don't care, we'll finish the screenplay after that anyway.
+
+
+13. CREDITS SCREEN
+    Should the credits be scrolling, static pages, or skippable?
+
+    Answer: Static pages.
+
+
+14. MAIN MENU BACKGROUND
+    What should the main menu look like? (Static image, 3D scene, simple black with title?)
+
+    Answer: Defer to your graphical competence.
+
+
+15. TITLE / LOGO
+    Will you provide a logo/title graphic, or should we use plain text?
+
+    Answer: Plain text with specific font to be provided.
+
+
+16. LOADING SCREENS
+    If loading is needed between scenes, any preference? (Black screen, progress bar, text tips?)
+
+    Answer: Black screen with no progress bar.
+
+
+17. ANTI-ALIASING PREFERENCE
+    Any preference for AA method? (FXAA for performance, TAA for quality, MSAA, or defer to me?)
+
+    Answer: Totally defer to you.
+
+
+18. INPUT REBINDING
+    Should keyboard controls be rebindable in settings, or fixed?
+
+    Answer: Not rebindable.
+
+
+19. SPRINT / RUN
+    Should Sven be able to run/sprint, or is walking the only speed?
+
+    Answer: Only walking.
+
+
+20. DEBUG / CHEAT MODE
+    For development, should we include a hidden debug mode (free camera, skip to scenes, etc.)?
+
+    Answer: Totally defer to you.
+
+
+=====================================
+END OF QUESTIONNAIRE #4
+Getting close to planning — one or two more rounds should cover everything.

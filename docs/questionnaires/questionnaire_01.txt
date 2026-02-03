@@ -1,0 +1,128 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #1
+=====================================
+Please answer each question. Write "N/A" or "defer to AI" if unsure.
+
+
+1. TARGET PLATFORM
+   Will the game be released for Windows only, or also Mac/Linux?
+
+   Answer: Both platforms.
+
+
+2. TARGET RESOLUTION & ASPECT RATIO
+   What is the target resolution (e.g., 1920×1080, 4K)? Should ultrawide (21:9) be supported?
+
+   Answer: 1920x1080.
+
+
+3. FRAME RATE TARGET
+   Are you targeting 30 FPS, 60 FPS, or unlocked?
+
+   Answer: I defer to you.
+
+
+4. SVEN'S APPEARANCE
+   Beyond "dark blue hoodie and gray pants," can you describe Sven's face, hair, build, and age?
+
+   Answer: The model will be provided as is.
+
+
+5. SVEN'S MODEL SOURCE
+   Will you provide a rigged 3D model of Sven, or should we plan for a placeholder/asset-store character?
+
+   Answer: Yes, it will be provided.
+
+
+6. HOUSE INTERIOR STYLE
+   Any preferences for the house aesthetic (Scandinavian minimalist, cluttered bachelor pad, modern apartment, etc.)?
+
+   Answer: The indoor model will be provided. In fact, all models will be provided.
+
+
+7. HOUSE LAYOUT
+   How many rooms should the player be able to explore? (e.g., living room only, living room + bedroom + kitchen, etc.)
+
+   Answer: See above.
+
+
+8. OUTDOOR ENVIRONMENT SCALE
+   For the street segment, roughly how large should the explorable area be? One city block, a short linear path, or larger?
+
+   Answer: For scene 1, I imagine it will be about half a kilometer squared.
+
+
+9. NPC DENSITY ON STREET
+   How many pedestrians should be visible at once on the street? Should they be interactable or just ambient?
+
+   Answer: They are not interactable however collidable. I imagine about two people per pavement.
+
+
+10. WEATHER EFFECTS
+    The screenplay mentions "slight rain." Should rain intensity be adjustable per scene, or is light rain the constant?
+
+    Answer: Light rain constant.
+
+
+11. LIGHTING / TIME OF DAY
+    "Late evening, about eight thirty" — should there be visible sunset hues, or already dark with streetlights?
+
+    Answer: Already dark blue with streetlights.
+
+
+12. VOICEOVER LANGUAGE
+    You mentioned Swedish voiceovers. Will you supply the audio files, or should placeholder TTS be used initially?
+
+    Answer: They will be supplied.
+
+
+13. SUBTITLE LANGUAGES
+    Which subtitle languages should be available at launch? (e.g., Swedish, English, others)
+
+    Answer: Swedish, English, Spanish, Chinese, French, German and Turkish.
+
+
+14. SOUND DESIGN
+    Will you provide ambient sounds (rain, traffic, room tone) and UI sounds, or should we source royalty-free assets?
+
+    Answer: Will be provided.
+
+
+15. MUSIC / SCORE
+    Will there be background music? If yes, will you supply tracks or should we plan for silence / minimal drones?
+
+    Answer: No music.
+
+
+16. NOÉ-STYLE PROMPT FREQUENCY
+    Beyond the two prompts in the screenplay, roughly how often should these black-screen interruptions occur?
+
+    Answer: Only those two.
+
+
+17. INTERACTION FEEDBACK
+    When the player interacts (e.g., phone, newspaper), should there be a UI pop-up, a close-up camera, or just audio/text?
+
+    Answer: Just audio/text. Except for the door, which will be an animation.
+
+
+18. CONTROLLER SUPPORT
+    Should the game support gamepads (Xbox, PlayStation) in addition to keyboard + mouse?
+
+    Answer: Sure, unless difficult to do so. Don't wanna complicate it too much.
+
+
+19. ACCESSIBILITY FEATURES
+    Any accessibility considerations (colorblind modes, text size options, button remapping)?
+
+    Answer: None.
+
+
+20. DEMO LENGTH EXPECTATION
+    Roughly how long should the full demo feel? (e.g., 5 minutes, 10 minutes, 15+ minutes of gameplay)
+
+    Answer: The screenplay currently details about half the game. It should feel approximately 10 minutes, with the entire demo 20 lasting 20 minutes.
+
+
+=====================================
+END OF QUESTIONNAIRE #1
+Please save and return this file when complete.

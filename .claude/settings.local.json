@@ -2,7 +2,19 @@
   "permissions": {
     "allow": [
       "Bash(tree:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" log --oneline -20)",
+      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" status)",
+      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" log --graph --oneline --all)",
+      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" diff development..main-menu-tweaks --stat)",
+      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" diff project.godot)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(Get-Process -Name *godot* -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object Name, Id, CPU, Memory)",
+      "Bash(netstat:*)",
+      "Bash(dir:*)",
+      "Bash(ls:*)"
     ]
   }
 }

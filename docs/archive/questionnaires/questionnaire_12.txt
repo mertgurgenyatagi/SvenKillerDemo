@@ -1,0 +1,199 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #12
+=====================================
+The SECOND HALF of the demo — what happens after Sven reaches the girl.
+Write "N/A" or "defer to AI" if unsure.
+
+STORY CONTEXT (from screenplay):
+- Sven reaches the bus station and sees the girl
+- Something significant happens (the "killer" element?)
+- Demo ends
+
+You mentioned reaching the girl is only HALF the demo. This questionnaire explores what comes next.
+
+
+1. MEETING THE GIRL — WHAT HAPPENS?
+   When Sven approaches the girl at the bus station, what triggers next? 
+   a) Cutscene plays automatically
+   b) Player presses E to interact/speak
+   c) Girl notices Sven and initiates dialogue
+   d) Something else entirely: ___
+
+   Answer:
+
+
+2. DIALOGUE SYSTEM
+   Is there spoken dialogue between Sven and the girl?
+   a) Yes — voice acted lines (you'll provide audio)
+   b) Yes — text-only dialogue boxes
+   c) No dialogue — purely visual/cinematic
+   d) Minimal (one or two lines)
+
+   Answer:
+
+
+3. THE "KILLER" ELEMENT
+   The game is called "Sven Killer." What happens at/after the bus station that justifies this title?
+   a) Sven does something violent
+   b) Something violent happens TO Sven
+   c) The implication of future violence
+   d) Metaphorical "killing" (emotional, psychological)
+   e) Prefer not to spoil — I'll provide the cutscene/assets
+
+   Answer:
+
+
+4. SECOND HALF GAMEPLAY
+   After the bus station encounter, is there more GAMEPLAY, or is it purely cinematic to the end?
+   a) More walking/exploration in a new area
+   b) Same area, different objective
+   c) Purely cutscene/cinematic until credits
+   d) Quick time events or other interaction
+   e) Other: ___
+
+   Answer:
+
+
+5. SECOND HALF DURATION
+   Approximately how long is the second half of the demo?
+   a) Very short (30 seconds - 1 minute)
+   b) Medium (2-3 minutes)
+   c) Equal to first half (~5 minutes)
+   d) Longer than first half
+
+   Answer:
+
+
+6. NEW ENVIRONMENTS
+   Does the second half require any NEW environments beyond:
+   - Sven's house (built)
+   - Street/bus station (built)
+   
+   If yes, what? (Another location, interior, etc.)
+
+   Answer:
+
+
+7. NEW CHARACTERS
+   Besides the girl, are there any other characters introduced in the second half?
+   a) No, just Sven and the girl
+   b) Yes — police/authorities
+   c) Yes — other pedestrians become relevant
+   d) Yes — other: ___
+
+   Answer:
+
+
+8. TIME PASSAGE
+   Does time pass during/after the bus station scene?
+   a) Everything happens in real-time continuous
+   b) Time skip (flashback or flash-forward)
+   c) Scene transition to later moment
+
+   Answer:
+
+
+9. THE SECOND NOÉ-STYLE PROMPT
+   From Q6: There are TWO black-screen text interruptions in the demo.
+   The first happens in the house. When does the SECOND one occur?
+   a) During the walk to the bus station
+   b) When Sven sees the girl
+   c) After interacting with the girl
+   d) Near the very end
+   e) Other: ___
+
+   Answer:
+
+
+10. SECOND PROMPT TEXT
+    What does the second Noé-style black screen say? (Swedish text)
+
+    Answer:
+
+
+11. DEMO ENDING
+    How does the demo conclude?
+    a) Fade to black → credits
+    b) Freeze frame → credits
+    c) Specific final image/scene → credits
+    d) Cliffhanger cut → "To be continued"
+    e) Other: ___
+
+    Answer:
+
+
+12. CREDITS
+    From Q4: Credits appear after demo ends. What should they include?
+    a) Just "SVEN KILLER" title
+    b) Full credits (your name, roles, etc.)
+    c) "Demo" indicator + coming soon message
+    d) You'll provide the credits content
+
+    Answer:
+
+
+13. POST-CREDITS
+    Is there anything after the credits? (Teaser, hidden scene, return to menu?)
+
+    Answer:
+
+
+14. REPLAY / MENU
+    After credits finish:
+    a) Return to main menu
+    b) Quit to desktop automatically
+    c) "Press any key to exit" prompt
+    d) Loop back to start
+
+    Answer:
+
+
+15. SAVE SYSTEM
+    Does the demo need any save functionality, or is it meant to be played in one sitting?
+
+    Answer:
+
+
+16. MULTIPLE ENDINGS?
+    Is there only one way the demo can end, or are there variations based on player choices?
+    a) Single fixed ending
+    b) Minor variations (dialogue choices affect tone)
+    c) Multiple distinct endings
+    d) "Secret" ending for specific actions
+
+    Answer:
+
+
+17. THE GIRL'S IDENTITY
+    Without spoilers: Is the girl's identity/relationship to Sven revealed in the demo, or left mysterious?
+    a) Revealed (we learn who she is)
+    b) Mysterious (player doesn't know)
+    c) Hinted at but not confirmed
+
+    Answer:
+
+
+18. AUDIO FOR SECOND HALF
+    Will you provide specific music/sound design for the second half, or should I use placeholder ambient audio?
+
+    Answer:
+
+
+19. CUTSCENE FORMAT
+    If there are cutscenes in the second half:
+    a) Pre-rendered video (you provide .mp4/.webm)
+    b) Real-time in-engine cinematics
+    c) Still images / slideshow style
+    d) Mix of above
+
+    Answer:
+
+
+20. ASSETS NEEDED
+    Based on your answers above, what additional assets will YOU provide for the second half? (Models, animations, audio, video?)
+
+    Answer:
+
+
+=====================================
+END OF QUESTIONNAIRE #12
+Second half of demo — post-bus-station content.

@@ -1,0 +1,148 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #3
+=====================================
+Final clarifications before planning begins.
+Write "N/A" or "defer to AI" if unsure.
+
+
+1. GODOT VERSION
+   Which Godot version should we target? (Godot 4.x is recommended for modern 3D features)
+
+   Answer: 4.x
+
+
+2. PROJECT STRUCTURE PREFERENCE
+   Any preference for folder organization (e.g., by feature: /player, /ui, /world; or by type: /scenes, /scripts, /assets)?
+
+   Answer: Totally defer to you.
+
+
+3. SVEN'S WALKING SPEED
+   Approximate walking speed in real-world terms? (e.g., casual stroll ~1.2 m/s, brisk walk ~1.6 m/s)
+
+   Answer: Casual stroll.
+
+
+4. CAMERA DISTANCE & HEIGHT
+   How far behind and above Sven should the camera sit? (e.g., 2m back, 0.5m above shoulder)
+
+   Answer: Referenced to the center of Kratos’ neck as the origin:
+
+Camera position (approx.):
+
+Backward (−Z): 0.65 m
+
+Right (+X): 0.20 m
+
+Up (+Y): 0.12 m
+
+So in vector form:
+( +0.20 m, +0.12 m, −0.65 m )
+
+Orientation (for completeness):
+
+Yaw: ~15° to the right
+
+Pitch: ~−10° (slightly downward)
+
+Roll: ~0°
+
+
+5. CAMERA MOUSE SENSITIVITY RANGE
+   What should the default sensitivity be, and what range should the slider cover? (e.g., default 1.0, range 0.25–2.0)
+
+   Answer: Totally defer to you.
+
+
+6. CAMERA VERTICAL LIMITS
+   Should the player be able to look straight up/down, or should vertical rotation be clamped (e.g., ±60°)?
+
+   Answer: Not clamped totally.
+
+
+7. DOOR CUTSCENE DETAILS
+   For the uninterruptible door cutscene: should the camera reposition behind Sven after, or stay where it ended?
+
+   Answer: Reposition as usual.
+
+
+8. NEWSPAPER CLOSE-UP BEHAVIOR
+   When the newspaper fills the frame, how does the player dismiss it? (Press E again, press Escape, or after a timer?)
+
+   Answer: Press E again.
+
+
+9. VOICEMAIL PLAYBACK
+   Can the player interrupt the voicemail by walking away, or must it play to completion?
+
+   Answer: It must play to completion, however, the player is able to walk around. The audio drops in volume according to distance to phone.
+
+
+10. SUBTITLE TIMING
+    Should subtitles match audio timing exactly, or appear slightly ahead for readability?
+
+    Answer: Slightly ahead.
+
+
+11. MISSION PROMPT DURATION
+    How long should mission text stay on screen before fading? (e.g., 5 seconds, until objective changes, persistent)
+
+    Answer: Persistent.
+
+
+12. MISSION PROMPT SOUND
+    You mentioned a "simple sound effect" for mission prompts. Will you provide it, or should we source one?
+
+    Answer: Will be provided.
+
+
+13. WHITE DESTINATION DOT
+    Should the dot pulse, glow, or remain static? Should it disappear when the player is close?
+
+    Answer: Remain static. Disappears when close.
+
+
+14. INTERACTION INDICATOR ("E")
+    Style for the "E" prompt — floating above the object, next to crosshair, or at screen edge pointing to object?
+
+    Answer: Floating above the object.
+
+
+15. RAIN VISUAL STYLE
+    Particle-based raindrops, screen-space rain overlay, or both? Should rain splash on ground/surfaces?
+
+    Answer: Totally defer to you.
+
+
+16. RAIN AUDIO
+    Constant ambient rain loop, or dynamic volume based on whether the player is indoors/outdoors?
+
+    Answer: Fades in after walking out the door, after that, consistent.
+
+
+17. STREETLIGHT BEHAVIOR
+    Should streetlights cast real-time shadows, or baked/static lighting for performance?
+
+    Answer: Totally defer to you. Obviously real time shadows are preferred, however, performance above all.
+
+
+18. NPC SPAWN SYSTEM
+    Should pedestrians spawn at designated points and despawn when off-screen, or persist in the world?
+
+    Answer: Totally defer to you. Performance is paramount.
+
+
+19. CAR SPAWN LANES
+    Single lane each direction, or multiple lanes? Should cars ever stop (traffic, crossing pedestrians)?
+
+    Answer: Totally defer to you. You can deliberate after the map model is provided.
+
+
+20. BUILD & EXPORT EXPECTATIONS
+    Should the final demo be a single executable with embedded assets, or a folder with separate .pck data?
+
+    Answer: Single executable.
+
+
+=====================================
+END OF QUESTIONNAIRE #3
+After this, I will compile a full production plan.

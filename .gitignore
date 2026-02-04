@@ -1,24 +1,40 @@
-# Godot
+# Godot 4.x
 .godot/
 *.import
+*.uid
 
-# Blender backups
+# Blender
 *.blend1
+*.blend2
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # IDE
 .vscode/
+.idea/
 *.swp
 *.swo
+*~
 
 # Export builds
 export/*.exe
 export/*.pck
 export/*.zip
+export/*.dmg
+export/*.app
 
 # Temporary files
 *.tmp
+*.temp
 *.bak
+*.log
+
+# Python (if any scripts)
+__pycache__/
+*.pyc
+
+# Large binary caches
+*.cache

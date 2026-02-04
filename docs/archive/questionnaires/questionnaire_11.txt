@@ -1,0 +1,171 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #11
+=====================================
+Outdoor environment details — based on "Urban Sprawl 2" city model setup.
+Write "N/A" or "defer to AI" if unsure.
+
+CURRENT SETUP (for reference):
+- City model: "Urban Sprawl 2" (American downtown style, 167m × 151m)
+- Walking corridor: 72m path (~60 seconds at 1.2 m/s)
+- Start point: GAME_StartPoint at (-20, -50, 0)
+- End point: GAME_BusStation at (-20, 22, 0)
+- Bus shelter and girl figure generated and placed
+- 7 pedestrian spawn points along corridor
+- 2 car spawn points (north/south of corridor)
+- 4 boundary markers defining playable area
+
+
+1. CITY MODEL STYLE
+   The "Urban Sprawl 2" model has an American downtown aesthetic (tall buildings, fire escapes, commercial storefronts). Is this acceptable, or do you prefer we find/create something more European/Scandinavian residential?
+
+   Answer: Acceptable.
+
+
+2. CORRIDOR DIRECTION CONFIRMED
+   Currently, Sven walks NORTH along the Y-axis (from Y=-50 to Y=+22). The bus station is straight ahead after exiting. Does this match your vision of "bus station is to the left"? (We can reorient.)
+
+   Answer: I guess? I trust you.
+
+
+3. WALK DURATION
+   The 72m corridor gives ~60 seconds of walking at 1.2 m/s. Is this the right length, or should it be shorter/longer?
+
+   Answer: Looks right.
+
+
+4. WHICH SIDE OF STREET
+   Does Sven walk on:
+   a) The sidewalk closest to buildings (left side as he walks)
+   b) The opposite sidewalk
+   c) Can cross the street freely within bounds
+
+   Answer: a. He can cross the street but it's just exploration.
+
+
+5. STREET CROSSING ALLOWED?
+   Can Sven cross to the other side of the street, or is he confined to one sidewalk?
+
+   Answer: He can do what he likes.
+
+6. BUILDING INTERIORS
+   The city model has detailed building facades. Are any enterable, or is everything except Sven's house locked/inaccessible?
+
+   Answer: Non-enterable.
+
+
+7. PEDESTRIAN DENSITY — VISUAL TARGET
+   How many NPCs should be visible at any moment? 
+   a) 2-3 (lonely, isolated feeling)
+   b) 5-7 (moderate city life)
+   c) 10+ (busy street)
+
+   Answer: 5-7 sounds good.
+
+
+8. PEDESTRIAN SPAWN BEHAVIOR
+   Currently 7 spawn points placed along the corridor. Pedestrians will:
+   a) Spawn at these points, walk a path, then despawn at corridor edges
+   b) Loop endlessly (walk back and forth)
+   c) Other: ___
+
+   Answer: A. They should never spawn and despawn in the player's view though. Game design 101.
+
+
+9. PEDESTRIAN MODELS
+   Will you provide pedestrian models, or should I generate placeholder figures? If placeholder, how many unique types? (3, 5, 10?)
+
+   Answer: Pedestrians and cars will all be provided.
+
+
+10. PEDESTRIAN COLLISION
+    From Q2: Pedestrians are collidable objects that Sven can brush against. Do they:
+    a) Stop and wait if Sven blocks their path
+    b) Walk around Sven
+    c) Walk through Sven after brief collision
+
+    Answer: A.
+
+
+11. CAR TRAFFIC FREQUENCY
+    Currently 2 car spawn points (north and south). From Q2: cars pass every 6-7 seconds. Confirm:
+    a) One car every 6-7 seconds (alternating directions)
+    b) Longer gaps (every 15-20 seconds)
+    c) Other: ___
+
+    Answer: Defer to you.
+
+
+12. CAR MODELS
+    Will you provide car models, or should I generate/source placeholders? How many types? (1 generic, 3 variety, 5+?)
+
+    Answer: Will be provided.
+
+
+13. BUS SHELTER — CURRENT SETUP
+    Generated a simple glass/metal bus shelter (3m × 1.3m × 2.1m). Is this acceptable, or do you have a specific design in mind?
+
+    Answer: Acceptable.
+
+
+14. THE GIRL — CURRENT PLACEHOLDER
+    Generated a young woman figure (1.65m tall) standing near the shelter. Will you replace this with your own model?
+
+    Answer: Most likely will be replaced.
+
+
+15. THE GIRL — FACING DIRECTION
+    Currently she faces AWAY from where Sven approaches (mysterious). Should she:
+    a) Face away (Sven sees her back as he approaches)
+    b) Face toward Sven (sees him coming)
+    c) Face the street (profile view)
+
+    Answer: We'll cross that street when we get to it.
+
+16. THE GIRL — BEHAVIOR ON ARRIVAL
+    What is she doing when Sven arrives at the bus station?
+    a) Standing completely still
+    b) Subtle idle animation (shifting weight, looking around)
+    c) Specific action (checking phone, smoking, etc.)
+
+    Answer: Idle animation will be provided.
+
+
+17. END OF DEMO TRIGGER
+    What happens when Sven reaches the girl / bus station?
+    a) Automatic cutscene/fade to black
+    b) Player must press E to interact
+    c) Just standing near her ends the demo
+    d) Other: ___
+
+    Answer: This is half of the demo. Nothing happens.
+
+18. DESTINATION DOT VISIBILITY
+    The white dot marking the bus station — visible through buildings, or only with line of sight?
+
+    Answer: Visible through buildings.
+
+
+19. BOUNDARY BEHAVIOR — PAST BUS STATION
+    If Sven walks past the bus station (north), what happens?
+    a) Invisible wall + "You're late" text
+    b) Soft boundary (slows down, turns around)
+    c) No boundary (can explore further)
+
+    Distance past bus station before trigger: ___ meters
+
+    Answer: DOesn't matter. We'll cross that street when we get to it.
+
+
+20. BOUNDARY BEHAVIOR — WRONG DIRECTION
+    If Sven walks backward toward his house (south), what happens?
+    a) Same "You're late" response
+    b) Different text: ___
+    c) Can return to house (door locked)
+    d) No boundary
+
+    Answer: C.
+
+
+=====================================
+END OF QUESTIONNAIRE #11
+Outdoor environment based on current Blender setup.
+

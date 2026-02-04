@@ -1,0 +1,129 @@
+SVEN KILLER DEMO — QUESTIONNAIRE #7
+=====================================
+Deeper dives based on your Q6 answers + remaining unknowns.
+Write "N/A" or "defer to AI" if unsure.
+
+
+1. VHS VIDEO POSITIONING
+   The 1:1 videos appear on a black background. Should they be centered, or positioned elsewhere (e.g., slightly off-center for unease)?
+
+   Answer: Centered.
+
+
+2. VHS VIDEO SIZE
+   How large should the video appear on screen? (Full height, 50% of screen height, smaller like a window?)
+
+   Answer: 80% of height.
+
+
+3. VHS VIDEO BORDER/FRAME
+   Any visual treatment around the video? (White border, VHS static edges, clean cut, vignette?)
+
+   Answer: No.
+
+
+4. VOICEOVER TEXT TRIGGER
+   You said videos appear when Sven mentions "beach" and "birds." Should I parse the VO audio timing, or will you provide exact timestamps?
+
+   Answer: I will provide exact timestamps.
+
+
+5. PROMPT TEXT SUBTITLES
+   You said prompt texts ("WE WILL MEET AT THE BUS STATION", "CALM DOWN...") get subtitles. Since these are already text, do you mean translations appear below the Swedish text?
+
+   Answer: The prompt texts are swedish, bold and huge in the center. Subtitles exist as subtitles.
+
+
+6. PROMPT TEXT LANGUAGE
+   Are the Noé-style prompts displayed in Swedish with subtitle translations, or in the player's selected language?
+
+   Answer: Always Swedish.
+
+
+7. PEDESTRIAN SPEECH — CONTENT
+   Pedestrians speak. Will you provide audio clips of ambient Swedish chatter, or should this be generic murmuring?
+
+   Answer: Will be provided.
+
+
+8. PEDESTRIAN SPEECH — FREQUENCY
+   How often should pedestrians speak? (Constantly murmuring, occasional phrases when near Sven, rare outbursts?)
+
+   Answer: I think the best way is that I will provide about 50 audio files, each lasting about 30 seconds. If any pedestrian comes within a certain radius of the player (far enough to be at the quiet end) one of those audio files will start to eminate from the pedestrian at random. OH. ONE IMPORTANT THING. I FORGOT. THE PEDESTRIANS SHOULD ONLY SPEAK IF THEY ARE ON THE PHONE OR WALKING IN PAIRS. They are not coocoo in the head, they shouldn't be talking to themselves.
+
+
+9. PEDESTRIAN FOOTSTEPS
+   Will you provide pedestrian footstep sounds, or reuse Sven's outdoor footsteps?
+
+   Answer: Reuse.
+
+
+10. CONTINUOUS INDOOR/OUTDOOR
+    You'd love the transition to be continuous (no loading). This is feasible if both environments are loaded together. The tradeoff is higher memory usage. Acceptable?
+
+    Answer: The house will have two floors. Perhaps the street can load after the player walks down to the bottom floor.
+
+
+11. DOOR ANIMATION — CONTINUOUS
+    If the transition is continuous, should the door physically open (Sven walks through) or should the camera pan away during the cutscene and cut back outside?
+
+    Answer: The door physically opens and Sven goes through it in an uninterruptable cutscene.
+
+
+12. LOCKED DOOR FEEDBACK
+    When Sven tries to re-enter the house, what happens? (Door doesn't open, text appears like "No going back.", nothing?)
+
+    Answer: Sounds great!
+
+
+13. OUTDOOR AREA BOUNDARIES
+    Beyond the invisible "You're late" boundary toward the bus station, what about other directions? (Same text, different text, physical barriers like fences?)
+
+    Answer: Totally defer to you.
+
+
+14. MISSION PROMPT — HOUSE
+    "Calm down. Leave the house when you're ready." — does this appear immediately, or after the player has explored for a bit?
+
+    Answer: After the player has explored a little bit.
+
+
+15. MISSION PROMPT — REPLACES OR STACKS?
+    When a new mission prompt appears ("Walk to the bus station."), does it replace the previous one, or do they stack?
+
+    Answer: Yes. It replaces it.
+
+
+16. LIGHT SWITCH — MULTIPLE ROOMS
+    If lights default to "only living room on," does turning off the living room light plunge the player into near-darkness? Is that intentional?
+
+    Answer: Yes. Although the brightness should be approximately level between lights on or off.
+
+
+17. KITCHEN VISIBILITY
+    If only the living room light is on, how visible is the kitchen? (Ambient light from windows, pitch black, faint glow?)
+
+    Answer: Totally defer to you.
+
+
+18. WINDOW LIGHT
+    Should windows show the dark blue evening sky, or be covered (curtains/blinds)?
+
+    Answer: Bottom floor windows show the street.
+
+
+19. SVEN'S STARTING POSITION
+    Where exactly does Sven start in the living room? (Standing, sitting on couch, near the door?)
+
+    Answer: Sitting on couch.
+
+
+20. OPENING SEQUENCE — PLAYER CONTROL
+    After the opening videos/VO/prompt, does gameplay begin with the player already in control, or does the camera pan/fade in first?
+
+    Answer: Already in control.
+
+
+=====================================
+END OF QUESTIONNAIRE #7
+More to come if needed.

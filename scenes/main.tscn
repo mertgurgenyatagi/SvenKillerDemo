@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://f1i11lhe2uki"]
+
+[ext_resource type="Script" uid="uid://dccuy0oyxmene" path="res://scenes/main.gd" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://1w3huj87club" path="res://assets/ui/branding/gurgenstudios.png" id="2_sugp2"]
+
+[node name="Main" type="Node" unique_id=415795559]
+script = ExtResource("1_0wfyh")
+
+[node name="CurrentScene" type="Node" parent="." unique_id=535837763]
+
+[node name="SplashScreen" type="CanvasLayer" parent="." unique_id=644215622]
+
+[node name="Background" type="ColorRect" parent="SplashScreen" unique_id=706030727]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Logo" type="TextureRect" parent="SplashScreen" unique_id=1108761175]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -500.0
+offset_right = 500.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_sugp2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=491223523]
+layer = 100
+
+[node name="Fade" type="ColorRect" parent="TransitionLayer" unique_id=974474692]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

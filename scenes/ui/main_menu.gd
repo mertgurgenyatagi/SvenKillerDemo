@@ -254,12 +254,12 @@ func _on_button_hover(button: Button) -> void:
 		return
 
 	# Change cursor to hand
-	DisplayServer.cursor_set_shape(DisplayServer.CURSOR_HAND)
+	DisplayServer.cursor_set_shape(DisplayServer.CURSOR_POINTING_HAND)
 
 	# Play hover sound (reduced by 25%)
 	if ui_sfx_player:
 		ui_sfx_player.stream = menu_hover_sfx
-		ui_sfx_player.volume_db = linear2db(0.75)
+		ui_sfx_player.volume_db = linear_to_db(0.75)
 		ui_sfx_player.play()
 
 	# Kill existing tween if any
@@ -297,7 +297,7 @@ func _on_button_pressed() -> void:
 	# Play click sound (reduced by 60%)
 	if ui_sfx_player:
 		ui_sfx_player.stream = menu_click_sfx
-		ui_sfx_player.volume_db = linear2db(0.4)
+		ui_sfx_player.volume_db = linear_to_db(0.4)
 		ui_sfx_player.play()
 
 func _on_music_timer_timeout() -> void:

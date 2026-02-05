@@ -21,11 +21,10 @@ var hover_tweens: Dictionary = {}
 var hover_panels: Dictionary = {}
 
 # Settings state
-var settings_panel_2: VBoxContainer = null  # Category buttons (VIDEO, GRAPHICS, etc.)
-var settings_panel_3: VBoxContainer = null  # Actual settings controls
+var settings_panel_2: VBoxContainer = null  # Category buttons
+var settings_panel_3: VBoxContainer = null  # Settings controls
 var settings_panel_2_buttons: Array[Button] = []
 var settings_panel_3_controls: Array[Control] = []
-var current_settings_category: String = ""
 
 # Audio - loaded at runtime (needs Godot import first)
 var ambient_audio: AudioStream
@@ -283,128 +282,110 @@ func _on_music_timer_timeout() -> void:
 		tween.tween_property(music_player, "volume_db", music_volume_db, 10.0).set_ease(Tween.EASE_IN)
 
 func _on_settings_pressed() -> void:
-	# Dim panel 1 (main menu) to 50%
+	# Dim main menu buttons
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(new_game_button, "modulate:a", 0.5, 0.2)
 	tween.tween_property(settings_button, "modulate:a", 0.5, 0.2)
 	await tween.finished
 
-	# Show panel 2 (categories)
-	_show_settings_panel_2()
+	_show_panel_2()
 
 
-func _show_settings_panel_2() -> void:
-	# Create wrapper Control for positioning
-	var panel_2_wrapper: Control = Control.new()
-	panel_2_wrapper.position = Vector2(700, 325)  # Center position
-	panel_2_wrapper.size = Vector2(400, 600)  # Enough space for buttons
-	add_child(panel_2_wrapper)
-
-	# Create panel 2 container
+func _show_panel_2() -> void:
+	# Simple VBoxContainer positioned next to main menu
 	settings_panel_2 = VBoxContainer.new()
+	settings_panel_2.position = menu_container.position + Vector2(500, 0)
 	settings_panel_2.add_theme_constant_override("separation", 12)
-	panel_2_wrapper.add_child(settings_panel_2)
+	add_child(settings_panel_2)
 
 	var categories: Array[String] = ["VIDEO", "GRAPHICS", "AUDIO", "SUBTITLES", "BACK"]
 
-	for category in categories:
-		var btn: Button = _create_menu_button(category, settings_panel_2)
+	for cat in categories:
+		var btn: Button = _create_menu_button(cat, settings_panel_2)
 		btn.modulate.a = 0.0
 		settings_panel_2_buttons.append(btn)
 
-		if category == "BACK":
-			btn.pressed.connect(_on_settings_panel_2_back)
+		if cat == "BACK":
+			btn.pressed.connect(_close_panel_2)
 		else:
-			btn.pressed.connect(_on_category_selected.bind(category))
+			btn.pressed.connect(_show_panel_3.bind(cat))
 
 	await get_tree().process_frame
 	_update_hover_panels()
 
-	# Fade in panel 2
+	# Fade in
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
 	for btn in settings_panel_2_buttons:
 		tween.tween_property(btn, "modulate:a", 1.0, 0.2)
 
 
-func _on_category_selected(category: String) -> void:
-	current_settings_category = category
+func _show_panel_3(category: String) -> void:
+	# Clear old panel 3
+	if settings_panel_3:
+		settings_panel_3.queue_free()
+		settings_panel_3_controls.clear()
 
-	# Dim panel 2 to 50%
+	# Dim panel 2
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
 	for btn in settings_panel_2_buttons:
 		tween.tween_property(btn, "modulate:a", 0.5, 0.2)
 	await tween.finished
 
-	# Show panel 3 (actual settings)
-	_show_settings_panel_3(category)
-
-
-func _show_settings_panel_3(category: String) -> void:
-	# Remove old panel 3 if exists
-	if settings_panel_3:
-		settings_panel_3.get_parent().queue_free()  # Free wrapper too
-		settings_panel_3_controls.clear()
-
-	# Create wrapper Control for positioning
-	var panel_3_wrapper: Control = Control.new()
-	panel_3_wrapper.position = Vector2(1200, 325)  # Right position
-	panel_3_wrapper.size = Vector2(400, 600)  # Enough space for settings
-	add_child(panel_3_wrapper)
-
-	# Create panel 3 container
+	# Simple VBoxContainer positioned next to panel 2
 	settings_panel_3 = VBoxContainer.new()
+	settings_panel_3.position = settings_panel_2.position + Vector2(500, 0)
 	settings_panel_3.add_theme_constant_override("separation", 12)
-	panel_3_wrapper.add_child(settings_panel_3)
+	add_child(settings_panel_3)
 
-	# Build settings for category
+	# Add settings based on category
 	match category:
 		"VIDEO":
-			_add_setting_row("Display Mode", "video/display_mode")
-			_add_setting_row("Resolution", "video/resolution_index")
-			_add_setting_row("VSync", "video/vsync")
-			_add_setting_row("FPS Limit", "video/fps_limit")
-			_add_setting_row("Brightness", "video/brightness")
+			_add_setting("Display Mode", "video/display_mode")
+			_add_setting("Resolution", "video/resolution_index")
+			_add_setting("VSync", "video/vsync")
+			_add_setting("FPS Limit", "video/fps_limit")
+			_add_setting("Brightness", "video/brightness")
 		"GRAPHICS":
-			_add_setting_row("Anti-Aliasing", "graphics/anti_aliasing")
-			_add_setting_row("Anisotropic", "graphics/anisotropic_filtering")
+			_add_setting("Anti-Aliasing", "graphics/anti_aliasing")
+			_add_setting("Anisotropic", "graphics/anisotropic_filtering")
 		"AUDIO":
-			_add_setting_row("Master Volume", "audio/master_volume")
-			_add_setting_row("Music Volume", "audio/music_volume")
-			_add_setting_row("SFX Volume", "audio/sfx_volume")
-			_add_setting_row("Voice Volume", "audio/voice_volume")
+			_add_setting("Master Volume", "audio/master_volume")
+			_add_setting("Music Volume", "audio/music_volume")
+			_add_setting("SFX Volume", "audio/sfx_volume")
+			_add_setting("Voice Volume", "audio/voice_volume")
 		"SUBTITLES":
-			_add_setting_row("Subtitles", "subtitles/enabled")
-			_add_setting_row("Language", "subtitles/language")
-			_add_setting_row("Text Size", "subtitles/text_size")
+			_add_setting("Subtitles", "subtitles/enabled")
+			_add_setting("Language", "subtitles/language")
+			_add_setting("Text Size", "subtitles/text_size")
 
 	# Add BACK button
 	var back_btn: Button = _create_menu_button("BACK", settings_panel_3)
 	back_btn.modulate.a = 0.0
-	back_btn.pressed.connect(_on_settings_panel_3_back)
+	back_btn.pressed.connect(_close_panel_3)
 	settings_panel_3_controls.append(back_btn)
 
 	await get_tree().process_frame
 	_update_hover_panels()
 
-	# Fade in panel 3
-	var tween: Tween = create_tween()
+	# Fade in
+	tween = create_tween()
 	tween.set_parallel(true)
 	for ctrl in settings_panel_3_controls:
 		tween.tween_property(ctrl, "modulate:a", 1.0, 0.2)
 
 
-func _add_setting_row(label: String, key: String) -> void:
+func _add_setting(label: String, key: String) -> void:
 	var btn: Button = _create_menu_button(label, settings_panel_3)
 	btn.modulate.a = 0.0
 	settings_panel_3_controls.append(btn)
-	# TODO: Make functional - cycle through options
+	# TODO: Make functional
 	btn.pressed.connect(func(): print("Setting: ", label))
 
 
-func _on_settings_panel_3_back() -> void:
+func _close_panel_3() -> void:
 	# Fade out panel 3
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
@@ -412,10 +393,9 @@ func _on_settings_panel_3_back() -> void:
 		tween.tween_property(ctrl, "modulate:a", 0.0, 0.2)
 	await tween.finished
 
-	settings_panel_3.get_parent().queue_free()  # Free wrapper too
+	settings_panel_3.queue_free()
 	settings_panel_3 = null
 	settings_panel_3_controls.clear()
-	current_settings_category = ""
 
 	# Restore panel 2 brightness
 	tween = create_tween()
@@ -424,7 +404,7 @@ func _on_settings_panel_3_back() -> void:
 		tween.tween_property(btn, "modulate:a", 1.0, 0.2)
 
 
-func _on_settings_panel_2_back() -> void:
+func _close_panel_2() -> void:
 	# Fade out panel 2
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
@@ -432,16 +412,16 @@ func _on_settings_panel_2_back() -> void:
 		tween.tween_property(btn, "modulate:a", 0.0, 0.2)
 	await tween.finished
 
-	# Clean up panel 2
+	# Clean up
 	for btn in settings_panel_2_buttons:
 		if hover_panels.has(btn):
 			hover_panels[btn].queue_free()
 			hover_panels.erase(btn)
-	settings_panel_2.get_parent().queue_free()  # Free wrapper too
+	settings_panel_2.queue_free()
 	settings_panel_2 = null
 	settings_panel_2_buttons.clear()
 
-	# Restore panel 1 brightness
+	# Restore main menu brightness
 	tween = create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(new_game_button, "modulate:a", 1.0, 0.2)

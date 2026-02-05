@@ -21,7 +21,7 @@ var content_container: VBoxContainer = null
 var _controls: Dictionary = {}
 
 # Constants
-const TABS: Array[String] = ["VIDEO", "GRAPHICS", "AUDIO", "SUBTITLES"]
+const TABS: Array[String] = ["GENERAL", "VIDEO", "GRAPHICS", "AUDIO", "SUBTITLES"]
 const PANEL_WIDTH: int = 920
 const PANEL_HEIGHT: int = 580
 
@@ -266,10 +266,11 @@ func _switch_tab(index: int) -> void:
 	await get_tree().process_frame
 
 	match index:
-		0: _build_video_tab()
-		1: _build_graphics_tab()
-		2: _build_audio_tab()
-		3: _build_subtitles_tab()
+		0: _build_general_tab()
+		1: _build_video_tab()
+		2: _build_graphics_tab()
+		3: _build_audio_tab()
+		4: _build_subtitles_tab()
 
 	_load_current_values()
 
@@ -290,6 +291,11 @@ func _update_tab_visuals() -> void:
 
 
 # --- Tab Builders ---
+
+func _build_general_tab() -> void:
+	_add_option_row("Language", "general/language",
+		SettingsManager.LANGUAGE_LABELS, SettingsManager.LANGUAGE_CODES)
+
 
 func _build_video_tab() -> void:
 	_add_option_row("Display Mode", "video/display_mode",

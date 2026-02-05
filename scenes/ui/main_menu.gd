@@ -26,6 +26,9 @@ var settings_overlay: Control = null
 # Audio - loaded at runtime (needs Godot import first)
 var ambient_audio: AudioStream
 var music_audio: AudioStream
+var menu_hover_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_hover.ogg")
+var menu_click_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_click.ogg")
+var ui_sfx_player: AudioStreamPlayer = null
 
 # Config values
 var ambient_volume_db: float = 4.0 # Remove config usage, use direct values
@@ -165,20 +168,25 @@ func setup_title() -> void:
 	title_label.text = "SVEN KILLER"
 
 func setup_buttons() -> void:
+	# Create UI SFX player
+	ui_sfx_player = AudioStreamPlayer.new()
+	ui_sfx_player.bus = "SFX"
+	add_child(ui_sfx_player)
+
 	# Buttons 15% bigger than before
 	for button in [new_game_button, settings_button]:
 		button.add_theme_font_override("font", roboto_condensed_font)
 		button.add_theme_font_size_override("font_size", 34)
 		button.clip_text = false
 		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		# Soft outline + faint shadow + consistent color
+		# Soft outline + bold shadow + consistent color
 		button.add_theme_color_override("font_color", Color(0.98, 0.98, 0.98, 1))
 		button.add_theme_color_override("font_hover_color", Color(0.98, 0.98, 0.98, 1))
 		button.add_theme_color_override("font_focus_color", Color(0.98, 0.98, 0.98, 1))
 		button.add_theme_color_override("font_pressed_color", Color(0.98, 0.98, 0.98, 1))
-		button.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.6))
-		button.add_theme_constant_override("shadow_offset_x", 2)
-		button.add_theme_constant_override("shadow_offset_y", 2)
+		button.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
+		button.add_theme_constant_override("shadow_offset_x", 6)
+		button.add_theme_constant_override("shadow_offset_y", 6)
 		# Remove outline - using shadow instead
 		button.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.0))
 		button.add_theme_constant_override("outline_size", 0)
@@ -201,6 +209,7 @@ func setup_buttons() -> void:
 		# Connect hover signals
 		button.mouse_entered.connect(_on_button_hover.bind(button))
 		button.mouse_exited.connect(_on_button_unhover.bind(button))
+		button.pressed.connect(_on_button_pressed)
 
 	menu_container.add_theme_constant_override("separation", 12)
 
@@ -244,6 +253,15 @@ func _on_button_hover(button: Button) -> void:
 	if not hover_panels.has(button):
 		return
 
+	# Change cursor to hand
+	get_tree().root.get_mouse_position()
+	Input.set_mouse_cursor_shape(Input.CURSOR_POINTING_HAND)
+
+	# Play hover sound
+	if ui_sfx_player:
+		ui_sfx_player.stream = menu_hover_sfx
+		ui_sfx_player.play()
+
 	# Kill existing tween if any
 	if hover_tweens.has(button) and hover_tweens[button] != null and hover_tweens[button].is_valid():
 		hover_tweens[button].kill()
@@ -260,6 +278,9 @@ func _on_button_unhover(button: Button) -> void:
 	if not hover_panels.has(button):
 		return
 
+	# Reset cursor to default
+	Input.set_mouse_cursor_shape(Input.CURSOR_ARROW)
+
 	# Kill existing tween if any
 	if hover_tweens.has(button) and hover_tweens[button] != null and hover_tweens[button].is_valid():
 		hover_tweens[button].kill()
@@ -271,6 +292,12 @@ func _on_button_unhover(button: Button) -> void:
 		var tween = create_tween()
 		tween.tween_property(style, "bg_color:a", 0.0, 0.15).set_ease(Tween.EASE_IN)
 		hover_tweens[button] = tween
+
+func _on_button_pressed() -> void:
+	# Play click sound
+	if ui_sfx_player:
+		ui_sfx_player.stream = menu_click_sfx
+		ui_sfx_player.play()
 
 func _on_music_timer_timeout() -> void:
 		music_player.volume_db = -60

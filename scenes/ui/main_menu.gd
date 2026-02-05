@@ -254,10 +254,10 @@ func _on_button_hover(button: Button) -> void:
 	if not hover_panels.has(button):
 		return
 
-	# Play hover sound (reduced by 50% total: 25% + 25%)
+	# Play hover sound (35% volume)
 	if ui_sfx_player:
 		ui_sfx_player.stream = menu_hover_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.5625)
+		ui_sfx_player.volume_db = linear_to_db(0.35)
 		ui_sfx_player.play()
 
 	# Kill existing tween if any
@@ -289,10 +289,10 @@ func _on_button_unhover(button: Button) -> void:
 		hover_tweens[button] = tween
 
 func _on_button_pressed() -> void:
-	# Play click sound (reduced by 80% total: 60% + 20%)
+	# Play click sound (15% volume)
 	if ui_sfx_player:
 		ui_sfx_player.stream = menu_click_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.32)
+		ui_sfx_player.volume_db = linear_to_db(0.15)
 		ui_sfx_player.play()
 
 func _on_music_timer_timeout() -> void:

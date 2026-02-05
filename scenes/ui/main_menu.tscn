@@ -50,7 +50,7 @@ autoplay = true
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=778636808]
 
 [node name="MusicDelayTimer" type="Timer" parent="." unique_id=299444834]
-wait_time = 30.0
+wait_time = 20.0
 one_shot = true
 
 [node name="LeftVignette" type="ColorRect" parent="." unique_id=930636854]

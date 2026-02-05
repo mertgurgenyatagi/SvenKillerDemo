@@ -185,9 +185,9 @@ func setup_buttons() -> void:
 		button.add_theme_color_override("font_hover_color", Color(0.98, 0.98, 0.98, 1))
 		button.add_theme_color_override("font_focus_color", Color(0.98, 0.98, 0.98, 1))
 		button.add_theme_color_override("font_pressed_color", Color(0.98, 0.98, 0.98, 1))
-		button.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
-		button.add_theme_constant_override("shadow_offset_x", 6)
-		button.add_theme_constant_override("shadow_offset_y", 6)
+		button.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+		button.add_theme_constant_override("shadow_offset_x", 8)
+		button.add_theme_constant_override("shadow_offset_y", 8)
 		# Remove outline - using shadow instead
 		button.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.0))
 		button.add_theme_constant_override("outline_size", 0)

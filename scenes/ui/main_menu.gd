@@ -179,6 +179,7 @@ func setup_buttons() -> void:
 		button.add_theme_font_size_override("font_size", 34)
 		button.clip_text = false
 		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		# Soft outline + bold shadow + consistent color
 		button.add_theme_color_override("font_color", Color(0.98, 0.98, 0.98, 1))
 		button.add_theme_color_override("font_hover_color", Color(0.98, 0.98, 0.98, 1))
@@ -253,13 +254,10 @@ func _on_button_hover(button: Button) -> void:
 	if not hover_panels.has(button):
 		return
 
-	# Change cursor to hand
-	DisplayServer.cursor_set_shape(DisplayServer.CURSOR_POINTING_HAND)
-
-	# Play hover sound (reduced by 25%)
+	# Play hover sound (reduced by 50% total: 25% + 25%)
 	if ui_sfx_player:
 		ui_sfx_player.stream = menu_hover_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.75)
+		ui_sfx_player.volume_db = linear_to_db(0.5625)
 		ui_sfx_player.play()
 
 	# Kill existing tween if any
@@ -278,9 +276,6 @@ func _on_button_unhover(button: Button) -> void:
 	if not hover_panels.has(button):
 		return
 
-	# Reset cursor to default
-	DisplayServer.cursor_set_shape(DisplayServer.CURSOR_ARROW)
-
 	# Kill existing tween if any
 	if hover_tweens.has(button) and hover_tweens[button] != null and hover_tweens[button].is_valid():
 		hover_tweens[button].kill()
@@ -294,10 +289,10 @@ func _on_button_unhover(button: Button) -> void:
 		hover_tweens[button] = tween
 
 func _on_button_pressed() -> void:
-	# Play click sound (reduced by 60%)
+	# Play click sound (reduced by 80% total: 60% + 20%)
 	if ui_sfx_player:
 		ui_sfx_player.stream = menu_click_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.4)
+		ui_sfx_player.volume_db = linear_to_db(0.32)
 		ui_sfx_player.play()
 
 func _on_music_timer_timeout() -> void:

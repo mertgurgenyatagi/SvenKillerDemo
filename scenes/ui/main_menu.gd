@@ -19,6 +19,7 @@ var roboto_condensed_font: Font = preload("res://assets/fonts/roboto_condensed_m
 # Hover effect state
 var hover_tweens: Dictionary = {}
 var hover_panels: Dictionary = {}
+var new_game_locked: bool = false
 
 # Settings overlay
 var settings_overlay: Control = null
@@ -52,6 +53,20 @@ func _ready() -> void:
 
 	# Push the entire menu up by 300px originally; adjust down 125px (net -175)
 	menu_container.position = menu_container.position + Vector2(0, -175)
+
+	# Add initial black overlay that fades out (prevents white flash on menu load)
+	var initial_overlay = ColorRect.new()
+	initial_overlay.color = Color(0, 0, 0, 1)
+	initial_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	initial_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	initial_overlay.z_index = 100000
+	add_child(initial_overlay)
+
+	# Fade out over 0.3 seconds
+	var fade_tween = create_tween()
+	fade_tween.tween_property(initial_overlay, "modulate:a", 0.0, 0.3).set_ease(Tween.EASE_OUT)
+	await fade_tween.finished
+	initial_overlay.queue_free()
 
 func setup_video() -> void:
 	background_video.stream = load("res://assets/video/menu/main_menu.ogv")
@@ -215,6 +230,7 @@ func setup_buttons() -> void:
 	menu_container.add_theme_constant_override("separation", 12)
 
 	# Connect button actions
+	new_game_button.pressed.connect(_on_new_game_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 
 	# Defer panel sizing until layout is done
@@ -235,13 +251,13 @@ func setup_audio() -> void:
 	ambient_player.bus = "SFX"
 	music_player.bus = "Music"
 
-	# Ambient - fade in slowly from silence, looping
+	# Ambient - fade in from silence over 1.5 seconds, looping
 	ambient_player.stream = ambient_audio
-	ambient_player.volume_db = ambient_volume_db
+	ambient_player.volume_db = -60
 	ambient_player.finished.connect(_on_ambient_finished)
 	ambient_player.play()
 	var ambient_tween = create_tween()
-	ambient_tween.tween_property(ambient_player, "volume_db", ambient_volume_db, 2.5).set_ease(Tween.EASE_OUT)
+	ambient_tween.tween_property(ambient_player, "volume_db", ambient_volume_db, 1.5).set_ease(Tween.EASE_OUT)
 	music_player.stream = music_audio
 	music_delay_timer.timeout.connect(_on_music_timer_timeout)
 	music_delay_timer.start()
@@ -276,6 +292,10 @@ func _on_button_unhover(button: Button) -> void:
 	if not hover_panels.has(button):
 		return
 
+	# Don't unhover if New Game is locked (during transition)
+	if button == new_game_button and new_game_locked:
+		return
+
 	# Kill existing tween if any
 	if hover_tweens.has(button) and hover_tweens[button] != null and hover_tweens[button].is_valid():
 		hover_tweens[button].kill()
@@ -294,6 +314,55 @@ func _on_button_pressed() -> void:
 		ui_sfx_player.stream = menu_click_sfx
 		ui_sfx_player.volume_db = linear_to_db(0.15)
 		ui_sfx_player.play()
+
+func _on_new_game_pressed() -> void:
+	# Lock the hover rectangle (prevent unhover)
+	new_game_locked = true
+
+	# Ensure hover panel stays at full opacity
+	if hover_panels.has(new_game_button):
+		var panel = hover_panels[new_game_button]
+		var style = panel.get_theme_stylebox("panel")
+		if style is StyleBoxFlat:
+			# Kill any existing tween
+			if hover_tweens.has(new_game_button) and hover_tweens[new_game_button] != null and hover_tweens[new_game_button].is_valid():
+				hover_tweens[new_game_button].kill()
+			# Set to full opacity
+			style.bg_color.a = 0.45
+
+	# Wait 0.85 seconds
+	await get_tree().create_timer(0.85).timeout
+
+	# Stop all audio and video immediately at 0.85s
+	ambient_player.stop()
+	music_player.stop()
+	background_video.stop()
+	background_video.visible = false
+
+	# Hide dust particles
+	var dust_particles = get_node_or_null("DustParticles")
+	if dust_particles:
+		dust_particles.emitting = false
+		dust_particles.visible = false
+
+	# Hide the white video shader overlay (this was causing the flash!)
+	var shader_overlay = get_node_or_null("VideoShaderOverlay")
+	if shader_overlay:
+		shader_overlay.visible = false
+
+	# Instant black overlay (giant black box covering everything)
+	var black_overlay = ColorRect.new()
+	black_overlay.color = Color(0, 0, 0, 1)
+	black_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	black_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	black_overlay.z_index = 10000  # Extremely high z-index to ensure it's on top
+	add_child(black_overlay)
+
+	# Wait longer before scene change (0.45s more, total 1.3s from click)
+	await get_tree().create_timer(0.45).timeout
+
+	# Now change scenes (everything is already black, no flash possible)
+	get_tree().change_scene_to_file("res://scenes/gameplay/opening_sequence.tscn")
 
 func _on_music_timer_timeout() -> void:
 		music_player.volume_db = -60

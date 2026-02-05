@@ -13,6 +13,7 @@ const SETTING_BIND_MODE := "godot_mcp/bind_mode"
 const SETTING_CUSTOM_BIND_IP := "godot_mcp/custom_bind_ip"
 const SETTING_PORT_OVERRIDE_ENABLED := "godot_mcp/port_override_enabled"
 const SETTING_PORT_OVERRIDE := "godot_mcp/port_override"
+const SETTING_AUTO_START := "godot_mcp/auto_start"
 
 var _websocket_server: WebSocketServer
 var _command_router: CommandRouter
@@ -85,6 +86,11 @@ func _ensure_bind_settings() -> void:
 		ProjectSettings.set_setting(SETTING_PORT_OVERRIDE_ENABLED, false)
 	if not ProjectSettings.has_setting(SETTING_PORT_OVERRIDE):
 		ProjectSettings.set_setting(SETTING_PORT_OVERRIDE, WebSocketServer.DEFAULT_PORT)
+	if not ProjectSettings.has_setting(SETTING_AUTO_START):
+		# By default, keep legacy behavior of auto-starting the server. Set to false
+		# if you want to prevent Godot from starting its MCP server automatically
+		# (useful to avoid internal auto-connections). Can be toggled in Project Settings.
+		ProjectSettings.set_setting(SETTING_AUTO_START, true)
 	ProjectSettings.save()
 
 
@@ -244,7 +250,11 @@ func _on_config_applied(config: Dictionary) -> void:
 	ProjectSettings.set_setting(SETTING_PORT_OVERRIDE_ENABLED, bool(config.get("port_override_enabled", false)))
 	ProjectSettings.set_setting(SETTING_PORT_OVERRIDE, int(config.get("port_override", WebSocketServer.DEFAULT_PORT)))
 	ProjectSettings.save()
-	_apply_bind_settings(true)
+	# Only auto-start server if the auto-start setting is enabled. This prevents
+	# the editor from automatically opening network listeners and creating internal
+	# loopback connections when not desired.
+	var auto_start := ProjectSettings.get_setting(SETTING_AUTO_START, true)
+	_apply_bind_settings(auto_start)
 
 
 func _ensure_game_bridge_autoload() -> void:

@@ -30,16 +30,13 @@ window/size/mode=2
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
-
 [godot_mcp]
 
 bind_mode=0
 custom_bind_ip=""
-port_override_enabled=false
-port_override=6550
+port_override_enabled=true
+port_override=6700
+auto_start=true
 
 [input]
 
@@ -86,4 +83,5 @@ pause={
 
 textures/default_filters/anisotropic_filtering_level=4
 anti_aliasing/quality/msaa_3d=2
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 anti_aliasing/quality/screen_space_aa=1

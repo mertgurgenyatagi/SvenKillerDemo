@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "godot": {
+      "command": "node",
+      "args": [
+        "c:\\Users\\Mert\\Desktop\\repos\\SvenKillerDemo\\godot-mcp\\build\\index.js"
+      ],
+      "env": {
+        "DEBUG": "true",
+        "GODOT_PATH": "C:\\Users\\Mert\\Documents\\Godot_v4.6-stable_win64.exe"
+      },
+      "disabled": false
+    }
+  }
+}

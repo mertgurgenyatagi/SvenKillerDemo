@@ -20,6 +20,9 @@ var roboto_condensed_font: Font = preload("res://assets/fonts/roboto_condensed_m
 var hover_tweens: Dictionary = {}
 var hover_panels: Dictionary = {}
 
+# Settings overlay
+var settings_overlay: Control = null
+
 # Audio - loaded at runtime (needs Godot import first)
 var ambient_audio: AudioStream
 var music_audio: AudioStream
@@ -201,6 +204,9 @@ func setup_buttons() -> void:
 
 	menu_container.add_theme_constant_override("separation", 12)
 
+	# Connect button actions
+	settings_button.pressed.connect(_on_settings_pressed)
+
 	# Defer panel sizing until layout is done
 	await get_tree().process_frame
 	_update_hover_panels()
@@ -215,6 +221,10 @@ func _update_hover_panels() -> void:
 		panel.size = button.size + Vector2(padding_left + padding_right, padding_vertical * 2)
 
 func setup_audio() -> void:
+	# Assign to proper audio buses (created by SettingsManager autoload)
+	ambient_player.bus = "SFX"
+	music_player.bus = "Music"
+
 	# Ambient - fade in slowly from silence, looping
 	ambient_player.stream = ambient_audio
 	ambient_player.volume_db = ambient_volume_db
@@ -267,6 +277,23 @@ func _on_music_timer_timeout() -> void:
 		music_player.play()
 		var tween = create_tween()
 		tween.tween_property(music_player, "volume_db", music_volume_db, 10.0).set_ease(Tween.EASE_IN)
+
+func _on_settings_pressed() -> void:
+	if settings_overlay != null:
+		return
+	var settings_scene: PackedScene = load("res://scenes/ui/settings_menu.tscn")
+	settings_overlay = settings_scene.instantiate()
+	settings_overlay.closed.connect(_on_settings_closed)
+	add_child(settings_overlay)
+	new_game_button.disabled = true
+	settings_button.disabled = true
+
+
+func _on_settings_closed() -> void:
+	settings_overlay = null
+	new_game_button.disabled = false
+	settings_button.disabled = false
+
 
 func setup_vignette() -> void:
 	var shader_code = """

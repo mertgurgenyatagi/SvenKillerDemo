@@ -254,8 +254,7 @@ func _on_button_hover(button: Button) -> void:
 		return
 
 	# Change cursor to hand
-	get_tree().root.get_mouse_position()
-	Input.set_mouse_cursor_shape(Input.CURSOR_POINTING_HAND)
+	DisplayServer.cursor_set_shape(DisplayServer.CURSOR_POINTING_HAND)
 
 	# Play hover sound
 	if ui_sfx_player:
@@ -279,7 +278,7 @@ func _on_button_unhover(button: Button) -> void:
 		return
 
 	# Reset cursor to default
-	Input.set_mouse_cursor_shape(Input.CURSOR_ARROW)
+	DisplayServer.cursor_set_shape(DisplayServer.CURSOR_ARROW)
 
 	# Kill existing tween if any
 	if hover_tweens.has(button) and hover_tweens[button] != null and hover_tweens[button].is_valid():

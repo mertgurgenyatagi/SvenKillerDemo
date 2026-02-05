@@ -9,6 +9,11 @@ var roboto_font: Font = preload("res://assets/fonts/roboto_condensed_semibold.tt
 var roboto_regular: Font = preload("res://assets/fonts/roboto_condensed.ttf")
 var fjalla_font: Font = preload("res://assets/fonts/fjalla_one.ttf")
 
+# Audio
+var menu_hover_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_hover.ogg")
+var menu_click_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_click.ogg")
+var ui_sfx_player: AudioStreamPlayer = null
+
 # Tab state
 var current_tab: int = 0
 var tab_buttons: Array[Button] = []
@@ -22,6 +27,11 @@ const PANEL_HEIGHT: int = 580
 
 
 func _ready() -> void:
+	# Create UI SFX player
+	ui_sfx_player = AudioStreamPlayer.new()
+	ui_sfx_player.bus = "SFX"
+	add_child(ui_sfx_player)
+
 	_build_ui()
 	_switch_tab(0)
 
@@ -142,10 +152,13 @@ func _build_header(parent: VBoxContainer) -> void:
 	var close_btn: Button = Button.new()
 	close_btn.text = "✕"
 	close_btn.flat = true
+	close_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_btn.add_theme_font_override("font", roboto_font)
 	close_btn.add_theme_font_size_override("font_size", 24)
 	close_btn.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
 	close_btn.add_theme_color_override("font_hover_color", Color(0.95, 0.95, 0.95, 1.0))
+	close_btn.mouse_entered.connect(_on_button_hover)
+	close_btn.pressed.connect(_on_button_pressed)
 	close_btn.pressed.connect(_on_back_pressed)
 	header.add_child(close_btn)
 
@@ -161,6 +174,7 @@ func _build_tab_sidebar(parent: HBoxContainer) -> void:
 		btn.text = TABS[i]
 		btn.flat = true
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		btn.add_theme_font_override("font", roboto_font)
 		btn.add_theme_font_size_override("font_size", 20)
 		btn.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
@@ -179,6 +193,8 @@ func _build_tab_sidebar(parent: HBoxContainer) -> void:
 		btn.add_theme_stylebox_override("pressed", normal_style.duplicate())
 		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
+		btn.mouse_entered.connect(_on_button_hover)
+		btn.pressed.connect(_on_button_pressed)
 		btn.pressed.connect(_switch_tab.bind(i))
 		sidebar.add_child(btn)
 		tab_buttons.append(btn)
@@ -207,6 +223,7 @@ func _create_footer_button(text: String) -> Button:
 	var btn: Button = Button.new()
 	btn.text = text
 	btn.flat = true
+	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn.add_theme_font_override("font", roboto_font)
 	btn.add_theme_font_size_override("font_size", 18)
 	btn.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1.0))
@@ -229,6 +246,8 @@ func _create_footer_button(text: String) -> Button:
 	btn.add_theme_stylebox_override("hover", hover_style)
 
 	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	btn.mouse_entered.connect(_on_button_hover)
+	btn.pressed.connect(_on_button_pressed)
 	return btn
 
 
@@ -467,6 +486,22 @@ func _on_reset_defaults_pressed() -> void:
 	_load_current_values()
 
 
+func _on_button_hover() -> void:
+	# Play hover sound (35% volume)
+	if ui_sfx_player:
+		ui_sfx_player.stream = menu_hover_sfx
+		ui_sfx_player.volume_db = linear_to_db(0.35)
+		ui_sfx_player.play()
+
+
+func _on_button_pressed() -> void:
+	# Play click sound (15% volume)
+	if ui_sfx_player:
+		ui_sfx_player.stream = menu_click_sfx
+		ui_sfx_player.volume_db = linear_to_db(0.15)
+		ui_sfx_player.play()
+
+
 # --- Styling Helpers ---
 
 func _create_label(text: String) -> Label:
@@ -483,11 +518,14 @@ func _create_label(text: String) -> Label:
 
 
 func _style_option_button(option: OptionButton) -> void:
+	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	option.add_theme_font_override("font", roboto_regular)
 	option.add_theme_font_size_override("font_size", 18)
 	option.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
 	option.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0, 1.0))
 	option.add_theme_color_override("font_focus_color", Color(0.9, 0.9, 0.9, 1.0))
+	option.mouse_entered.connect(_on_button_hover)
+	option.pressed.connect(_on_button_pressed)
 
 	var normal: StyleBoxFlat = StyleBoxFlat.new()
 	normal.bg_color = Color(0.12, 0.12, 0.15, 0.9)

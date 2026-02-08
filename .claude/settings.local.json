@@ -25,7 +25,10 @@
       "Bash(npm install:*)",
       "Bash(timeout:*)",
       "Bash(where:*)",
-      "Bash(set:*)"
+      "Bash(set:*)",
+      "Bash(godot:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo view:*)"
     ]
   }
 }

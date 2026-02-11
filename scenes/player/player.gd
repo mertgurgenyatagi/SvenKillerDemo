@@ -33,11 +33,15 @@ var target_camera_yaw: float = 0.0
 var target_camera_pitch: float = deg_to_rad(-20.0)
 var target_zoom: float = 2.5
 
+
 const ANIM_PATHS: Dictionary = {
 	"idle": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Relaxed_Idle_v2_IPC.fbx",
 	"walk": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Walk_F_Loop_IPC.fbx",
 	"turn_left": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_L_Loop_IPC.fbx",
 	"turn_right": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_R_Loop_IPC.fbx",
+	"sit_down": "res://Stand To Sit.fbx",
+	"sitting_idle": "res://Sitting Idle.fbx",
+	"sit_to_stand": "res://Sit To Stand.fbx",
 }
 
 func _ready() -> void:
@@ -104,10 +108,24 @@ func _setup_animation_tree() -> void:
 	turn_right_node.animation = &"turn_right"
 	state_machine.add_node("turn_right", turn_right_node)
 
+	# Sitting states
+	var sit_down_node: AnimationNodeAnimation = AnimationNodeAnimation.new()
+	sit_down_node.animation = &"sit_down"
+	state_machine.add_node("sit_down", sit_down_node)
+
+	var sitting_idle_node: AnimationNodeAnimation = AnimationNodeAnimation.new()
+	sitting_idle_node.animation = &"sitting_idle"
+	state_machine.add_node("sitting_idle", sitting_idle_node)
+
+	var sit_to_stand_node: AnimationNodeAnimation = AnimationNodeAnimation.new()
+	sit_to_stand_node.animation = &"sit_to_stand"
+	state_machine.add_node("sit_to_stand", sit_to_stand_node)
+
 	# Transitions (all immediate with short crossfade)
 	var xfade: float = 0.2
-	for from_state in ["locomotion", "turn_left", "turn_right"]:
-		for to_state in ["locomotion", "turn_left", "turn_right"]:
+	var all_states: Array = ["locomotion", "turn_left", "turn_right", "sit_down", "sitting_idle", "sit_to_stand"]
+	for from_state in all_states:
+		for to_state in all_states:
 			if from_state == to_state:
 				continue
 			var transition: AnimationNodeStateMachineTransition = AnimationNodeStateMachineTransition.new()
@@ -170,24 +188,42 @@ func _load_animation(anim_name: String, fbx_path: String) -> void:
 		instance.queue_free()
 		return
 
-	# Take the first animation, duplicate and retarget it
+	# Take the first animation, duplicate and retarget bone paths
 	var anim: Animation = library.get_animation(anim_list[0]).duplicate()
 	var root_node: Node = animation_player.get_parent()
 	var skeleton_path: String = root_node.get_path_to(skeleton)
 
+	var matched: int = 0
+	var unmatched: int = 0
 	for track_idx in anim.get_track_count():
 		var track_path_str: String = str(anim.track_get_path(track_idx))
-		if "Skeleton3D:" in track_path_str:
-			var bone_name: String = track_path_str.split("Skeleton3D:")[1]
-			if skeleton.find_bone(bone_name) >= 0:
-				anim.track_set_path(track_idx, NodePath(skeleton_path + ":" + bone_name))
+		if "Skeleton3D:" not in track_path_str:
+			continue
+
+		var bone_name: String = track_path_str.split("Skeleton3D:")[1]
+		# Strip Mixamo prefix for compatibility (Godot converts : to _)
+		if bone_name.begins_with("mixamorig_"):
+			bone_name = bone_name.substr(10)
+
+		var target_bone_idx: int = skeleton.find_bone(bone_name)
+		if target_bone_idx < 0:
+			unmatched += 1
+			continue
+
+		anim.track_set_path(track_idx, NodePath(skeleton_path + ":" + bone_name))
+		matched += 1
+
+	print("[%s] Retarget: %d matched, %d unmatched" % [anim_name, matched, unmatched])
 
 	# Add to our AnimationPlayer
 	if not animation_player.has_animation_library(""):
 		animation_player.add_animation_library("", AnimationLibrary.new())
 
 	animation_player.get_animation_library("").add_animation(anim_name, anim)
-	anim.loop_mode = Animation.LOOP_LINEAR
+	if anim_name in ["sit_down", "sit_to_stand"]:
+		anim.loop_mode = Animation.LOOP_NONE
+	else:
+		anim.loop_mode = Animation.LOOP_LINEAR
 
 	instance.queue_free()
 
@@ -207,6 +243,9 @@ func _input(event: InputEvent) -> void:
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			target_zoom = clampf(target_zoom + zoom_speed, zoom_min, zoom_max)
 
+	if event.is_action_pressed("interact"):
+		_handle_interact()
+
 	if event.is_action_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -217,6 +256,10 @@ func _process(delta: float) -> void:
 	camera_pivot.rotation.y = lerp_angle(camera_pivot.rotation.y, target_camera_yaw, camera_rotation_speed * delta)
 	camera_pivot.rotation.x = lerpf(camera_pivot.rotation.x, target_camera_pitch, camera_rotation_speed * delta)
 	spring_arm.spring_length = lerpf(spring_arm.spring_length, target_zoom, zoom_inertia * delta)
+
+func _handle_interact() -> void:
+	pass  # Sitting interaction to be implemented
+
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():

@@ -331,6 +331,9 @@ The project is now pivoting toward a different movement system based on reverse-
 - `SettingsManager`: Audio bus setup, config persistence, language selection
 - `MCPGameBridge`: Claude AI integration (disabled)
 
+✅ **Debug Scene & Player Prototype**
+- `scenes/debug/debug_movement_and_camera.tscn` — Debug testbed added after this handover: contains a player instance and simple geometry; movement and camera were finalized here (prototype of the turn-and-walk locomotion and spring-arm camera with damping).
+
 ### What Doesn't Work
 
 ❌ **Gameplay**
@@ -410,6 +413,8 @@ SvenKillerDemo/
 │   │   ├── main_menu.gd
 │   │   ├── settings_menu.tscn
 │   │   └── settings_menu.gd
+│   ├── debug/
+│   │   └── debug_movement_and_camera.tscn
 │   ├── main.tscn
 │   └── main.gd
 ├── scripts/

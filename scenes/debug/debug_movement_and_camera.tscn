@@ -3,6 +3,7 @@
 [ext_resource type="Shader" uid="uid://d0e3863868aqm" path="res://assets/shaders/grid_platform.gdshader" id="1_grid"]
 [ext_resource type="PackedScene" uid="uid://c4k8n3m2p1h5j" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://c0rw6g7hxqvgq" path="res://scripts/interactable/interactable_indicator.gd" id="3_indicator"]
+[ext_resource type="Script" uid="uid://c04hg6ovdtkq8" path="res://scripts/interactable/sittable.gd" id="4_sittable"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.646, 0.656, 0.67, 1)
@@ -42,6 +43,18 @@ size = Vector3(0.2, 2, 0.2)
 radius = 0.25
 height = 0.0
 
+[sub_resource type="BoxMesh" id="BoxMesh_ChairSeat"]
+size = Vector3(1.2, 0.1, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ChairBack"]
+size = Vector3(1.2, 0.6, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ChairSeat"]
+size = Vector3(1.2, 0.1, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ChairBack"]
+size = Vector3(1.2, 0.6, 0.1)
+
 [node name="DebugMovementAndCamera" type="Node3D" unique_id=1447522123]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1807571116]
@@ -62,7 +75,7 @@ mesh = SubResource("BoxMesh_1")
 shape = SubResource("BoxShape3D_1")
 
 [node name="Player" parent="." unique_id=2002020252 instance=ExtResource("2_player")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.099999964, 9.624277)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0.099999964, 0.2001791)
 
 [node name="Pole" type="StaticBody3D" parent="." unique_id=2100000001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.1, 0)
@@ -77,4 +90,30 @@ shape = SubResource("BoxShape3D_2")
 mesh = SubResource("SphereMesh_1")
 
 [node name="InteractableIndicator" type="Node3D" parent="Pole/Ball" unique_id=2043214000]
+script = ExtResource("3_indicator")
+
+[node name="Chair" type="StaticBody3D" parent="." unique_id=1360216743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.4, 0)
+
+[node name="Sittable" type="Node3D" parent="Chair" unique_id=1526217785]
+script = ExtResource("4_sittable")
+
+[node name="SeatMesh" type="MeshInstance3D" parent="Chair" unique_id=1997033914]
+mesh = SubResource("BoxMesh_ChairSeat")
+
+[node name="BackrestMesh" type="MeshInstance3D" parent="Chair" unique_id=1999246235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.25)
+mesh = SubResource("BoxMesh_ChairBack")
+
+[node name="SeatCollision" type="CollisionShape3D" parent="Chair" unique_id=376623300]
+shape = SubResource("BoxShape3D_ChairSeat")
+
+[node name="BackrestCollision" type="CollisionShape3D" parent="Chair" unique_id=126711265]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.25)
+shape = SubResource("BoxShape3D_ChairBack")
+
+[node name="SeatPosition" type="Marker3D" parent="Chair" unique_id=1801418414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.1)
+
+[node name="InteractableIndicator" type="Node3D" parent="Chair" unique_id=1515696960]
 script = ExtResource("3_indicator")

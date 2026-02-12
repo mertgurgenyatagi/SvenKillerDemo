@@ -17,6 +17,7 @@ var sprite: Sprite3D
 var current_opacity: float = 0.0
 # -1.0 = left point, +1.0 = right point; fades through 0 during crossover
 var side_factor: float = -1.0
+var is_fading_out: bool = false
 
 
 func _ready() -> void:
@@ -28,6 +29,12 @@ func _ready() -> void:
 	sprite.visible = false
 	add_child(sprite)
 
+
+func fade_out() -> void:
+	is_fading_out = true
+
+func fade_in() -> void:
+	is_fading_out = false
 
 func _process(delta: float) -> void:
 	var camera: Camera3D = get_viewport().get_camera_3d()
@@ -42,13 +49,16 @@ func _process(delta: float) -> void:
 
 	# Opacity: 10% when camera within 10m, 100% when player within 1m
 	var target_opacity: float = 0.0
-	if cam_distance <= FADE_DISTANCE:
-		target_opacity = FAR_OPACITY
-	if player:
-		var player_2d := Vector2(player.global_position.x, player.global_position.z)
-		var object_2d := Vector2(object_pos.x, object_pos.z)
-		if player_2d.distance_to(object_2d) <= CLOSE_DISTANCE:
-			target_opacity = CLOSE_OPACITY
+	if is_fading_out:
+		target_opacity = 0.0
+	else:
+		if cam_distance <= FADE_DISTANCE:
+			target_opacity = FAR_OPACITY
+		if player:
+			var player_2d := Vector2(player.global_position.x, player.global_position.z)
+			var object_2d := Vector2(object_pos.x, object_pos.z)
+			if player_2d.distance_to(object_2d) <= CLOSE_DISTANCE:
+				target_opacity = CLOSE_OPACITY
 
 	current_opacity = lerpf(current_opacity, target_opacity, OPACITY_LERP_SPEED * delta)
 

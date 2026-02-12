@@ -28,7 +28,9 @@
       "Bash(set:*)",
       "Bash(godot:*)",
       "WebFetch(domain:github.com)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:www.mocaponline.com)"
     ]
   }
 }

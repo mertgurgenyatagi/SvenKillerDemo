@@ -33,6 +33,13 @@ var target_camera_yaw: float = 0.0
 var target_camera_pitch: float = deg_to_rad(-20.0)
 var target_zoom: float = 2.5
 
+enum PlayerState { MOVING, WALKING_TO_SEAT, APPROACHING_CHAIR, TURNING_TO_SIT, SITTING_DOWN, SEATED, STANDING_UP }
+var state: PlayerState = PlayerState.MOVING
+var target_sittable: Sittable = null
+var locked_position: Vector3 = Vector3.ZERO
+var can_interact_with_seat: bool = false
+var saved_spring_arm_pos: Vector3 = Vector3.ZERO
+
 
 const ANIM_PATHS: Dictionary = {
 	"idle": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Relaxed_Idle_v2_IPC.fbx",
@@ -258,12 +265,344 @@ func _process(delta: float) -> void:
 	spring_arm.spring_length = lerpf(spring_arm.spring_length, target_zoom, zoom_inertia * delta)
 
 func _handle_interact() -> void:
-	pass  # Sitting interaction to be implemented
+	if state == PlayerState.MOVING:
+		var nearest_sittable: Sittable = _find_nearest_sittable()
+		if nearest_sittable:
+			_start_sitting_sequence(nearest_sittable)
+		return
 
+	# Cancel during walk or approach phases
+	if state in [PlayerState.WALKING_TO_SEAT, PlayerState.APPROACHING_CHAIR]:
+		_cancel_sitting_sequence()
+		return
+
+	# Stand up from seated (only after cooldown)
+	if state == PlayerState.SEATED and can_interact_with_seat:
+		_start_standing_sequence()
+		return
+
+func _find_nearest_sittable() -> Sittable:
+	var search_radius: float = 3.0
+	var nearest: Sittable = null
+	var nearest_dist: float = search_radius
+
+	for node in get_tree().get_nodes_in_group("sittable"):
+		# Find the Sittable component
+		var sittable: Sittable = node.find_child("Sittable", false, false)
+		if not sittable:
+			continue
+
+		var dist: float = global_position.distance_to(node.global_position)
+		if dist < nearest_dist:
+			nearest = sittable
+			nearest_dist = dist
+
+	return nearest
+
+func _start_sitting_sequence(sittable: Sittable) -> void:
+	state = PlayerState.WALKING_TO_SEAT
+	target_sittable = sittable
+	current_speed = 0.0
+
+	# Fade out the indicator on the sittable object
+	var indicator: Node = sittable.get_parent().find_child("InteractableIndicator", false, false)
+	if indicator and indicator.has_method("fade_out"):
+		indicator.fade_out()
+
+	print("Starting sitting sequence. Target area: ", sittable.get_sitting_area_position())
+
+func _get_sittable_indicator() -> Node:
+	if not target_sittable or not target_sittable.get_parent():
+		return null
+	return target_sittable.get_parent().find_child("InteractableIndicator", false, false)
+
+func _cancel_sitting_sequence() -> void:
+	print("Sitting sequence cancelled.")
+	state = PlayerState.MOVING
+	current_speed = 0.0
+	velocity = Vector3.ZERO
+	animation_tree.set("parameters/locomotion/blend_position", 0.0)
+	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
+	playback.travel("locomotion")
+
+	var indicator: Node = _get_sittable_indicator()
+	if indicator and indicator.has_method("fade_in"):
+		indicator.fade_in()
+
+	target_sittable = null
+
+func _start_standing_sequence() -> void:
+	can_interact_with_seat = false
+	state = PlayerState.STANDING_UP
+
+	var indicator: Node = _get_sittable_indicator()
+	if indicator and indicator.has_method("fade_out"):
+		indicator.fade_out()
+
+	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
+	playback.travel("sit_to_stand")
+
+	var stand_anim: Animation = animation_player.get_animation_library("").get_animation("sit_to_stand")
+	var wait_time: float = stand_anim.length if stand_anim else 2.0
+	await get_tree().create_timer(wait_time).timeout
+
+	if state != PlayerState.STANDING_UP:
+		return
+
+	# Transition to standing idle
+	playback.travel("locomotion")
+	animation_tree.set("parameters/locomotion/blend_position", 0.0)
+	state = PlayerState.MOVING
+
+	# Apply standing offsets after idle begins
+	_apply_standing_offset()
+	_apply_standing_spring_arm_offset()
+
+	# 1 second cooldown before interaction is possible again
+	await get_tree().create_timer(1.0).timeout
+	target_sittable = null
+	if indicator and indicator.has_method("fade_in"):
+		indicator.fade_in()
+
+func _apply_standing_offset() -> void:
+	if not target_sittable or target_sittable.standing_offset == 0.0:
+		return
+
+	if target_sittable.standing_offset_delay > 0.0:
+		await get_tree().create_timer(target_sittable.standing_offset_delay).timeout
+
+	if state != PlayerState.MOVING or not target_sittable:
+		return
+
+	var offset_vec: Vector3 = target_sittable.chair_face_direction * target_sittable.standing_offset
+	var start_pos: Vector3 = global_position
+	var end_pos: Vector3 = global_position + offset_vec
+	var duration: float = target_sittable.standing_offset_duration
+	var elapsed: float = 0.0
+
+	while elapsed < duration and state == PlayerState.MOVING and target_sittable:
+		elapsed += get_process_delta_time()
+		var t: float = clampf(elapsed / duration, 0.0, 1.0)
+		global_position = start_pos.lerp(end_pos, t)
+		await get_tree().process_frame
+
+func _apply_standing_spring_arm_offset() -> void:
+	if not target_sittable or target_sittable.standing_spring_arm_offset == 0.0:
+		return
+
+	if target_sittable.standing_spring_arm_offset_delay > 0.0:
+		await get_tree().create_timer(target_sittable.standing_spring_arm_offset_delay).timeout
+
+	if state != PlayerState.MOVING or not target_sittable:
+		return
+
+	var world_offset: Vector3 = target_sittable.chair_face_direction * target_sittable.standing_spring_arm_offset
+	var offset_vec: Vector3 = camera_pivot.global_transform.basis.inverse() * world_offset
+	var start_pos: Vector3 = spring_arm.position
+	var end_pos: Vector3 = spring_arm.position + offset_vec
+	var duration: float = target_sittable.standing_spring_arm_offset_duration
+	var elapsed: float = 0.0
+
+	while elapsed < duration and state == PlayerState.MOVING and target_sittable:
+		elapsed += get_process_delta_time()
+		var t: float = clampf(elapsed / duration, 0.0, 1.0)
+		spring_arm.position = start_pos.lerp(end_pos, t)
+		await get_tree().process_frame
+
+func _handle_walk_to_seat(delta: float) -> void:
+	if not target_sittable:
+		state = PlayerState.MOVING
+		return
+
+	var target_pos: Vector3 = target_sittable.get_sitting_area_position()
+	var direction: Vector3 = (target_pos - global_position).normalized()
+	direction.y = 0.0
+
+	# Check if reached sitting area
+	if target_sittable.is_in_sitting_area(global_position):
+		print("Reached sitting area. Approaching chair.")
+		state = PlayerState.APPROACHING_CHAIR
+		return
+
+	# Walk toward sitting area
+	current_speed = speed
+	var target_rotation: float = atan2(-direction.x, -direction.z)
+	visuals.rotation.y = lerp_angle(visuals.rotation.y, target_rotation, turn_lerp * delta)
+
+	var angle: float = visuals.rotation.y
+	var facing: Vector3 = Vector3(-sin(angle), 0.0, -cos(angle))
+	velocity.x = facing.x * current_speed
+	velocity.z = facing.z * current_speed
+
+	# Update animation blend
+	animation_tree.set("parameters/locomotion/blend_position", 1.0)
+
+	move_and_slide()
+
+func _handle_approach_chair(delta: float) -> void:
+	if not target_sittable:
+		state = PlayerState.MOVING
+		return
+
+	# Walk forward toward the chair
+	var chair_pos: Vector3 = target_sittable.get_parent().global_position if target_sittable.get_parent() else target_sittable.global_position
+	var direction: Vector3 = (chair_pos - global_position).normalized()
+	direction.y = 0.0
+
+	current_speed = speed
+	var target_rotation: float = atan2(-direction.x, -direction.z)
+	visuals.rotation.y = lerp_angle(visuals.rotation.y, target_rotation, turn_lerp * delta)
+
+	var angle: float = visuals.rotation.y
+	var facing: Vector3 = Vector3(-sin(angle), 0.0, -cos(angle))
+	velocity.x = facing.x * current_speed
+	velocity.z = facing.z * current_speed
+
+	# Update animation blend
+	animation_tree.set("parameters/locomotion/blend_position", 1.0)
+
+	move_and_slide()
+
+	# Check for collision with chair
+	if get_slide_collision_count() > 0:
+		for i in get_slide_collision_count():
+			var collision: KinematicCollision3D = get_slide_collision(i)
+			if collision.get_collider() == target_sittable.get_parent():
+				print("Collided with chair. Starting turn.")
+				locked_position = global_position
+				state = PlayerState.TURNING_TO_SIT
+				current_speed = 0.0
+				return
+
+func _handle_turn_to_sit(delta: float) -> void:
+	if not target_sittable:
+		state = PlayerState.MOVING
+		return
+
+	var target_angle: float = target_sittable.get_chair_face_angle()
+	var angle_diff: float = angle_difference(visuals.rotation.y, target_angle)
+
+	# Check if facing the chair
+	if abs(angle_diff) < deg_to_rad(5.0):
+		print("Facing chair. Playing sit animation.")
+		visuals.rotation.y = target_angle
+		state = PlayerState.SITTING_DOWN
+		_play_sit_down_animation()
+		return
+
+	# Perform turn-in-place
+	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
+	if angle_diff > 0:
+		playback.travel("turn_left")
+	else:
+		playback.travel("turn_right")
+
+	var effective_speed: float = turn_speed * max(1.0, abs(angle_diff) / deg_to_rad(90.0))
+	var step: float = sign(angle_diff) * min(abs(angle_diff), deg_to_rad(effective_speed) * delta)
+	visuals.rotation.y += step
+
+	global_position = locked_position
+	velocity = Vector3.ZERO
+
+func _play_sit_down_animation() -> void:
+	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
+	playback.travel("sit_down")
+
+	# Wait for sit_down animation to finish, then transition to sitting_idle
+	var sit_anim: Animation = animation_player.get_animation_library("").get_animation("sit_down")
+	if sit_anim:
+		await get_tree().create_timer(sit_anim.length).timeout
+	else:
+		await get_tree().create_timer(2.0).timeout
+
+	if state == PlayerState.SITTING_DOWN:
+		print("Sit animation complete. Now seated.")
+		playback.travel("sitting_idle")
+		state = PlayerState.SEATED
+		can_interact_with_seat = false
+		saved_spring_arm_pos = spring_arm.position
+		_apply_sitting_offset()
+		_apply_spring_arm_offset()
+		_enable_seated_interaction()
+
+
+func _apply_sitting_offset() -> void:
+	if not target_sittable or target_sittable.sitting_offset == 0.0:
+		return
+
+	if target_sittable.sitting_offset_delay > 0.0:
+		await get_tree().create_timer(target_sittable.sitting_offset_delay).timeout
+
+	if state != PlayerState.SEATED:
+		return
+
+	var start_pos: Vector3 = locked_position
+	var end_pos: Vector3 = locked_position + target_sittable.chair_face_direction * target_sittable.sitting_offset
+	var duration: float = target_sittable.sitting_offset_duration
+	var elapsed: float = 0.0
+
+	while elapsed < duration and state == PlayerState.SEATED:
+		elapsed += get_process_delta_time()
+		var t: float = clampf(elapsed / duration, 0.0, 1.0)
+		locked_position = start_pos.lerp(end_pos, t)
+		await get_tree().process_frame
+
+	if state == PlayerState.SEATED:
+		locked_position = end_pos
+
+func _apply_spring_arm_offset() -> void:
+	if not target_sittable or target_sittable.spring_arm_offset == 0.0:
+		return
+
+	if target_sittable.spring_arm_offset_delay > 0.0:
+		await get_tree().create_timer(target_sittable.spring_arm_offset_delay).timeout
+
+	if state != PlayerState.SEATED:
+		return
+
+	var world_offset: Vector3 = target_sittable.chair_face_direction * target_sittable.spring_arm_offset
+	var offset_vec: Vector3 = camera_pivot.global_transform.basis.inverse() * world_offset
+	var start_pos: Vector3 = spring_arm.position
+	var end_pos: Vector3 = spring_arm.position + offset_vec
+	var duration: float = target_sittable.spring_arm_offset_duration
+	var elapsed: float = 0.0
+
+	while elapsed < duration and state == PlayerState.SEATED:
+		elapsed += get_process_delta_time()
+		var t: float = clampf(elapsed / duration, 0.0, 1.0)
+		spring_arm.position = start_pos.lerp(end_pos, t)
+		await get_tree().process_frame
+
+	if state == PlayerState.SEATED:
+		spring_arm.position = end_pos
+
+func _enable_seated_interaction() -> void:
+	await get_tree().create_timer(1.0).timeout
+	if state != PlayerState.SEATED:
+		return
+	can_interact_with_seat = true
+	var indicator: Node = _get_sittable_indicator()
+	if indicator and indicator.has_method("fade_in"):
+		indicator.fade_in()
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta
+
+	# Handle automatic sitting sequence
+	if state == PlayerState.WALKING_TO_SEAT:
+		_handle_walk_to_seat(delta)
+		return
+	elif state == PlayerState.APPROACHING_CHAIR:
+		_handle_approach_chair(delta)
+		return
+	elif state == PlayerState.TURNING_TO_SIT:
+		_handle_turn_to_sit(delta)
+		return
+	elif state in [PlayerState.SITTING_DOWN, PlayerState.SEATED, PlayerState.STANDING_UP]:
+		global_position = locked_position
+		velocity = Vector3.ZERO
+		return
 
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var has_input: bool = input_dir.length() > 0.0

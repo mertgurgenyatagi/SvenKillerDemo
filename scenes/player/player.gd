@@ -46,9 +46,9 @@ const ANIM_PATHS: Dictionary = {
 	"walk": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Walk_F_Loop_IPC.fbx",
 	"turn_left": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_L_Loop_IPC.fbx",
 	"turn_right": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_R_Loop_IPC.fbx",
-	"sit_down": "res://Stand To Sit.fbx",
-	"sitting_idle": "res://Sitting Idle.fbx",
-	"sit_to_stand": "res://Sit To Stand.fbx",
+	"sit_down": "res://assets/animations/sven/Stand To Sit.fbx",
+	"sitting_idle": "res://assets/animations/sven/Sitting Idle.fbx",
+	"sit_to_stand": "res://assets/animations/sven/Sit To Stand.fbx",
 }
 
 func _ready() -> void:

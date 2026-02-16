@@ -1,243 +1,176 @@
 @tool
-extends Node
 class_name MCPWebSocketServer
+extends Node
 
-signal command_received(id: String, command: String, params: Dictionary)
-signal client_connected()
-signal client_disconnected()
+signal client_connected(id)
+signal client_disconnected(id)
+signal command_received(client_id, command)
 
-const DEFAULT_PORT := 6550
-const CLOSE_CODE_ALREADY_CONNECTED := 4001
-const CLOSE_REASON_ALREADY_CONNECTED := "Another client is already connected"
+# Custom implementation of WebSocket server using TCP + WebSocketPeer
+var tcp_server = TCPServer.new()
+var peers = {}
+var pending_peers = []
+var _port = 9080
+var refuse_new_connections = false
+var handshake_timeout = 3000 # ms
 
-var _server: TCPServer
-var _peer: StreamPeerTCP
-var _ws_peer: WebSocketPeer
-var _is_connected := false
-var _rejected_connections := 0
-var _pending_rejection: WebSocketPeer = null
-var _pending_rejection_peer: StreamPeerTCP = null
-var _connected_host: String = ""
-var _connected_port: int = 0
+class PendingPeer:
+	var tcp: StreamPeerTCP
+	var connection: StreamPeer
+	var ws: WebSocketPeer = null
+	var connect_time: int
+	
+	func _init(p_tcp: StreamPeerTCP):
+		tcp = p_tcp
+		connection = tcp
+		connect_time = Time.get_ticks_msec()
 
+func _ready():
+	set_process(false)
 
-func _process(_delta: float) -> void:
-	if not _server:
-		return
+func _process(_delta):
+	poll()
 
-	if _server.is_connection_available():
-		_accept_connection()
+func is_server_active() -> bool:
+	return tcp_server.is_listening()
 
-	if _ws_peer:
-		_ws_peer.poll()
-		_process_websocket()
-
-	_process_pending_rejection()
-
-
-func start_server(port: int = DEFAULT_PORT, bind_address: String = "127.0.0.1") -> Error:
-	_server = TCPServer.new()
-	var err := _server.listen(port, bind_address)
-	if err != OK:
-		_server = null
-		MCPLog.error("Failed to start server on %s:%d: %s" % [bind_address, port, error_string(err)])
-		return err
-
-	return OK
-
+func start_server() -> int:
+	if is_server_active():
+		return ERR_ALREADY_IN_USE
+	
+	var err = tcp_server.listen(_port)
+	if err == OK:
+		set_process(true)
+		print("MCP WebSocket server started on port %d" % _port)
+	else:
+		print("Failed to start MCP WebSocket server: %d" % err)
+	
+	return err
 
 func stop_server() -> void:
-	if _pending_rejection:
-		_pending_rejection.close()
-		_pending_rejection = null
+	if is_server_active():
+		tcp_server.stop()
+		
+		# Close all client connections
+		for client_id in peers.keys():
+			peers[client_id].close()
+		peers.clear()
+		pending_peers.clear()
+		
+		set_process(false)
+		print("MCP WebSocket server stopped")
 
-	if _pending_rejection_peer:
-		_pending_rejection_peer.disconnect_from_host()
-		_pending_rejection_peer = null
-
-	if _ws_peer:
-		_ws_peer.close()
-		_ws_peer = null
-
-	if _peer:
-		_peer.disconnect_from_host()
-		_peer = null
-
-	if _server:
-		_server.stop()
-		_server = null
-
-	_is_connected = false
-	_rejected_connections = 0
-	_connected_host = ""
-	_connected_port = 0
-
-
-func get_rejected_connection_count() -> int:
-	return _rejected_connections
-
-
-func get_connected_host() -> String:
-	"""Returns the remote host IP address of the connected client."""
-	return _connected_host
-
-
-func get_connected_port() -> int:
-	"""Returns the remote port of the connected client."""
-	return _connected_port
-
-
-func send_response(response: Dictionary) -> void:
-	if not _ws_peer or _ws_peer.get_ready_state() != WebSocketPeer.STATE_OPEN:
-		MCPLog.warn("Cannot send response: not connected")
+func poll() -> void:
+	if not tcp_server.is_listening():
 		return
-
-	var json := JSON.stringify(response)
-	_ws_peer.send_text(json)
-
-
-func _accept_connection() -> void:
-	var incoming := _server.take_connection()
-	if not incoming:
-		return
-
-	# Reject if we already have an active or pending connection
-	if _ws_peer != null:
-		_reject_connection(incoming)
-		return
-
-	_peer = incoming
-	_ws_peer = WebSocketPeer.new()
-	_ws_peer.outbound_buffer_size = 16 * 1024 * 1024  # 16MB for screenshot data
-	var err := _ws_peer.accept_stream(_peer)
-	if err != OK:
-		MCPLog.error("Failed to accept WebSocket stream: %s" % error_string(err))
-		_ws_peer = null
-		_peer = null
-		return
-
-	# Capture connection information
-	_connected_host = _peer.get_connected_host()
-	_connected_port = _peer.get_connected_port()
+		
+	# Accept any incoming TCP connections
+	while not refuse_new_connections and tcp_server.is_connection_available():
+		var conn = tcp_server.take_connection()
+		assert(conn != null)
+		print("New TCP connection, starting WebSocket handshake...")
+		pending_peers.append(PendingPeer.new(conn))
 	
-	MCPLog.info("TCP connection received from %s:%d, awaiting WebSocket handshake..." % [_connected_host, _connected_port])
+	# Process pending connections (handshake)
+	var to_remove := []
+	for p in pending_peers:
+		if not _connect_pending(p):
+			if p.connect_time + handshake_timeout < Time.get_ticks_msec():
+				# Timeout
+				print("WebSocket handshake timed out")
+				to_remove.append(p)
+			continue # Still pending
+		to_remove.append(p)
+	for r in to_remove:
+		pending_peers.erase(r)
+	to_remove.clear()
+	
+	# Process connected peers
+	for id in peers:
+		var p: WebSocketPeer = peers[id]
+		p.poll()
+		
+		var state = p.get_ready_state()
+		if state == WebSocketPeer.STATE_CLOSING or state == WebSocketPeer.STATE_CLOSED:
+			print("Client %d disconnected (state: %d)" % [id, state])
+			emit_signal("client_disconnected", id)
+			to_remove.append(id)
+			continue
+		
+		# Process incoming messages
+		while p.get_available_packet_count() > 0:
+			var packet = p.get_packet()
+			var text = packet.get_string_from_utf8()
+			
+			# Parse the JSON command
+			var json = JSON.new()
+			var parse_result = json.parse(text)
+			
+			if parse_result == OK:
+				var command = json.get_data()
+				print("Received command from client %d: %s" % [id, command])
+				emit_signal("command_received", id, command)
+			else:
+				print("Error parsing JSON from client %d: %s at line %d" % 
+					[id, json.get_error_message(), json.get_error_line()])
+	
+	# Remove disconnected clients
+	for r in to_remove:
+		peers.erase(r)
 
+func _connect_pending(p: PendingPeer) -> bool:
+	if p.ws != null:
+		# Poll websocket client if doing handshake
+		p.ws.poll()
+		var state = p.ws.get_ready_state()
+		
+		if state == WebSocketPeer.STATE_OPEN:
+			var id = randi() % (1 << 30) + 1 # Generate a random ID
+			peers[id] = p.ws
+			print("Client %d WebSocket connection established" % id)
+			emit_signal("client_connected", id)
+			return true # Success.
+		elif state != WebSocketPeer.STATE_CONNECTING:
+			print("WebSocket handshake failed, state: %d" % state)
+			return true # Failure.
+		return false # Still connecting.
+	else:
+		if p.tcp.get_status() != StreamPeerTCP.STATUS_CONNECTED:
+			print("TCP connection lost during handshake")
+			return true # TCP disconnected.
+		else:
+			# TCP is ready, create WS peer
+			print("TCP connected, upgrading to WebSocket...")
+			p.ws = WebSocketPeer.new()
+			p.ws.accept_stream(p.tcp)
+			return false # WebSocketPeer connection is pending.
 
-func _reject_connection(incoming: StreamPeerTCP) -> void:
-	_rejected_connections += 1
+func send_response(client_id: int, response: Dictionary) -> int:
+	if not peers.has(client_id):
+		print("Error: Client %d not found" % client_id)
+		return ERR_DOES_NOT_EXIST
+	
+	var peer = peers[client_id]
+	var json_text = JSON.stringify(response)
+	
+	if peer.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		print("Error: Client %d connection not open" % client_id)
+		return ERR_UNAVAILABLE
+	
+	var result = peer.send_text(json_text)
+	if result != OK:
+		print("Error sending response to client %d: %d" % [client_id, result])
+	
+	return result
 
-	# If we're already processing a rejection, just drop this one at TCP level
-	if _pending_rejection != null:
-		incoming.disconnect_from_host()
-		MCPLog.info("Rejected connection at TCP level (busy processing previous rejection) - total rejections: %d" % _rejected_connections)
+func set_port(new_port: int) -> void:
+	if is_server_active():
+		push_error("Cannot change port while server is active")
 		return
+	_port = new_port
 
-	# Accept WebSocket to send proper close code with reason
-	_pending_rejection_peer = incoming
-	_pending_rejection = WebSocketPeer.new()
-	var err := _pending_rejection.accept_stream(_pending_rejection_peer)
-	if err != OK:
-		# Fall back to TCP disconnect
-		incoming.disconnect_from_host()
-		_pending_rejection = null
-		_pending_rejection_peer = null
-		MCPLog.info("Rejected connection at TCP level (WebSocket accept failed) - total rejections: %d" % _rejected_connections)
-		return
+func get_port() -> int:
+	return _port
 
-	MCPLog.info("Rejecting connection (another client already connected) - total rejections: %d" % _rejected_connections)
-
-
-func _process_pending_rejection() -> void:
-	if _pending_rejection == null:
-		return
-
-	_pending_rejection.poll()
-	var state := _pending_rejection.get_ready_state()
-
-	match state:
-		WebSocketPeer.STATE_CONNECTING:
-			# Still waiting for handshake, will send close once ready
-			pass
-
-		WebSocketPeer.STATE_OPEN:
-			# Handshake complete, now send close with our custom code
-			_pending_rejection.close(CLOSE_CODE_ALREADY_CONNECTED, CLOSE_REASON_ALREADY_CONNECTED)
-
-		WebSocketPeer.STATE_CLOSING:
-			# Waiting for close to complete
-			pass
-
-		WebSocketPeer.STATE_CLOSED:
-			# Done, clean up
-			_pending_rejection = null
-			_pending_rejection_peer = null
-
-
-func _process_websocket() -> void:
-	if not _ws_peer:
-		return
-
-	var state := _ws_peer.get_ready_state()
-
-	match state:
-		WebSocketPeer.STATE_CONNECTING:
-			pass
-
-		WebSocketPeer.STATE_OPEN:
-			if not _is_connected:
-				_is_connected = true
-				client_connected.emit()
-				MCPLog.info("WebSocket handshake complete")
-
-			while _ws_peer.get_available_packet_count() > 0:
-				var packet := _ws_peer.get_packet()
-				_handle_packet(packet)
-
-		WebSocketPeer.STATE_CLOSING:
-			pass
-
-		WebSocketPeer.STATE_CLOSED:
-			if _is_connected:
-				_is_connected = false
-				client_disconnected.emit()
-			_ws_peer = null
-			_peer = null
-
-
-func _handle_packet(packet: PackedByteArray) -> void:
-	var text := packet.get_string_from_utf8()
-
-	var json := JSON.new()
-	var err := json.parse(text)
-	if err != OK:
-		MCPLog.error("Failed to parse command: %s" % json.get_error_message())
-		_send_error_response("", "PARSE_ERROR", "Invalid JSON: %s" % json.get_error_message())
-		return
-
-	if not json.data is Dictionary:
-		MCPLog.error("Invalid command format: expected JSON object")
-		_send_error_response("", "INVALID_FORMAT", "Expected JSON object")
-		return
-
-	var data: Dictionary = json.data
-	if not data.has("id") or not data.has("command"):
-		MCPLog.error("Invalid command format")
-		_send_error_response(data.get("id", ""), "INVALID_FORMAT", "Missing 'id' or 'command' field")
-		return
-
-	var id: String = str(data.get("id"))
-	var command: String = data.get("command")
-	var params: Dictionary = data.get("params", {})
-
-	command_received.emit(id, command, params)
-
-
-func _send_error_response(id: String, code: String, message: String) -> void:
-	send_response({
-		"id": id,
-		"status": "error",
-		"error": {
-			"code": code,
-			"message": message
-		}
-	})
+func get_client_count() -> int:
+	return peers.size()

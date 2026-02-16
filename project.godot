@@ -20,7 +20,6 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://ctru81t2dss32"
 SettingsManager="*res://scripts/autoload/settings_manager.gd"
-MCPGameBridge="res://addons/godot_mcp/game_bridge/mcp_game_bridge.gd"
 
 [display]
 
@@ -29,14 +28,11 @@ window/size/viewport_height=1080
 window/size/mode=2
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+auto_start=false
 
-[godot_mcp]
+[editor_plugins]
 
-bind_mode=0
-custom_bind_ip=""
-port_override_enabled=true
-port_override=6700
-auto_start=true
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [input]
 

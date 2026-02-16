@@ -21,8 +21,11 @@ extends Node3D
 @export var standing_spring_arm_offset_delay: float = 0.0  ## Seconds after sit_to_stand starts before spring arm offset begins
 @export var standing_spring_arm_offset_duration: float = 0.2  ## Seconds over which the standing spring arm offset is applied
 
-const SITTING_AREA_OFFSET: float = 1.0  ## Distance from chair to sitting area (meters)
-const SITTING_AREA_SIZE: float = 0.5  ## Size of the sitting area (meters)
+const SITTING_AREA_OFFSET_DEFAULT: float = 1.0  ## Default distance from chair to sitting area (meters)
+const SITTING_AREA_SIZE_DEFAULT: float = 0.5  ## Default size of the sitting area (meters)
+@export_group("Sitting Area")
+@export var sitting_area_offset: float = SITTING_AREA_OFFSET_DEFAULT  ## Distance from chair to sitting area (meters)
+@export var sitting_area_size: Vector2 = Vector2(SITTING_AREA_SIZE_DEFAULT, SITTING_AREA_SIZE_DEFAULT)  ## Size of the sitting area (X, Z) in meters
 
 var seat_marker: Marker3D = null
 
@@ -58,7 +61,7 @@ func get_seat_rotation() -> float:
 func get_sitting_area_position() -> Vector3:
 	## Returns the center of the sitting area where the player should walk to
 	var chair_pos: Vector3 = get_parent().global_position if get_parent() else global_position
-	return chair_pos + chair_face_direction * SITTING_AREA_OFFSET
+	return chair_pos + chair_face_direction * sitting_area_offset
 
 func get_chair_face_angle() -> float:
 	## Returns the yaw angle (radians) the player should face when sitting
@@ -69,4 +72,4 @@ func is_in_sitting_area(player_pos: Vector3) -> bool:
 	var area_center: Vector3 = get_sitting_area_position()
 	var dx: float = abs(player_pos.x - area_center.x)
 	var dz: float = abs(player_pos.z - area_center.z)
-	return dx <= SITTING_AREA_SIZE / 2.0 and dz <= SITTING_AREA_SIZE / 2.0
+	return dx <= sitting_area_size.x / 2.0 and dz <= sitting_area_size.y / 2.0

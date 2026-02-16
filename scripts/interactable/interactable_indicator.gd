@@ -22,7 +22,7 @@ var is_fading_out: bool = false
 
 func _ready() -> void:
 	sprite = Sprite3D.new()
-	sprite.texture = preload("res://interactable_indicator.png")
+	sprite.texture = preload("res://assets/textures/ui/interactable_indicator.png")
 	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.pixel_size = pixel_size
 	sprite.modulate = Color(1, 1, 1, 0)

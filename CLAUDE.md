@@ -13,7 +13,7 @@
 **Engine & Tools:**
 - Godot 4.6 (Forward Plus renderer)
 - GDScript 4.x (type-safe, with type hints)
-- Godot MCP addon for Claude AI integration
+- AI integration: removed
 - Git with feature branching (`main-menu-tweaks` → `development`)
 
 ---
@@ -242,11 +242,8 @@ scenes/player/
 3. Merge to `development` branch when feature-complete.
 4. Use `main-menu-tweaks` only for menu-specific polish.
 
-### Collaboration with Claude AI (via MCP)
-- Use the Godot MCP addon (`addons/godot_mcp/`) for seamless code generation
-- Provide clear scene/asset paths; the addon can navigate the project structure
-- Request implementation of established patterns (e.g., "Create player controller following GameManager pattern")
-- Ask for shader code, animation setup, signal handling—areas where AI excels
+### Collaboration with Claude AI
+- Use manual or external AI workflows.
 
 ---
 
@@ -277,7 +274,7 @@ scenes/player/
 | Interactions SFX | `assets/audio/sfx/interactions/` |
 | Game design (screenplay) | `docs/sven_killer_screenplay.txt` |
 | Production checklist | `docs/planning/Final_Preparations.md` |
-| Godot MCP addon | `addons/godot_mcp/` |
+| Godot MCP addon | removed |
 
 ---
 
@@ -298,4 +295,4 @@ scenes/player/
 
 **Last Updated:** Feb 4, 2026
 **Branch:** main-menu-tweaks → development
-**Contact AI:** Use Godot MCP addon (`/mcp` commands) for code generation
+**Contact AI:** AI integration removed — use external tools or scripts instead

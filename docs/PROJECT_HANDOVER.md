@@ -146,7 +146,7 @@ The project is now pivoting toward a different movement system based on reverse-
 ### Phase 2: Opening Sequence (Feb 2026)
 
 **Branch:** `pre-gameplay-sequence` → `development`
-**Commit:** `5209404` — "Complete opening voiceover sequence implementation and set up Godot MCP"
+**Commit:** `5209404` — "Complete opening voiceover sequence implementation"
 
 **Implemented:**
 - Opening voiceover sequence (`opening_sequence.tscn`):
@@ -165,10 +165,6 @@ The project is now pivoting toward a different movement system based on reverse-
 - `scenes/gameplay/opening_sequence.tscn`, `scenes/gameplay/opening_sequence.gd`
 - `assets/shaders/video_bw_sepia.gdshader`
 
-**Godot MCP Setup:**
-- Added `addons/godot_mcp/` addon for Claude AI integration
-- Configured `MCPGameBridge` autoload
-- Disabled MCP servers in `.claude/mcp.json`
 
 ### Phase 3: Player Controller & Sitting Mechanic (Feb 2026)
 
@@ -269,13 +265,13 @@ The project is now pivoting toward a different movement system based on reverse-
 - `assets/audio/vehicles/` (car sound effects)
 - `assets/textures/` (environment textures, polyhaven library, UI extras)
 - `.claude/plans/` (planning documents)
-- `static/`, `debug_screenshots/`, `godot-mcp/` (temp folders)
+ - `static/`, `debug_screenshots/` (temp folders)
 - Root-level temp files (installers, test FBX, test screenshots)
 
 **Kept (26 essential files):**
 - Core scenes: `main.tscn`, `main_menu.tscn`, `settings_menu.tscn`, `opening_sequence.tscn`
 - Scripts: `main.gd`, `main_menu.gd`, `settings_menu.gd`, `opening_sequence.gd`
-- Autoloads: `game_manager.gd`, `settings_manager.gd`, `mcp_game_bridge.gd`
+- Autoloads: `game_manager.gd`, `settings_manager.gd`
 - Fonts: `fjalla_one.ttf`, `roboto_condensed.ttf`, `roboto_condensed_medium.ttf`, `roboto_condensed_semibold.ttf` (also kept unused: `courier_prime.ttf`, `inter.ttf`, `playfair_display.ttf`)
 - Audio: `sven_killer.ogg` (music), `ambient_main_menu.ogg`, `menu_hover.ogg`, `menu_click.ogg`, `noe_prompt_sfx.ogg`, `vo_opening_custody.ogg`
 - Video: `main_menu.ogv`, `voiceover_video.ogv`
@@ -283,7 +279,7 @@ The project is now pivoting toward a different movement system based on reverse-
 - Branding: `gurgenstudios.png`
 - Documentation: `docs/` (all files kept)
 - Project files: `project.godot`, `.gitignore`, etc.
-- Godot addons: `addons/godot_mcp/`
+-- Godot addons: (none kept)
 
 **Current Repository State:**
 - Lean, production-ready asset structure
@@ -329,7 +325,6 @@ The project is now pivoting toward a different movement system based on reverse-
 ✅ **Autoload Singletons**
 - `GameManager`: Scene management, fade transitions, current_scene tracking
 - `SettingsManager`: Audio bus setup, config persistence, language selection
-- `MCPGameBridge`: Claude AI integration (disabled)
 
 ✅ **Debug Scene & Player Prototype**
 - `scenes/debug/debug_movement_and_camera.tscn` — Debug testbed added after this handover: contains a player instance and simple geometry; movement and camera were finalized here (prototype of the turn-and-walk locomotion and spring-arm camera with damping).
@@ -356,10 +351,6 @@ The project is now pivoting toward a different movement system based on reverse-
 
 ```
 SvenKillerDemo/
-├── .claude/
-│   └── mcp.json
-├── addons/
-│   └── godot_mcp/
 ├── assets/
 │   ├── audio/
 │   │   ├── music/

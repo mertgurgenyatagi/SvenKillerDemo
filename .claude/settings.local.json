@@ -1,36 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tree:*)",
-      "Bash(git add:*)",
-      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" log --oneline -20)",
-      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" status)",
-      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" log --graph --oneline --all)",
-      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" diff development..main-menu-tweaks --stat)",
-      "Bash(git -C \"c:\\\\Users\\\\Mert\\\\Desktop\\\\repos\\\\SvenKillerDemo\" diff project.godot)",
-      "Bash(tasklist:*)",
-      "Bash(findstr:*)",
-      "Bash(Get-Process -Name *godot* -ErrorAction SilentlyContinue)",
-      "Bash(Select-Object Name, Id, CPU, Memory)",
-      "Bash(netstat:*)",
-      "Bash(dir:*)",
-      "Bash(ls:*)",
-      "Bash(move:*)",
-      "Bash(powershell -Command:*)",
-      "Bash(npx:*)",
-      "Bash(curl:*)",
-      "Bash(python:*)",
-      "Bash(pip install:*)",
-      "Bash(git clone:*)",
       "Bash(npm install:*)",
-      "Bash(timeout:*)",
-      "Bash(where:*)",
-      "Bash(set:*)",
-      "Bash(godot:*)",
-      "WebFetch(domain:github.com)",
-      "Bash(gh repo view:*)",
-      "Bash(python3:*)",
-      "WebFetch(domain:www.mocaponline.com)"
+      "Bash(npm run build:*)",
+      "Bash(ls:*)",
+      "Bash(bash .mcp/test-mcp-connection.sh)",
+      "Bash(pkill:*)",
+      "Bash(node test-godot-ws.js:*)",
+      "Bash(timeout 3 node:*)",
+      "Bash(node:*)",
+      "Bash(chmod:*)",
+      "Bash(git restore:*)",
+      "Bash(MSYS_NO_PATHCONV=1 node:*)"
     ]
   }
 }

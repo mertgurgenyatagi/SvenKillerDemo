@@ -27,9 +27,6 @@ var settings_overlay: Control = null
 # Audio - loaded at runtime (needs Godot import first)
 var ambient_audio: AudioStream
 var music_audio: AudioStream
-var menu_hover_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_hover.ogg")
-var menu_click_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_click.ogg")
-var ui_sfx_player: AudioStreamPlayer = null
 
 # Config values
 var ambient_volume_db: float = 4.0 # Remove config usage, use direct values
@@ -183,11 +180,6 @@ func setup_title() -> void:
 	title_label.text = "SVEN KILLER"
 
 func setup_buttons() -> void:
-	# Create UI SFX player
-	ui_sfx_player = AudioStreamPlayer.new()
-	ui_sfx_player.bus = "SFX"
-	add_child(ui_sfx_player)
-
 	# Buttons 15% bigger than before
 	for button in [new_game_button, settings_button]:
 		button.add_theme_font_override("font", roboto_condensed_font)
@@ -271,10 +263,7 @@ func _on_button_hover(button: Button) -> void:
 		return
 
 	# Play hover sound (35% volume)
-	if ui_sfx_player:
-		ui_sfx_player.stream = menu_hover_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.35)
-		ui_sfx_player.play()
+	AudioManager.play_sfx(AudioManager.AudioID.MENU_HOVER, linear_to_db(0.35))
 
 	# Kill existing tween if any
 	if hover_tweens.has(button) and hover_tweens[button] != null and hover_tweens[button].is_valid():
@@ -310,10 +299,7 @@ func _on_button_unhover(button: Button) -> void:
 
 func _on_button_pressed() -> void:
 	# Play click sound (15% volume)
-	if ui_sfx_player:
-		ui_sfx_player.stream = menu_click_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.15)
-		ui_sfx_player.play()
+	AudioManager.play_sfx(AudioManager.AudioID.MENU_CLICK, linear_to_db(0.15))
 
 func _on_new_game_pressed() -> void:
 	# Lock the hover rectangle (prevent unhover)
@@ -329,6 +315,8 @@ func _on_new_game_pressed() -> void:
 				hover_tweens[new_game_button].kill()
 			# Set to full opacity
 			style.bg_color.a = 0.45
+
+	# NOTE: house preload moved to opening sequence (instantiate when voiceover ends)
 
 	# Wait 0.85 seconds
 	await get_tree().create_timer(0.85).timeout

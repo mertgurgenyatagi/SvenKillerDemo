@@ -20,7 +20,9 @@ var side_factor: float = -1.0
 var is_fading_out: bool = false
 
 
+
 func _ready() -> void:
+	# Create main sprite
 	sprite = Sprite3D.new()
 	sprite.texture = preload("res://assets/textures/ui/interactable_indicator.png")
 	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -97,14 +99,16 @@ func _process(delta: float) -> void:
 
 	# abs(side_factor) fades to 0 during crossover, creating a natural fade transition
 	var side_opacity: float = absf(side_factor)
-	sprite.modulate = Color(1, 1, 1, current_opacity * side_opacity)
+	var final_opacity: float = current_opacity * side_opacity
+	sprite.modulate = Color(1, 1, 1, final_opacity)
 
 	# Dynamic angle: 5 deg at 10m, 10 deg at <=1m
 	var t := clampf(1.0 - (cam_distance - CLOSE_DISTANCE) / (FADE_DISTANCE - CLOSE_DISTANCE), 0.0, 1.0)
 	var angle := lerpf(ANGLE_FAR, ANGLE_CLOSE, t)
 
 	# Dynamic size: full at 10m, half at <=1m
-	sprite.pixel_size = lerpf(pixel_size, pixel_size * 0.5, t)
+	var dynamic_pixel_size: float = lerpf(pixel_size, pixel_size * 0.5, t)
+	sprite.pixel_size = dynamic_pixel_size
 
 	# Position
 	var perp := Vector2(-dir.y, dir.x)

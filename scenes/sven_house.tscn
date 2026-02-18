@@ -2,12 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://tsnwf28pnf1n" path="res://modern_apartment_interior.glb" id="1_house_model"]
 [ext_resource type="Script" uid="uid://dj143tjcsp1nq" path="res://scripts/collision/house_collision_generator.gd" id="2_collision"]
-[ext_resource type="PackedScene" uid="uid://c4k8n3m2p1h5j" path="res://scenes/player/player.tscn" id="3_v6mjv"]
+[ext_resource type="PackedScene" uid="uid://y56shyqj6rfg" path="res://scenes/player/player_house_version.tscn" id="3_v6mjv"]
 [ext_resource type="PackedScene" uid="uid://daqjf27n3jeo6" path="res://chair_source/Maya Arm Chair - 4K.glb" id="4_chair"]
 [ext_resource type="Script" uid="uid://c04hg6ovdtkq8" path="res://scripts/interactable/sittable.gd" id="5_sittable"]
 [ext_resource type="Script" uid="uid://c0rw6g7hxqvgq" path="res://scripts/interactable/interactable_indicator.gd" id="6_indicator"]
 [ext_resource type="Script" uid="uid://dk6v7woa1abbu" path="res://scripts/interactable/phone_interactable.gd" id="7_phone"]
-[ext_resource type="Script" uid="uid://bq622d680ex1m" path="res://scripts/interactable/house_lightswitch_interactable.gd" id="8_lightswitch"]
+[ext_resource type="Script" uid="uid://bjftdd8j353he" path="res://scripts/interactable/light_switch_interactable.gd" id="8_aoyq6"]
+[ext_resource type="Script" uid="uid://cxvamigjx3v40" path="res://scenes/sven_house_boot.gd" id="9_boot"]
+[ext_resource type="Texture2D" uid="uid://xydyxdu7hmpk" path="res://ChatGPT Image Feb 14, 2026, 05_36_44 AM.png" id="10_qhurl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ChairBox"]
 size = Vector3(0.5, 0.35, 0.5)
@@ -18,27 +20,32 @@ size = Vector3(0.3, 0.3, 0.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_LightSwitchBox"]
 size = Vector3(0.2, 0.3, 0.2)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6klm2"]
+blend_mode = 4
+albedo_texture = ExtResource("10_qhurl")
+
 [node name="SvenHouse" type="Node3D" unique_id=137629843]
+script = ExtResource("9_boot")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1361436057]
 
 [node name="HouseModel" parent="." unique_id=144816368 instance=ExtResource("1_house_model")]
 transform = Transform3D(0.002, 0, 0, 0, 0.002, 0, 0, 0, 0.002, 15.24885, 0, 5.704932)
 
-[node name="@StaticBody3D@18536" type="StaticBody3D" parent="HouseModel" unique_id=24887398]
+[node name="@StaticBody3D@28168" type="StaticBody3D" parent="HouseModel" unique_id=1422626132]
 collision_mask = 0
 
 [node name="CollisionGenerator" type="Node3D" parent="." unique_id=2090534873]
 script = ExtResource("2_collision")
 
 [node name="ChairParent" type="Node3D" parent="." unique_id=1467558760]
-transform = Transform3D(-0.4714804, 0, -0.7666199, 0, 0.9, 0, 0.7666199, 0, -0.4714804, 4.3311977, 0.18116492, -1.8553525)
+transform = Transform3D(0.44995937, 0, 0.77944624, 0, 0.90000004, 0, -0.77944624, 0, 0.44995937, 0.32321572, 0.18116492, -1.8876324)
 
 [node name="MayaChair" parent="ChairParent" unique_id=1836773350 instance=ExtResource("4_chair")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.3, 0, -27.7)
 
 [node name="ChairCollisionBox" type="StaticBody3D" parent="." unique_id=681028879]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.337, 0.382, -1.84)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.30752528, 0.382, -1.84)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ChairCollisionBox" unique_id=902360278]
 shape = SubResource("BoxShape3D_ChairBox")
@@ -56,33 +63,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
 script = ExtResource("6_indicator")
 
 [node name="Player" parent="." unique_id=1007643025 instance=ExtResource("3_v6mjv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.3014654, -0.7820132)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0.91853666, 0.3014654, -3.0682483)
 
-[node name="LightSwitchBox" type="StaticBody3D" parent="." unique_id=681028880]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29, 1.35, -5.98)
+[node name="PhoneInteractableBox" type="StaticBody3D" parent="." unique_id=681028880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.23, 1.35, -5.98)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LightSwitchBox" unique_id=902360279]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PhoneInteractableBox" unique_id=902360279]
 shape = SubResource("BoxShape3D_PhoneBox")
 
-[node name="HouseLightSwitchInteractable" type="Node3D" parent="LightSwitchBox" unique_id=2053761366]
+[node name="PhoneInteractable" type="Node3D" parent="PhoneInteractableBox" unique_id=2053761366]
 script = ExtResource("7_phone")
 
-[node name="InteractableIndicator" type="Node3D" parent="LightSwitchBox" unique_id=1304164377]
+[node name="InteractableIndicator" type="Node3D" parent="PhoneInteractableBox" unique_id=1304164377]
 script = ExtResource("6_indicator")
 
-[node name="PhoneInteractableBox" type="StaticBody3D" parent="." unique_id=681028881]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.234, 1.35, -5.98)
+[node name="LightSwitchInteractableBox" type="StaticBody3D" parent="." unique_id=681028881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29, 1.35, -5.98)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PhoneInteractableBox" unique_id=902360280]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LightSwitchInteractableBox" unique_id=902360280]
 shape = SubResource("BoxShape3D_LightSwitchBox")
 
-[node name="PhoneInteractable" type="Node3D" parent="PhoneInteractableBox" unique_id=2053761367]
-script = ExtResource("8_lightswitch")
+[node name="LightSwitchInteractable" type="Node3D" parent="LightSwitchInteractableBox" unique_id=2053761367]
+script = ExtResource("8_aoyq6")
 
-[node name="InteractableIndicator" type="Node3D" parent="PhoneInteractableBox" unique_id=1304164378]
+[node name="InteractableIndicator" type="Node3D" parent="LightSwitchInteractableBox" unique_id=1304164378]
 script = ExtResource("6_indicator")
 
-[node name="MainCeilingLight" type="OmniLight3D" parent="." unique_id=2110151949]
+[node name="MainCeilingLight" type="OmniLight3D" parent="." unique_id=2110151949 groups=["house_lights"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 2.5396712, -3.054076)
 light_color = Color(1, 0.92, 0.82, 1)
 light_energy = 3.5
@@ -93,34 +100,39 @@ shadow_blur = 4.085
 omni_range = 8.0
 omni_attenuation = 1.5
 
-[node name="corner1" type="OmniLight3D" parent="." unique_id=2132890252]
+[node name="corner1" type="OmniLight3D" parent="." unique_id=2132890252 groups=["house_lights"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5382864, 1.6720389, -0.44549787)
 light_color = Color(1, 0.92156863, 0.81960785, 1)
 light_energy = 0.366
 light_specular = 0.0
 
-[node name="corner2" type="OmniLight3D" parent="." unique_id=1699454467]
+[node name="corner2" type="OmniLight3D" parent="." unique_id=1699454467 groups=["house_lights"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2425513, 1.6720389, -0.6285635)
 light_color = Color(1, 0.92156863, 0.81960785, 1)
 light_energy = 0.366
 light_specular = 0.0
 
-[node name="corner3" type="OmniLight3D" parent="." unique_id=1079512657]
+[node name="corner3" type="OmniLight3D" parent="." unique_id=1079512657 groups=["house_lights"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2465658, 1.6720389, -5.0856323)
 light_color = Color(1, 0.92156863, 0.81960785, 1)
 light_energy = 0.366
 light_specular = 0.0
 
-[node name="corner4" type="OmniLight3D" parent="." unique_id=676963764]
+[node name="corner4" type="OmniLight3D" parent="." unique_id=676963764 groups=["house_lights"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8644516, 1.6720389, -5.4079065)
 light_color = Color(1, 0.92156863, 0.81960785, 1)
 light_energy = 0.366
 light_specular = 0.0
 
-[node name="corner5" type="OmniLight3D" parent="." unique_id=1331105349]
+[node name="corner5" type="OmniLight3D" parent="." unique_id=1331105349 groups=["house_lights"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03857875, 2.4590743, -7.464864)
 light_color = Color(1, 0.92156863, 0.81960785, 1)
 light_energy = 0.366
 light_specular = 0.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=2091708745]
+transform = Transform3D(-9.934766e-11, -0.5, -5.2125306e-16, -1.1924881e-11, 7.110139e-17, 0.5, -0.001, 4.967383e-08, -5.9624403e-09, 3.49924, 1.8092306, -6.1349235)
+flip_faces = true
+material = SubResource("StandardMaterial3D_6klm2")
 
 [editable path="HouseModel"]

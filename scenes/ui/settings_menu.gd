@@ -9,11 +9,6 @@ var roboto_font: Font = preload("res://assets/fonts/roboto_condensed_semibold.tt
 var roboto_regular: Font = preload("res://assets/fonts/roboto_condensed.ttf")
 var fjalla_font: Font = preload("res://assets/fonts/fjalla_one.ttf")
 
-# Audio
-var menu_hover_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_hover.ogg")
-var menu_click_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/menu_click.ogg")
-var ui_sfx_player: AudioStreamPlayer = null
-
 # Tab state
 var current_tab: int = 0
 var tab_buttons: Array[Button] = []
@@ -27,11 +22,6 @@ const PANEL_HEIGHT: int = 580
 
 
 func _ready() -> void:
-	# Create UI SFX player
-	ui_sfx_player = AudioStreamPlayer.new()
-	ui_sfx_player.bus = "SFX"
-	add_child(ui_sfx_player)
-
 	_build_ui()
 	_switch_tab(0)
 
@@ -494,18 +484,12 @@ func _on_reset_defaults_pressed() -> void:
 
 func _on_button_hover() -> void:
 	# Play hover sound (35% volume)
-	if ui_sfx_player:
-		ui_sfx_player.stream = menu_hover_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.35)
-		ui_sfx_player.play()
+	AudioManager.play_sfx(AudioManager.AudioID.MENU_HOVER, linear_to_db(0.35))
 
 
 func _on_button_pressed() -> void:
 	# Play click sound (15% volume)
-	if ui_sfx_player:
-		ui_sfx_player.stream = menu_click_sfx
-		ui_sfx_player.volume_db = linear_to_db(0.15)
-		ui_sfx_player.play()
+	AudioManager.play_sfx(AudioManager.AudioID.MENU_CLICK, linear_to_db(0.15))
 
 
 # --- Styling Helpers ---

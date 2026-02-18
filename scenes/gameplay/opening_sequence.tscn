@@ -36,7 +36,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TransitionCurtain" type="ColorRect" parent="."]
-z_index = 100000
+z_index = 1000
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

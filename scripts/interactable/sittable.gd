@@ -43,8 +43,16 @@ func _ready() -> void:
 		if indicator:
 			indicator.y_offset = 1.0
 
-	# Normalize chair face direction
-	chair_face_direction = chair_face_direction.normalized()
+	# If a SeatPosition marker exists, derive the chair face direction from its global X axis.
+	# This makes it robust when the model is rotated in the editor (e.g., chair forward == +X).
+	if seat_marker:
+		chair_face_direction = seat_marker.global_transform.basis.x.normalized()
+	elif get_parent():
+		# Fallback to parent rotation (use parent's +X as forward)
+		chair_face_direction = get_parent().global_transform.basis.x.normalized()
+	else:
+		# Default: Z+ (legacy)
+		chair_face_direction = chair_face_direction.normalized()
 
 func get_seat_position() -> Vector3:
 	if seat_marker:

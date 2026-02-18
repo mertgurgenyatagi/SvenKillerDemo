@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://y56shyqj6rfg"]
+
+[ext_resource type="PackedScene" uid="uid://cthugyx0doxam" path="res://assets/models/characters/motusman/MotusMan_v55.fbx" id="1_motusman"]
+[ext_resource type="Script" uid="uid://m3s0n4j4jb8g" path="res://scenes/player/player_house.gd" id="1_player"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.3
+height = 1.8
+
+[node name="Player" type="CharacterBody3D" unique_id=1007643025]
+collision_layer = 2
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=623137660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Visuals" type="Node3D" parent="." unique_id=325526008]
+
+[node name="MotusMan" parent="Visuals" unique_id=2018844390 instance=ExtResource("1_motusman")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals" unique_id=1323807423]
+
+[node name="CameraPivot" type="Node3D" parent="." unique_id=479174333]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 1.5, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=1452518826]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
+collision_mask = 0
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=2017370138]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0)
+h_offset = 0.35
+current = true
+fov = 60.0

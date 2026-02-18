@@ -17,9 +17,7 @@ var voiceover_video: VideoStream = preload("res://assets/video/voiceover/voiceov
 var bw_sepia_shader: Shader = preload("res://assets/shaders/video_bw_sepia.gdshader")
 
 # Noé prompt
-var noe_prompt_sfx: AudioStream = preload("res://assets/audio/sfx/interactions/noe_prompt_sfx.ogg")
 var noe_prompt_label: Label = null
-var noe_sfx_player: AudioStreamPlayer = null
 
 # Video display system (built programmatically for SubViewport 10fps cap)
 var video_player: VideoStreamPlayer = null
@@ -83,13 +81,6 @@ func _setup_noe_prompt() -> void:
 	noe_prompt_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(noe_prompt_label)
 
-	# Audio player for prompt SFX
-	noe_sfx_player = AudioStreamPlayer.new()
-	noe_sfx_player.bus = "SFX"
-	noe_sfx_player.stream = noe_prompt_sfx
-	noe_sfx_player.volume_db = 4.0  # File's original volume
-	add_child(noe_sfx_player)
-
 func _setup_video_system() -> void:
 	# SubViewportContainer with scale transform instead of size-based enlargement
 	# This centers and scales the video more reliably
@@ -139,6 +130,17 @@ func _start_video() -> void:
 	# Render first frame immediately
 	sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
+	# Instantiate the house scene at voiceover START so hidden boot logic runs while the video plays
+	var house_packed: PackedScene = load("res://scenes/sven_house.tscn")
+	if house_packed:
+		var house_inst = house_packed.instantiate()
+		if house_inst:
+			if house_inst.has_method("reveal_scene"):
+				house_inst.background_preload = true
+			GameManager.preloaded_scene = house_inst
+			# Add to GameManager autoload so it persists until we reparent into Main/CurrentScene
+			GameManager.add_child(house_inst)
+
 	# Schedule Noé prompt: video is ~28.5 seconds
 	await get_tree().create_timer(29.5).timeout
 	video_ended = true
@@ -147,10 +149,10 @@ func _start_video() -> void:
 	subtitle_label.visible = false
 
 	# Play SFX 0.16 seconds before prompt appears with 0.14s fade in
-	noe_sfx_player.volume_db = -80.0  # Start silent
-	noe_sfx_player.play()
-	var sfx_tween: Tween = create_tween()
-	sfx_tween.tween_property(noe_sfx_player, "volume_db", 4.0, 0.14).set_ease(Tween.EASE_IN)
+	var noe_sfx_player: AudioStreamPlayer = AudioManager.play_sfx(AudioManager.AudioID.NOE_PROMPT, -80.0)
+	if noe_sfx_player:
+		var sfx_tween: Tween = create_tween()
+		sfx_tween.tween_property(noe_sfx_player, "volume_db", 4.0, 0.14).set_ease(Tween.EASE_IN)
 	await get_tree().create_timer(0.16).timeout
 
 	# Show Noé prompt
@@ -192,3 +194,56 @@ func _show_noe_prompt() -> void:
 	# Show subtitle with English translation
 	subtitle_label.text = "\"WE WILL MEET AT THE BUS STATION\""
 	subtitle_label.visible = true
+
+	# After 3 seconds, snap out the prompt and reveal preloaded house scene
+	# Start the second Noé SFX slightly before the reveal (same offset as the first: 0.16s)
+	var pre_reveal_delay: float = 3.0 - 0.16
+	if pre_reveal_delay > 0.0:
+		await get_tree().create_timer(pre_reveal_delay).timeout
+
+	# Play the prompt SFX 0.16s before revealing, fade in over 0.14s
+	var noe_sfx_player2: AudioStreamPlayer = AudioManager.play_sfx(AudioManager.AudioID.NOE_PROMPT, -80.0)
+	if noe_sfx_player2:
+		var sfx_tween2: Tween = create_tween()
+		sfx_tween2.tween_property(noe_sfx_player2, "volume_db", 4.0, 0.14).set_ease(Tween.EASE_IN)
+
+	# Wait the same offset used earlier so sfx leads the reveal by ~0.16s
+	await get_tree().create_timer(0.16).timeout
+
+	# Stop showing prompt and subtitle and hide black screen
+	noe_prompt_label.visible = false
+	subtitle_label.visible = false
+	black_screen.visible = false
+
+	# Reveal the preloaded house scene if present
+	if GameManager.preloaded_scene:
+		var house = GameManager.preloaded_scene
+		print("opening_sequence: preloaded house parent=", house.get_parent(), " GameManager.main_node=", GameManager.main_node)
+
+		var main_node = GameManager.main_node
+		if not main_node:
+			# SceneTree root (Window) does not provide find_node; search children for Main
+			for root_child in get_tree().get_root().get_children():
+				if root_child and root_child.has_method("find_node"):
+					var found_main = root_child.find_node("Main", true, false)
+					if found_main:
+						main_node = found_main
+						break
+			print("opening_sequence: located Main via search=", main_node)
+
+		if main_node and main_node.has_node("CurrentScene"):
+			var current_scene_node = main_node.get_node("CurrentScene")
+			# Reparent if needed
+			if house.get_parent() != current_scene_node:
+				if is_instance_valid(house.get_parent()):
+					house.get_parent().remove_child(house)
+				current_scene_node.add_child(house)
+				GameManager.current_scene = house
+				print("opening_sequence: reparented house into Main/CurrentScene")
+		else:
+			print("opening_sequence: ERROR - cannot find Main/CurrentScene to reparent house")
+
+		# Call reveal helper if available
+		if house.has_method("reveal_scene"):
+			house.reveal_scene()
+			print("opening_sequence: called reveal_scene() on house")

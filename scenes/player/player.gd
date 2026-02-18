@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+signal sat_down
+signal stood_up
+
 @export var speed: float = 1.3
 @export var acceleration: float = 2.7
 @export var deceleration: float = 4.0
@@ -15,6 +18,8 @@ extends CharacterBody3D
 @export var zoom_min: float = 1.3
 @export var zoom_max: float = 3.7
 @export var zoom_inertia: float = 4.0
+@export_group("Footsteps")
+@export var footstep_interval: float = 0.6  ## Seconds between footsteps at full walk speed
 
 @onready var visuals: Node3D = $Visuals
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -23,6 +28,8 @@ extends CharacterBody3D
 
 var skeleton: Skeleton3D
 var current_speed: float = 0.0
+var footstep_timer: float = 0.0
+var last_footstep_index: int = -1
 var animation_tree: AnimationTree
 var is_turning: bool = false
 var turn_target_angle: float = 0.0
@@ -33,12 +40,16 @@ var target_camera_yaw: float = 0.0
 var target_camera_pitch: float = deg_to_rad(-20.0)
 var target_zoom: float = 2.5
 
+# Saved camera baseline for normalization after standing (yaw not stored)
+var saved_camera_pitch: float = 0.0
+var saved_spring_length: float = 0.0
+var saved_spring_arm_pos: Vector3 = Vector3.ZERO
+
 enum PlayerState { MOVING, WALKING_TO_SEAT, APPROACHING_CHAIR, TURNING_TO_SIT, SITTING_DOWN, SEATED, STANDING_UP }
 var state: PlayerState = PlayerState.MOVING
 var target_sittable: Sittable = null
 var locked_position: Vector3 = Vector3.ZERO
 var can_interact_with_seat: bool = false
-var saved_spring_arm_pos: Vector3 = Vector3.ZERO
 
 
 const ANIM_PATHS: Dictionary = {
@@ -234,6 +245,31 @@ func _load_animation(anim_name: String, fbx_path: String) -> void:
 
 	instance.queue_free()
 
+func _play_footstep() -> void:
+	# Array of wood footstep audio IDs
+	var footstep_ids: Array[AudioManager.AudioID] = [
+		AudioManager.AudioID.FOOTSTEP_WOOD_1,
+		AudioManager.AudioID.FOOTSTEP_WOOD_2,
+		AudioManager.AudioID.FOOTSTEP_WOOD_3,
+		AudioManager.AudioID.FOOTSTEP_WOOD_4,
+		AudioManager.AudioID.FOOTSTEP_WOOD_5,
+		AudioManager.AudioID.FOOTSTEP_WOOD_6,
+		AudioManager.AudioID.FOOTSTEP_WOOD_7,
+	]
+
+	# Pick a random footstep, avoiding repeating the same one
+	var index: int = randi_range(0, footstep_ids.size() - 1)
+	while index == last_footstep_index and footstep_ids.size() > 1:
+		index = randi_range(0, footstep_ids.size() - 1)
+
+	last_footstep_index = index
+
+	# Play 3D footstep at player position
+	var player: AudioStreamPlayer3D = AudioManager.play_3d_sfx(footstep_ids[index], global_position)
+	if player:
+		# Slight pitch variation for natural feel
+		player.pitch_scale = randf_range(0.9, 1.1)
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		target_camera_yaw -= event.relative.x * mouse_sensitivity
@@ -266,6 +302,19 @@ func _process(delta: float) -> void:
 
 func _handle_interact() -> void:
 	if state == PlayerState.MOVING:
+		# Check for light switches first (simple toggle interaction)
+		var nearest_light_switch: LightSwitch = _find_nearest_light_switch()
+		if nearest_light_switch and nearest_light_switch.can_interact:
+			nearest_light_switch.toggle()
+			return
+
+		# Check for phones (allow interaction when playing to stop voicemail)
+		var nearest_phone: PhoneInteractable = _find_nearest_phone()
+		if nearest_phone and (nearest_phone.can_interact or nearest_phone.is_playing):
+			nearest_phone.activate()
+			return
+
+		# Then check for sittables (complex sequence interaction)
 		var nearest_sittable: Sittable = _find_nearest_sittable()
 		if nearest_sittable:
 			_start_sitting_sequence(nearest_sittable)
@@ -280,6 +329,40 @@ func _handle_interact() -> void:
 	if state == PlayerState.SEATED and can_interact_with_seat:
 		_start_standing_sequence()
 		return
+
+func _find_nearest_light_switch() -> LightSwitch:
+	var search_radius: float = 2.0  # Same as indicator CLOSE_DISTANCE
+	var nearest: LightSwitch = null
+	var nearest_dist: float = search_radius
+
+	for node in get_tree().get_nodes_in_group("light_switch"):
+		var light_switch: LightSwitch = node.find_child("LightSwitchInteractable", false, false)
+		if not light_switch:
+			continue
+
+		var dist: float = global_position.distance_to(node.global_position)
+		if dist < nearest_dist:
+			nearest = light_switch
+			nearest_dist = dist
+
+	return nearest
+
+func _find_nearest_phone() -> PhoneInteractable:
+	var search_radius: float = 2.0  # Same as indicator CLOSE_DISTANCE
+	var nearest: PhoneInteractable = null
+	var nearest_dist: float = search_radius
+
+	for node in get_tree().get_nodes_in_group("phone"):
+		var phone: PhoneInteractable = node.find_child("PhoneInteractable", false, false)
+		if not phone:
+			continue
+
+		var dist: float = global_position.distance_to(node.global_position)
+		if dist < nearest_dist:
+			nearest = phone
+			nearest_dist = dist
+
+	return nearest
 
 func _find_nearest_sittable() -> Sittable:
 	var search_radius: float = 3.0
@@ -358,11 +441,18 @@ func _start_standing_sequence() -> void:
 	_apply_standing_offset()
 	_apply_standing_spring_arm_offset()
 
+	# Smoothly normalize camera and spring arm back to the saved baseline
+	await _normalize_camera_to_saved(0.6)
+
+	# Notify listeners that standing/normalization finished
+	emit_signal("stood_up")
+
 	# 1 second cooldown before interaction is possible again
 	await get_tree().create_timer(1.0).timeout
 	target_sittable = null
 	if indicator and indicator.has_method("fade_in"):
 		indicator.fade_in()
+
 
 func _apply_standing_offset() -> void:
 	if not target_sittable or target_sittable.standing_offset == 0.0:
@@ -407,6 +497,24 @@ func _apply_standing_spring_arm_offset() -> void:
 		elapsed += get_process_delta_time()
 		var t: float = clampf(elapsed / duration, 0.0, 1.0)
 		spring_arm.position = start_pos.lerp(end_pos, t)
+		await get_tree().process_frame
+
+func _normalize_camera_to_saved(duration: float = 0.6) -> void:
+	var elapsed: float = 0.0
+	var start_pitch: float = target_camera_pitch
+	var start_zoom: float = target_zoom
+	var start_spring_pos: Vector3 = spring_arm.position
+
+	# If no meaningful baseline saved, bail early
+	if duration <= 0.0:
+		return
+
+	while elapsed < duration:
+		elapsed += get_process_delta_time()
+		var t: float = clampf(elapsed / duration, 0.0, 1.0)
+		target_camera_pitch = lerp(start_pitch, saved_camera_pitch, t)
+		target_zoom = lerp(start_zoom, saved_spring_length, t)
+		spring_arm.position = start_spring_pos.lerp(saved_spring_arm_pos, t)
 		await get_tree().process_frame
 
 func _handle_walk_to_seat(delta: float) -> void:
@@ -506,6 +614,12 @@ func _handle_turn_to_sit(delta: float) -> void:
 
 func _play_sit_down_animation() -> void:
 	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
+
+	# Save camera baseline (no yaw) so we can return to it after standing
+	saved_camera_pitch = target_camera_pitch
+	saved_spring_length = target_zoom
+	saved_spring_arm_pos = spring_arm.position
+
 	playback.travel("sit_down")
 
 	# Wait for sit_down animation to finish, then transition to sitting_idle
@@ -524,6 +638,8 @@ func _play_sit_down_animation() -> void:
 		_apply_sitting_offset()
 		_apply_spring_arm_offset()
 		_enable_seated_interaction()
+		# Notify listeners that we've finished sitting
+		emit_signal("sat_down")
 
 
 func _apply_sitting_offset() -> void:
@@ -681,5 +797,15 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
+
+	# Footstep audio: play at intervals proportional to walking speed
+	if current_speed > 0.1 and is_on_floor():
+		footstep_timer += delta
+		var interval: float = footstep_interval / (current_speed / speed)
+		if footstep_timer >= interval:
+			footstep_timer = 0.0
+			_play_footstep()
+	else:
+		footstep_timer = 0.0
 
 	move_and_slide()

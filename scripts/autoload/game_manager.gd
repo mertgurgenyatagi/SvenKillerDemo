@@ -12,6 +12,7 @@ var current_state: GameState = GameState.SPLASH
 var current_scene: Node = null
 var main_node: Node = null
 var transition_fade: ColorRect = null
+var preloaded_scene: Node = null
 
 func _ready() -> void:
 	# We'll grab references after main.tscn loads

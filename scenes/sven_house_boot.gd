@@ -2,13 +2,18 @@ extends Node3D
 
 # Minimal boot helper: press 'E' while scene runs hidden if preloaded.
 
-@export var enabled: bool = true
+@export var enabled: bool = false
 @export var background_preload: bool = false
 
 var _hidden_visuals: Array = []
 var _stopped_audio_players: Array = []
 
 func _ready() -> void:
+	# When loaded normally (not as a background preload), start ambient audio now.
+	if not background_preload:
+		_start_ambient_audio()
+		_trigger_mission_statement()
+
 	# Small delay so autoloads and child nodes initialize
 	if not enabled:
 		return
@@ -153,9 +158,25 @@ func reveal_scene() -> void:
 			ap.play()
 	_stopped_audio_players.clear()
 
+	# Start ambient audio now that the scene is visible
+	_start_ambient_audio()
+	_trigger_mission_statement()
+
 	# Re-enable player input
 	var player = _find_player()
 	if player and player.has_method("set_process_input"):
 		player.set_process_input(true)
 
+
+func _start_ambient_audio() -> void:
+	for node in get_tree().get_nodes_in_group("house_ambient_audio"):
+		if (node is AudioStreamPlayer or node is AudioStreamPlayer3D) and not node.playing:
+			node.play()
+
 	background_preload = false
+
+
+func _trigger_mission_statement() -> void:
+	for node in get_tree().get_nodes_in_group("mission_statement"):
+		if node.has_method("show_after_delay"):
+			node.show_after_delay()

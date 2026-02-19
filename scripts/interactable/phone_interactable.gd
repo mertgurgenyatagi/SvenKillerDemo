@@ -71,6 +71,8 @@ func _setup_subtitles() -> void:
 
 	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	# Default to bottom — _position_label() will move it to top if the slot is taken
 	subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	subtitle_label.offset_top = -200
 	subtitle_label.offset_bottom = -100
@@ -94,18 +96,32 @@ func _update_subtitles(time: float) -> void:
 		var sub: Dictionary = subtitles[i]
 		if time >= sub["start"] and time <= sub["end"]:
 			if current_subtitle_index != i:
+				var at_bottom: bool = GameManager.claim_subtitle_bottom(self)
+				_position_label(at_bottom)
 				subtitle_label.text = sub["text"]
 				subtitle_label.visible = true
 				current_subtitle_index = i
 			return
 
 	if subtitle_label.visible:
+		GameManager.release_subtitle_bottom(self)
 		subtitle_label.visible = false
 		current_subtitle_index = -1
 
 func _hide_subtitles() -> void:
+	GameManager.release_subtitle_bottom(self)
 	subtitle_label.visible = false
 	current_subtitle_index = -1
+
+func _position_label(at_bottom: bool) -> void:
+	if at_bottom:
+		subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+		subtitle_label.offset_top = -200
+		subtitle_label.offset_bottom = -100
+	else:
+		subtitle_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		subtitle_label.offset_top = 100
+		subtitle_label.offset_bottom = 200
 
 func activate() -> void:
 	if is_playing:

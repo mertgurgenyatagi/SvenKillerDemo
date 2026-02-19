@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://bjftdd8j353he" path="res://scripts/interactable/light_switch_interactable.gd" id="8_aoyq6"]
 [ext_resource type="Script" uid="uid://cxvamigjx3v40" path="res://scenes/sven_house_boot.gd" id="9_boot"]
 [ext_resource type="Texture2D" uid="uid://xydyxdu7hmpk" path="res://ChatGPT Image Feb 14, 2026, 05_36_44 AM.png" id="10_qhurl"]
+[ext_resource type="Script" uid="uid://bx4nk8pqr3ytu" path="res://scripts/interactable/newspaper_clipping.gd" id="11_newspaper"]
+[ext_resource type="Script" path="res://scripts/ui/mission_statement.gd" id="12_mission"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ChairBox"]
 size = Vector3(0.5, 0.35, 0.5)
@@ -32,7 +34,7 @@ script = ExtResource("9_boot")
 [node name="HouseModel" parent="." unique_id=144816368 instance=ExtResource("1_house_model")]
 transform = Transform3D(0.002, 0, 0, 0, 0.002, 0, 0, 0, 0.002, 15.24885, 0, 5.704932)
 
-[node name="@StaticBody3D@28168" type="StaticBody3D" parent="HouseModel" unique_id=1422626132]
+[node name="HouseCollision" type="StaticBody3D" parent="HouseModel" unique_id=755943913]
 collision_mask = 0
 
 [node name="CollisionGenerator" type="Node3D" parent="." unique_id=2090534873]
@@ -130,9 +132,15 @@ light_color = Color(1, 0.92156863, 0.81960785, 1)
 light_energy = 0.366
 light_specular = 0.0
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=2091708745]
+[node name="NewspaperClipping" type="CSGBox3D" parent="." unique_id=2091708745]
 transform = Transform3D(-9.934766e-11, -0.5, -5.2125306e-16, -1.1924881e-11, 7.110139e-17, 0.5, -0.001, 4.967383e-08, -5.9624403e-09, 3.49924, 1.8092306, -6.1349235)
 flip_faces = true
 material = SubResource("StandardMaterial3D_6klm2")
+
+[node name="NewspaperReader" type="Node3D" parent="NewspaperClipping" unique_id=1456789012]
+script = ExtResource("11_newspaper")
+
+[node name="MissionStatement" type="Node" parent="." unique_id=876543210]
+script = ExtResource("12_mission")
 
 [editable path="HouseModel"]

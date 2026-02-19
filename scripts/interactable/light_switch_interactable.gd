@@ -39,7 +39,9 @@ func _setup_audio() -> void:
 	hum_player.stream = AudioManager.get_audio_stream(AudioManager.AudioID.HOUSE_HUM)
 	hum_player.bus = "SFX"
 	hum_player.volume_db = hum_volume_on if is_on else hum_volume_off
-	hum_player.autoplay = true
+	# No autoplay — sven_house_boot starts this at the right moment so it
+	# doesn't bleed into the opening voiceover during background preload.
+	hum_player.add_to_group("house_ambient_audio")
 	add_child(hum_player)
 
 	# Ensure the hum loops

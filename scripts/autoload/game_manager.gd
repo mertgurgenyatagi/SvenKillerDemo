@@ -14,6 +14,21 @@ var main_node: Node = null
 var transition_fade: ColorRect = null
 var preloaded_scene: Node = null
 
+# Subtitle slot tracking — ensures overlapping subtitles stack top/bottom
+var _subtitle_bottom_owner: Object = null
+
+func claim_subtitle_bottom(owner: Object) -> bool:
+	## Returns true if the caller owns the bottom slot (show at bottom).
+	## Returns false if another system already owns it (show at top instead).
+	if _subtitle_bottom_owner == null or not is_instance_valid(_subtitle_bottom_owner):
+		_subtitle_bottom_owner = owner
+		return true
+	return _subtitle_bottom_owner == owner
+
+func release_subtitle_bottom(owner: Object) -> void:
+	if _subtitle_bottom_owner == owner:
+		_subtitle_bottom_owner = null
+
 func _ready() -> void:
 	# We'll grab references after main.tscn loads
 	pass

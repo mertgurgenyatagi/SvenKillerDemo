@@ -1053,6 +1053,7 @@ func _walk_through_door(doorable: Doorable) -> void:
 
 func _door_camera_sequence() -> void:
 	## Cinematic camera arc during door opening. Runs fully independent.
+	## NOTE: Input locking is managed by _play_open_door_animation(), not here.
 	## ---- CONFIGURATION (edit these) ----
 	# Normalize: snap camera behind the player before starting
 	var normalize_pitch: float      = 0.0   # degrees
@@ -1073,7 +1074,8 @@ func _door_camera_sequence() -> void:
 	var p3_duration: float      =  2.5    # seconds
 	## ---- END CONFIGURATION ----
 
-	camera_cutscene_active = true
+	# Input locking is managed solely by _play_open_door_animation()
+	# This function just moves the camera around
 
 	# Sync target_camera_yaw to the actual camera angle to eliminate accumulated
 	# mouse drift — prevents the tween from unwinding a large accumulated value.
@@ -1128,10 +1130,11 @@ func _door_camera_sequence() -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tween.finished
 
-	camera_cutscene_active = false
-
 
 func _play_open_door_animation() -> void:
+	# Lock input BEFORE starting anything
+	camera_cutscene_active = true
+
 	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
 	playback.travel("open_door_inwards")
 
@@ -1139,7 +1142,8 @@ func _play_open_door_animation() -> void:
 		target_doorable.open_door()
 		_walk_through_door(target_doorable)  # fire and forget — runs in parallel
 
-	_door_camera_sequence()  # fire and forget — runs in parallel
+	# Start camera sequence in background (fire-and-forget)
+	var camera_task = _door_camera_sequence()
 
 	# Start right hand tracking if enabled
 	if debug_track_right_hand:
@@ -1164,7 +1168,8 @@ func _play_open_door_animation() -> void:
 	animation_tree.set("parameters/locomotion/blend_position", 0.0)
 	state = PlayerState.AT_DOOR
 
-	# Unlock input immediately; camera sequence continues correcting in the background
+	# Unlock input immediately after animation finishes.
+	# The camera sequence continues running in the background without input being locked.
 	camera_cutscene_active = false
 
 

@@ -1143,7 +1143,7 @@ func _play_open_door_animation() -> void:
 		_walk_through_door(target_doorable)  # fire and forget — runs in parallel
 
 	# Start camera sequence in background (fire-and-forget)
-	var camera_task = _door_camera_sequence()
+	_door_camera_sequence()
 
 	# Start right hand tracking if enabled
 	if debug_track_right_hand:
@@ -1166,7 +1166,7 @@ func _play_open_door_animation() -> void:
 
 	playback.travel("locomotion")
 	animation_tree.set("parameters/locomotion/blend_position", 0.0)
-	state = PlayerState.AT_DOOR
+	state = PlayerState.MOVING
 
 	# Unlock input immediately after animation finishes.
 	# The camera sequence continues running in the background without input being locked.

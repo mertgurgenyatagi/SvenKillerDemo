@@ -171,7 +171,7 @@ script = ExtResource("11_newspaper")
 script = ExtResource("12_mission")
 
 [node name="DoorInteractableBox" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -9.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -9.03)
 collision_layer = 4
 collision_mask = 0
 

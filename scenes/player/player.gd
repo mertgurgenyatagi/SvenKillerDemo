@@ -46,27 +46,21 @@ var saved_camera_pitch: float = 0.0
 var saved_spring_length: float = 0.0
 var saved_spring_arm_pos: Vector3 = Vector3.ZERO
 
-enum PlayerState { MOVING, WALKING_TO_SEAT, APPROACHING_CHAIR, TURNING_TO_SIT, SITTING_DOWN, SEATED, STANDING_UP, WALKING_TO_DOOR, TURNING_TO_DOOR, OPENING_DOOR, AT_DOOR }
+enum PlayerState { MOVING, WALKING_TO_SEAT, APPROACHING_CHAIR, TURNING_TO_SIT, SITTING_DOWN, SEATED, STANDING_UP }
 var state: PlayerState = PlayerState.MOVING
 var target_sittable: Sittable = null
-var target_doorable: Doorable = null
 var locked_position: Vector3 = Vector3.ZERO
 var can_interact_with_seat: bool = false
 var camera_cutscene_active: bool = false
 
-# Debug: track hand positions during door opening
 @export var debug_track_right_hand: bool = false
 var right_hand_bone_idx: int = -1
 var left_hand_bone_idx: int = -1
-var is_tracking_door_opening: bool = false
-var door_opening_elapsed: float = 0.0
 var last_print_time: float = 0.0
 
 # Debug: scene time scale
 @export var debug_time_scale: float = 1.0
 
-@export_group("Door Walk Through")
-@export var end_stand_distance: float = 1.0       ## Meters from DoorCenter along -standing_direction
 @export var walk_through_start: float = 5.50      ## Seconds after animation start to begin moving player
 @export var walk_through_duration: float = 0.20   ## Duration of the slide, independent of start time
 @export_group("")
@@ -80,7 +74,6 @@ const ANIM_PATHS: Dictionary = {
 	"sit_down": "res://assets/animations/sven/Stand To Sit.fbx",
 	"sitting_idle": "res://assets/animations/sven/Sitting Idle.fbx",
 	"sit_to_stand": "res://assets/animations/sven/Sit To Stand.fbx",
-	"open_door_inwards": "res://Opening Door Inwards.fbx",
 }
 
 func _ready() -> void:
@@ -178,14 +171,9 @@ func _setup_animation_tree() -> void:
 	sit_to_stand_node.animation = &"sit_to_stand"
 	state_machine.add_node("sit_to_stand", sit_to_stand_node)
 
-	# Door states
-	var open_door_inwards_node: AnimationNodeAnimation = AnimationNodeAnimation.new()
-	open_door_inwards_node.animation = &"open_door_inwards"
-	state_machine.add_node("open_door_inwards", open_door_inwards_node)
-
 	# Transitions (all immediate with short crossfade)
 	var xfade: float = 0.2
-	var all_states: Array = ["locomotion", "turn_left", "turn_right", "sit_down", "sitting_idle", "sit_to_stand", "open_door_inwards"]
+	var all_states: Array = ["locomotion", "turn_left", "turn_right", "sit_down", "sitting_idle", "sit_to_stand"]
 	for from_state in all_states:
 		for to_state in all_states:
 			if from_state == to_state:
@@ -282,7 +270,7 @@ func _load_animation(anim_name: String, fbx_path: String) -> void:
 		animation_player.add_animation_library("", AnimationLibrary.new())
 
 	animation_player.get_animation_library("").add_animation(anim_name, anim)
-	if anim_name in ["sit_down", "sit_to_stand", "open_door_inwards"]:
+	if anim_name in ["sit_down", "sit_to_stand"]:
 		anim.loop_mode = Animation.LOOP_NONE
 	else:
 		anim.loop_mode = Animation.LOOP_LINEAR
@@ -346,21 +334,6 @@ func _process(delta: float) -> void:
 	# Debug: apply time scale
 	Engine.time_scale = debug_time_scale
 
-	# Debug: track hand positions during door opening
-	if debug_track_right_hand and is_tracking_door_opening and skeleton:
-		door_opening_elapsed += delta
-		# Print every 0.1 seconds
-		if door_opening_elapsed - last_print_time >= 0.1:
-			# Right hand: 1.21s - 1.56s
-			if door_opening_elapsed >= 1.21 and door_opening_elapsed <= 1.56 and right_hand_bone_idx >= 0:
-				var right_pos: Vector3 = skeleton.get_bone_global_pose(right_hand_bone_idx).origin
-				print("Time: %.2fs, RightHand X: %.4f, Z: %.4f" % [door_opening_elapsed, right_pos.x, right_pos.z])
-			# Left hand: 1.80s - end of animation
-			elif door_opening_elapsed >= 1.80 and left_hand_bone_idx >= 0:
-				var left_pos: Vector3 = skeleton.get_bone_global_pose(left_hand_bone_idx).origin
-				print("Time: %.2fs, LeftHand X: %.4f, Z: %.4f" % [door_opening_elapsed, left_pos.x, left_pos.z])
-			last_print_time = door_opening_elapsed
-
 	camera_pivot.rotation.y = lerp_angle(camera_pivot.rotation.y, target_camera_yaw, camera_rotation_speed * delta)
 	camera_pivot.rotation.x = lerpf(camera_pivot.rotation.x, target_camera_pitch, camera_rotation_speed * delta)
 	spring_arm.spring_length = lerpf(spring_arm.spring_length, target_zoom, zoom_inertia * delta)
@@ -379,11 +352,6 @@ func _handle_interact() -> void:
 			nearest_phone.activate()
 			return
 
-		# Check for doors
-		var nearest_doorable: Doorable = _find_nearest_doorable()
-		if nearest_doorable:
-			_start_door_sequence(nearest_doorable)
-			return
 
 		# Then check for sittables (complex sequence interaction)
 		var nearest_sittable: Sittable = _find_nearest_sittable()
@@ -394,16 +362,6 @@ func _handle_interact() -> void:
 	# Cancel during walk or approach phases
 	if state in [PlayerState.WALKING_TO_SEAT, PlayerState.APPROACHING_CHAIR]:
 		_cancel_sitting_sequence()
-		return
-
-	# Cancel walk-to-door
-	if state == PlayerState.WALKING_TO_DOOR:
-		_cancel_door_sequence()
-		return
-
-	# Leave door position
-	if state == PlayerState.AT_DOOR:
-		_leave_door()
 		return
 
 	# Stand up from seated (only after cooldown)
@@ -805,18 +763,6 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 		return
 
-	# Handle door sequence
-	if state == PlayerState.WALKING_TO_DOOR:
-		_handle_walk_to_door(delta)
-		return
-	elif state == PlayerState.TURNING_TO_DOOR:
-		_handle_turn_to_door(delta)
-		return
-	elif state in [PlayerState.OPENING_DOOR, PlayerState.AT_DOOR]:
-		global_position = locked_position
-		velocity = Vector3.ZERO
-		return
-
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var has_input: bool = input_dir.length() > 0.0
 
@@ -908,276 +854,3 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-# ---------------------------------------------------------------------------
-# Door sequence
-# ---------------------------------------------------------------------------
-
-func _find_nearest_doorable() -> Doorable:
-	var search_radius: float = 3.0
-	var camera: Camera3D = get_viewport().get_camera_3d()
-	var nearest: Doorable = null
-	var nearest_dist: float = search_radius
-
-	for node in get_tree().get_nodes_in_group("doorable"):
-		var doorable: Doorable = node.find_child("Doorable", false, false)
-		if not doorable:
-			continue
-		if camera and not camera.is_position_in_frustum(node.global_position):
-			continue
-		var dist: float = global_position.distance_to(node.global_position)
-		if dist < nearest_dist:
-			nearest = doorable
-			nearest_dist = dist
-
-	return nearest
-
-
-func _start_door_sequence(doorable: Doorable) -> void:
-	state = PlayerState.WALKING_TO_DOOR
-	target_doorable = doorable
-	current_speed = 0.0
-
-	var indicator: Node = _get_doorable_indicator()
-	if indicator and indicator.has_method("fade_out"):
-		indicator.fade_out()
-
-
-func _cancel_door_sequence() -> void:
-	state = PlayerState.MOVING
-	current_speed = 0.0
-	velocity = Vector3.ZERO
-	animation_tree.set("parameters/locomotion/blend_position", 0.0)
-	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
-	playback.travel("locomotion")
-
-	var indicator: Node = _get_doorable_indicator()
-	if indicator and indicator.has_method("fade_in"):
-		indicator.fade_in()
-
-	target_doorable = null
-
-
-func _get_doorable_indicator() -> Node:
-	if not target_doorable or not target_doorable.get_parent():
-		return null
-	return target_doorable.get_parent().find_child("InteractableIndicator", false, false)
-
-
-func _handle_walk_to_door(delta: float) -> void:
-	if not target_doorable:
-		state = PlayerState.MOVING
-		return
-
-	var target_pos: Vector3 = target_doorable.get_standing_area_position()
-	var direction: Vector3 = (target_pos - global_position)
-	direction.y = 0.0
-
-	if target_doorable.is_in_standing_area(global_position):
-		_arrive_at_door()
-		return
-
-	direction = direction.normalized()
-	current_speed = speed
-	var target_rotation: float = atan2(-direction.x, -direction.z)
-	visuals.rotation.y = lerp_angle(visuals.rotation.y, target_rotation, turn_lerp * delta)
-
-	var angle: float = visuals.rotation.y
-	var facing: Vector3 = Vector3(-sin(angle), 0.0, -cos(angle))
-	velocity.x = facing.x * current_speed
-	velocity.z = facing.z * current_speed
-
-	animation_tree.set("parameters/locomotion/blend_position", 1.0)
-	move_and_slide()
-
-
-func _arrive_at_door() -> void:
-	state = PlayerState.TURNING_TO_DOOR
-	current_speed = 0.0
-	velocity = Vector3.ZERO
-	locked_position = global_position
-
-	animation_tree.set("parameters/locomotion/blend_position", 0.0)
-	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
-	playback.travel("locomotion")
-
-
-func _handle_turn_to_door(delta: float) -> void:
-	if not target_doorable:
-		state = PlayerState.MOVING
-		return
-
-	var target_angle: float = target_doorable.get_standing_face_angle()
-	var angle_diff: float = angle_difference(visuals.rotation.y, target_angle)
-
-	if abs(angle_diff) < deg_to_rad(5.0):
-		visuals.rotation.y = target_angle
-		state = PlayerState.OPENING_DOOR
-		_play_open_door_animation()
-		return
-
-	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
-	if angle_diff > 0:
-		playback.travel("turn_left")
-	else:
-		playback.travel("turn_right")
-
-	var effective_speed: float = turn_speed * max(1.0, abs(angle_diff) / deg_to_rad(90.0))
-	var step: float = sign(angle_diff) * min(abs(angle_diff), deg_to_rad(effective_speed) * delta)
-	visuals.rotation.y += step
-
-	global_position = locked_position
-	velocity = Vector3.ZERO
-
-
-func _walk_through_door(doorable: Doorable) -> void:
-	## Completely independent of animation state.
-	## Waits walk_through_start seconds, then slides the player forward
-	## over walk_through_duration seconds regardless of what else is happening.
-	await get_tree().create_timer(walk_through_start).timeout
-
-	var start_pos: Vector3 = locked_position
-	var end_pos: Vector3 = doorable.get_end_stand_position(end_stand_distance)
-	end_pos.y = locked_position.y
-	var elapsed: float = 0.0
-
-	while elapsed < walk_through_duration:
-		elapsed += get_process_delta_time()
-		var t: float = clampf(elapsed / walk_through_duration, 0.0, 1.0)
-		locked_position = start_pos.lerp(end_pos, t)
-		global_position = locked_position
-		await get_tree().process_frame
-
-	locked_position = end_pos
-	global_position = locked_position
-
-
-func _door_camera_sequence() -> void:
-	## Cinematic camera arc during door opening. Runs fully independent.
-	## NOTE: Input locking is managed by _play_open_door_animation(), not here.
-	## ---- CONFIGURATION (edit these) ----
-	# Normalize: snap camera behind the player before starting
-	var normalize_pitch: float      = 0.0   # degrees
-	var normalize_zoom: float       =  1.0    # spring length
-	var normalize_time: float       =  2.0    # seconds to smooth into position
-	var normalize_yaw_offset: float =   -30.0   # degrees left of directly behind
-
-	# Phase 1: Creep in close + begin drift sideways
-	var p1_zoom: float          =   0.3  # target zoom
-	var p1_pitch: float         = 0.0   # degrees
-	var p1_yaw_offset: float    =  135  # degrees from behind — drifts sideways as it zooms in
-	var p1_duration: float      =  1.8    # seconds
-
-	# Phase 3: Sweep around to face the player + pull back wide simultaneously
-	var p3_yaw_offset: float    = 210.0   # degrees from behind
-	var p3_pitch: float         = -10.0   # degrees (final pitch)
-	var p3_zoom: float          =  4.0    # target zoom (final zoom)
-	var p3_duration: float      =  2.5    # seconds
-	## ---- END CONFIGURATION ----
-
-	# Input locking is managed solely by _play_open_door_animation()
-	# This function just moves the camera around
-
-	# Sync target_camera_yaw to the actual camera angle to eliminate accumulated
-	# mouse drift — prevents the tween from unwinding a large accumulated value.
-	target_camera_yaw = camera_pivot.rotation.y
-
-	# Compute behind_yaw as the shortest arc from current camera to behind-the-player.
-	var behind_yaw: float = target_camera_yaw + angle_difference(target_camera_yaw, visuals.rotation.y + PI + deg_to_rad(normalize_yaw_offset))
-
-	var tween: Tween = create_tween().set_parallel(true)
-	tween.tween_property(self, "target_camera_yaw", behind_yaw, normalize_time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_camera_pitch", deg_to_rad(normalize_pitch), normalize_time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_zoom", normalize_zoom, normalize_time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(camera, "h_offset", -0.3, normalize_time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
-
-	# Phase 1: Creep in close + drift sideways + shift h_offset simultaneously
-	tween = create_tween().set_parallel(true)
-	tween.tween_property(self, "target_zoom", p1_zoom, p1_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_camera_pitch", deg_to_rad(p1_pitch), p1_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_camera_yaw", behind_yaw + deg_to_rad(p1_yaw_offset), p1_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(camera, "h_offset", 0.6, p1_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
-
-	# Phase 3: Sweep around to face the player + pull back wide simultaneously
-	tween = create_tween().set_parallel(true)
-	tween.tween_property(self, "target_camera_yaw", behind_yaw + deg_to_rad(p3_yaw_offset), p3_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_camera_pitch", deg_to_rad(p3_pitch), p3_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_zoom", p3_zoom, p3_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
-
-	# Aggressive correction: normalize pitch and zoom back to neutral state over 0.6 seconds.
-	# Yaw is left alone — player keeps their current view direction.
-	var correction_duration: float = 0.6
-	var final_pitch: float = deg_to_rad(-20.0)  # neutral looking angle
-	var final_zoom: float = 2.5  # standard distance
-
-	tween = create_tween().set_parallel(true)
-	tween.tween_property(self, "target_camera_pitch", final_pitch, correction_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "target_zoom", final_zoom, correction_duration) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
-
-
-func _play_open_door_animation() -> void:
-	# Lock input BEFORE starting anything
-	camera_cutscene_active = true
-
-	var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
-	playback.travel("open_door_inwards")
-
-	if target_doorable:
-		target_doorable.open_door()
-		_walk_through_door(target_doorable)  # fire and forget — runs in parallel
-
-	# Start camera sequence in background (fire-and-forget)
-	_door_camera_sequence()
-
-	# Start right hand tracking if enabled
-	if debug_track_right_hand:
-		is_tracking_door_opening = true
-		door_opening_elapsed = 0.0
-		last_print_time = 0.0
-		print("=== Door opening animation started ===")
-
-	var anim: Animation = animation_player.get_animation_library("").get_animation("open_door_inwards") if animation_player.has_animation_library("") else null
-	var wait_time: float = anim.length if anim else 2.0
-	await get_tree().create_timer(wait_time).timeout
-
-	# Stop tracking
-	if debug_track_right_hand and is_tracking_door_opening:
-		print("=== Door opening animation ended (%.2fs) ===" % door_opening_elapsed)
-		is_tracking_door_opening = false
-
-	if state != PlayerState.OPENING_DOOR:
-		return
-
-	playback.travel("locomotion")
-	animation_tree.set("parameters/locomotion/blend_position", 0.0)
-	state = PlayerState.MOVING
-
-	# Unlock input immediately after animation finishes.
-	# The camera sequence continues running in the background without input being locked.
-	camera_cutscene_active = false
-
-
-func _leave_door() -> void:
-	state = PlayerState.MOVING
-
-	var indicator: Node = _get_doorable_indicator()
-	if indicator and indicator.has_method("fade_in"):
-		indicator.fade_in()
-
-	target_doorable = null

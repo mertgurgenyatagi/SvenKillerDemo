@@ -5,7 +5,7 @@ extends Control
 signal closed
 
 # Fonts
-var roboto_font: Font = preload("res://assets/fonts/roboto_condensed_semibold.ttf")
+var roboto_font: Font = preload("res://assets/fonts/roboto_condensed_medium.ttf")
 var roboto_regular: Font = preload("res://assets/fonts/roboto_condensed.ttf")
 var fjalla_font: Font = preload("res://assets/fonts/fjalla_one.ttf")
 

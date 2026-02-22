@@ -1,7 +1,0 @@
-{
-  "type": "run_gdscript",
-  "params": {
-    "code": "var house = get_node('/root/HouseModel')\nvar found = []\nfunc search_recursive(node, path=''):\n\tvar full_path = path + '/' + node.name\n\tif 'Material336' in node.name or 'Material22' in node.name:\n\t\tfound.append(full_path)\n\tfor child in node.get_children():\n\t\tsearch_recursive(child, full_path)\nsearch_recursive(house, '')\nreturn str(found)"
-  },
-  "commandId": "cli-find-materials"
-}

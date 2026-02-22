@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://c80av8q3xh2k7"]
 
-[ext_resource type="PackedScene" uid="uid://tsnwf28pnf1n" path="res://modern_apartment_interior.glb" id="1_house_model"]
+[ext_resource type="PackedScene" uid="uid://tsnwf28pnf1n" path="res://assets/models/environments/modern_apartment_interior.glb" id="1_house_model"]
 [ext_resource type="Script" uid="uid://dj143tjcsp1nq" path="res://scripts/collision/house_collision_generator.gd" id="2_collision"]
 [ext_resource type="PackedScene" uid="uid://y56shyqj6rfg" path="res://scenes/player/player_house_version.tscn" id="3_v6mjv"]
-[ext_resource type="PackedScene" uid="uid://daqjf27n3jeo6" path="res://chair_source/Maya Arm Chair - 4K.glb" id="4_chair"]
+[ext_resource type="PackedScene" uid="uid://daqjf27n3jeo6" path="res://assets/models/props/maya_arm_chair.glb" id="4_chair"]
 [ext_resource type="Script" uid="uid://c04hg6ovdtkq8" path="res://scripts/interactable/sittable.gd" id="5_sittable"]
 [ext_resource type="Script" uid="uid://c0rw6g7hxqvgq" path="res://scripts/interactable/interactable_indicator.gd" id="6_indicator"]
 [ext_resource type="Script" uid="uid://dk6v7woa1abbu" path="res://scripts/interactable/phone_interactable.gd" id="7_phone"]
 [ext_resource type="Script" uid="uid://bjftdd8j353he" path="res://scripts/interactable/light_switch_interactable.gd" id="8_aoyq6"]
 [ext_resource type="Script" uid="uid://cxvamigjx3v40" path="res://scenes/sven_house_boot.gd" id="9_boot"]
-[ext_resource type="Texture2D" uid="uid://xydyxdu7hmpk" path="res://ChatGPT Image Feb 14, 2026, 05_36_44 AM.png" id="10_qhurl"]
+[ext_resource type="Texture2D" uid="uid://xydyxdu7hmpk" path="res://assets/textures/ChatGPT Image Feb 14, 2026, 05_36_44 AM.png" id="10_qhurl"]
 [ext_resource type="Script" uid="uid://bx4nk8pqr3ytu" path="res://scripts/interactable/newspaper_clipping.gd" id="11_newspaper"]
 [ext_resource type="Script" path="res://scripts/ui/mission_statement.gd" id="12_mission"]
 

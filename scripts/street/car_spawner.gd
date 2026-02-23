@@ -28,11 +28,11 @@ func _ready() -> void:
 		push_error("CarSpawner: CarSpawnPoint1 or CarSpawnPoint2 not found")
 		return
 
-	# Directly reference named car nodes
-	var car1_sp1 = get_node_or_null("Car1SP1")
-	var car2_sp1 = get_node_or_null("Car2SP1")
-	var car1_sp2 = get_node_or_null("Car1SP2")
-	var car2_sp2 = get_node_or_null("Car2SP2")
+	# Directly reference named car nodes (nested under CarPool)
+	var car1_sp1 = get_node_or_null("CarPool/Car1SP1")
+	var car2_sp1 = get_node_or_null("CarPool/Car2SP1")
+	var car1_sp2 = get_node_or_null("CarPool/Car1SP2")
+	var car2_sp2 = get_node_or_null("CarPool/Car2SP2")
 
 	if car1_sp1:
 		cars_at_point_1.append(car1_sp1)

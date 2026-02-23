@@ -28,24 +28,31 @@ func _ready() -> void:
 		push_error("CarSpawner: CarSpawnPoint1 or CarSpawnPoint2 not found")
 		return
 
-	# Find cars at each spawn point by proximity
-	var all_cars: Array[Node3D] = []
-	for child in get_children():
-		if child is Node3D and "car" in child.name.to_lower():
-			all_cars.append(child)
+	# Directly reference named car nodes
+	var car1_sp1 = get_node_or_null("Car1SP1")
+	var car2_sp1 = get_node_or_null("Car2SP1")
+	var car1_sp2 = get_node_or_null("Car1SP2")
+	var car2_sp2 = get_node_or_null("Car2SP2")
 
-	if all_cars.size() < 4:
-		push_warning("CarSpawner: Expected 4 cars, found %d" % all_cars.size())
+	if car1_sp1:
+		cars_at_point_1.append(car1_sp1)
+	else:
+		push_warning("CarSpawner: Car1SP1 not found")
 
-	# Assign cars to spawn points based on proximity
-	for car in all_cars:
-		var dist_to_1: float = car.global_position.distance_to(spawn_point_1.global_position)
-		var dist_to_2: float = car.global_position.distance_to(spawn_point_2.global_position)
+	if car2_sp1:
+		cars_at_point_1.append(car2_sp1)
+	else:
+		push_warning("CarSpawner: Car2SP1 not found")
 
-		if dist_to_1 < dist_to_2:
-			cars_at_point_1.append(car)
-		else:
-			cars_at_point_2.append(car)
+	if car1_sp2:
+		cars_at_point_2.append(car1_sp2)
+	else:
+		push_warning("CarSpawner: Car1SP2 not found")
+
+	if car2_sp2:
+		cars_at_point_2.append(car2_sp2)
+	else:
+		push_warning("CarSpawner: Car2SP2 not found")
 
 
 func _process(delta: float) -> void:

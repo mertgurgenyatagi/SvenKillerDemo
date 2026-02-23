@@ -2,7 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://crlm746jchuwl" path="res://scenes/player/after_the_rain..._-_vr__sound.glb" id="1_b8bqp"]
 [ext_resource type="PackedScene" uid="uid://y56shyqj6rfg" path="res://scenes/player/player_house_version.tscn" id="3_sgs07"]
-[ext_resource type="Script" path="res://scripts/street/car_spawner.gd" id="4_carsp"]
+[ext_resource type="PackedScene" uid="uid://cfxhne22j8kf2" path="res://assets/models/props/car_1.glb" id="4_6ldcx"]
+[ext_resource type="Script" uid="uid://dc6g3yywdp5m3" path="res://scripts/street/car_spawner.gd" id="4_carsp"]
+[ext_resource type="PackedScene" uid="uid://blccqs0gdtlqv" path="res://assets/models/props/car_2.glb" id="5_ox3fo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_evening"]
 sky_top_color = Color(0.12, 0.14, 0.22, 1)
@@ -604,8 +606,16 @@ shadow_blur = 3.0
 omni_range = 14.0
 omni_attenuation = 1.8
 
-[node name="CarSpawnPoint1" type="Node3D" parent="." unique_id=1264859301]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7003517, 0, 32.4801)
+[node name="CarPool" type="Node3D" parent="." unique_id=1130158523]
 
-[node name="CarSpawnPoint2" type="Node3D" parent="." unique_id=398641495]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.398121, 0, 128.45116)
+[node name="Car1SP2" parent="CarPool" unique_id=540722079 instance=ExtResource("4_6ldcx")]
+transform = Transform3D(1.192488e-10, 0, -0.01, 0, 0.01, 0, 0.01, 0, 1.192488e-10, 8.398, 0, 191.707)
+
+[node name="Car2SP1" parent="CarPool" unique_id=374182251 instance=ExtResource("5_ox3fo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.038554, -1.2013484, -68.3485)
+
+[node name="Car1SP1" parent="CarPool" unique_id=1618437080 instance=ExtResource("4_6ldcx")]
+transform = Transform3D(1.192488e-10, 0, -0.01, 0, 0.01, 0, 0.01, 0, 1.192488e-10, 8.398, 0, -63.87511)
+
+[node name="Car2SP2" parent="CarPool" unique_id=132923152 instance=ExtResource("5_ox3fo")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.043227, -1.2013484, 195.19885)

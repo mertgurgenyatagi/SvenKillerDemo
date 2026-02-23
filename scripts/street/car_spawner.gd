@@ -97,13 +97,15 @@ func _activate_car() -> void:
 		return
 
 	# Find an inactive car from the pool
-	var car_data: Dictionary = null
+	var car_data: Dictionary
+	var found: bool = false
 	for pool_entry in car_pool:
 		if not pool_entry["active"]:
 			car_data = pool_entry
+			found = true
 			break
 
-	if not car_data:
+	if not found:
 		# No inactive cars available, try to recycle the oldest active one
 		# (For now, just return — in production, could implement LRU eviction)
 		return

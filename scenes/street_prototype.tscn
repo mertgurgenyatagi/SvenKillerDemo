@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://crlm746jchuwl" path="res://scenes/player/after_the_rain..._-_vr__sound.glb" id="1_b8bqp"]
 [ext_resource type="PackedScene" uid="uid://y56shyqj6rfg" path="res://scenes/player/player_house_version.tscn" id="3_sgs07"]
+[ext_resource type="Script" path="res://scripts/street/car_spawner.gd" id="4_carsp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_evening"]
 sky_top_color = Color(0.12, 0.14, 0.22, 1)
@@ -46,6 +47,7 @@ volumetric_fog_length = 120.0
 size = Vector3(100, 0.1, 100)
 
 [node name="StreetPrototype" type="Node3D" unique_id=877057033]
+script = ExtResource("4_carsp")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=276508066]
 environment = SubResource("Environment_street")
@@ -601,3 +603,9 @@ shadow_opacity = 0.7
 shadow_blur = 3.0
 omni_range = 14.0
 omni_attenuation = 1.8
+
+[node name="CarSpawnPoint1" type="Node3D" parent="." unique_id=1264859301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7003517, 0, 32.4801)
+
+[node name="CarSpawnPoint2" type="Node3D" parent="." unique_id=398641495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.398121, 0, 128.45116)

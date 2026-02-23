@@ -189,6 +189,16 @@ func _get_audio_stream(audio_id: AudioID, entry: AudioEntry) -> AudioStream:
 	return stream
 
 
+## Stop all pooled audio players immediately.
+func stop_all() -> void:
+	for player in _player_2d_pool:
+		if player.playing:
+			player.stop()
+	for player in _player_3d_pool:
+		if player.playing:
+			player.stop()
+
+
 ## Get first available 2D player from pool.
 func _get_available_2d_player() -> AudioStreamPlayer:
 	for player in _player_2d_pool:

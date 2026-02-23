@@ -9,6 +9,10 @@ var _hidden_visuals: Array = []
 var _stopped_audio_players: Array = []
 
 func _ready() -> void:
+	# Begin loading the street scene in the background immediately so it's ready by the time
+	# the player reaches the front door.
+	GameManager.start_background_preload("res://scenes/street_prototype.tscn")
+
 	# When loaded normally (not as a background preload), start ambient audio now.
 	if not background_preload:
 		_start_ambient_audio()

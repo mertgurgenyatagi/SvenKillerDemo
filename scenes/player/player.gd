@@ -340,7 +340,13 @@ func _process(delta: float) -> void:
 
 func _handle_interact() -> void:
 	if state == PlayerState.MOVING:
-		# Check for light switches first (simple toggle interaction)
+		# Check for doors first (simple open interaction)
+		var nearest_door: DoorInteractable = _find_nearest_door()
+		if nearest_door and nearest_door.can_interact:
+			nearest_door.open()
+			return
+
+		# Check for light switches (simple toggle interaction)
 		var nearest_light_switch: LightSwitch = _find_nearest_light_switch()
 		if nearest_light_switch and nearest_light_switch.can_interact:
 			nearest_light_switch.toggle()
@@ -352,12 +358,6 @@ func _handle_interact() -> void:
 			nearest_phone.activate()
 			return
 
-
-		# Check for doors
-		var nearest_door: DoorInteractable = _find_nearest_door()
-		if nearest_door and nearest_door.can_interact:
-			nearest_door.activate()
-			return
 
 		# Then check for sittables (complex sequence interaction)
 		var nearest_sittable: Sittable = _find_nearest_sittable()
@@ -374,6 +374,22 @@ func _handle_interact() -> void:
 	if state == PlayerState.SEATED and can_interact_with_seat:
 		_start_standing_sequence()
 		return
+
+func _find_nearest_door() -> DoorInteractable:
+	var search_radius: float = 2.0  # Same as indicator CLOSE_DISTANCE
+	var nearest: DoorInteractable = null
+	var nearest_dist: float = search_radius
+
+	for node in get_tree().get_nodes_in_group("door"):
+		var door: DoorInteractable = node.find_child("DoorInteractable", false, false)
+		if not door:
+			continue
+		var dist: float = global_position.distance_to(node.global_position)
+		if dist < nearest_dist:
+			nearest = door
+			nearest_dist = dist
+
+	return nearest
 
 func _find_nearest_light_switch() -> LightSwitch:
 	var search_radius: float = 2.0  # Same as indicator CLOSE_DISTANCE
@@ -409,25 +425,6 @@ func _find_nearest_phone() -> PhoneInteractable:
 		var dist: float = global_position.distance_to(node.global_position)
 		if dist < nearest_dist:
 			nearest = phone
-			nearest_dist = dist
-
-	return nearest
-
-func _find_nearest_door() -> DoorInteractable:
-	var search_radius: float = 2.0
-	var cam: Camera3D = get_viewport().get_camera_3d()
-	var nearest: DoorInteractable = null
-	var nearest_dist: float = search_radius
-
-	for node in get_tree().get_nodes_in_group("door"):
-		var door: DoorInteractable = node.find_child("DoorInteractable", false, false)
-		if not door:
-			continue
-		if cam and not cam.is_position_in_frustum(node.global_position):
-			continue
-		var dist: float = global_position.distance_to(node.global_position)
-		if dist < nearest_dist:
-			nearest = door
 			nearest_dist = dist
 
 	return nearest

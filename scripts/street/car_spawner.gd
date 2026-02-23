@@ -2,25 +2,19 @@ class_name CarSpawner
 extends Node3D
 
 ## Car pooling system: reuses car instances instead of instantiating/destroying.
-## Cars start at rest at despawn boundaries, activate based on player position,
-## and recycle by teleporting back when crossing the opposite boundary.
+## Pre-place car instances as children of this node with names "Car_1", "Car_2", etc.
+## The spawner will manage activation based on player position and recycle via teleporting.
 
 @export var spawn_interval: float = 10.0
 @export var car_speed: float = 15.0  # m/s
 @export var despawn_z_min: float = -50.0
 @export var despawn_z_max: float = 200.0
 @export var player_z_threshold: float = 74.0
-@export var pool_size: int = 4  # Number of car instances to pool
 
 @onready var spawn_point_1: Node3D = get_node_or_null("../CarSpawnPoint1")
 @onready var spawn_point_2: Node3D = get_node_or_null("../CarSpawnPoint2")
 
-var car_models: Array[PackedScene] = [
-	preload("res://assets/models/props/car_1.glb"),
-	preload("res://assets/models/props/car_2.glb"),
-]
-
-## Pooled car data: {node, active, direction, model_index}
+## Pooled car data: {node, active, direction}
 var car_pool: Array[Dictionary] = []
 var spawn_timer: float = 0.0
 
@@ -30,22 +24,20 @@ func _ready() -> void:
 		push_error("CarSpawner: CarSpawnPoint1 or CarSpawnPoint2 not found")
 		return
 
-	# Create pooled car instances — spawn at rest positions (boundaries)
-	for i in range(pool_size):
-		var car_model: PackedScene = car_models[i % car_models.size()]
-		var car_instance: Node3D = car_model.instantiate()
+	# Find all existing car children (look for nodes with "Car" in name)
+	for child in get_children():
+		if child is Node3D and "Car" in child.name:
+			# Initialize pooled car
+			car_pool.append({
+				"node": child,
+				"active": false,
+				"direction": 0,
+			})
+			# Park inactive cars at z_max
+			child.position.z = despawn_z_max
 
-		# Start cars at z_max (they'll be recycled as needed)
-		car_instance.global_position = spawn_point_1.global_position
-		car_instance.position.z = despawn_z_max
-		add_child(car_instance)
-
-		car_pool.append({
-			"node": car_instance,
-			"active": false,
-			"direction": 0,
-			"model_index": i % car_models.size(),
-		})
+	if car_pool.is_empty():
+		push_warning("CarSpawner: No car nodes found as children. Add car instances with names containing 'Car'")
 
 
 func _process(delta: float) -> void:
@@ -106,8 +98,6 @@ func _activate_car() -> void:
 			break
 
 	if not found:
-		# No inactive cars available, try to recycle the oldest active one
-		# (For now, just return — in production, could implement LRU eviction)
 		return
 
 	# Activate the car

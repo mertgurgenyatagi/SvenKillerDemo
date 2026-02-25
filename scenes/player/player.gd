@@ -104,6 +104,12 @@ func _ready() -> void:
 	_setup_animation_tree()
 	print("Animation setup complete. Animations: ", animation_player.get_animation_list())
 
+	# CharacterBody3D physics — tuned for a walking game to avoid catching on geometry
+	floor_max_angle = deg_to_rad(65.0)    # Default 45°: walk over slightly steeper surfaces without stopping
+	floor_snap_length = 0.1               # Default 0.1: stay grounded over steps and uneven edges
+	wall_min_slide_angle = deg_to_rad(15.0) # Default 15°: slide along walls instead of catching on them
+	max_slides = 4                         # Default 4: more collision iterations per frame for tighter corners
+
 	# Find hand bones for debug tracking
 	if skeleton:
 		right_hand_bone_idx = skeleton.find_bone("RightHand")

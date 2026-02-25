@@ -242,6 +242,12 @@ func _show_noe_prompt() -> void:
 				print("opening_sequence: reparented house into Main/CurrentScene")
 		else:
 			print("opening_sequence: ERROR - cannot find Main/CurrentScene to reparent house")
+			# Main is gone (freed by the native scene switch that loaded this sequence).
+			# The house stays under GameManager — we can't move it — but we MUST track it
+			# as current_scene so hard_cut_to_scene frees it (and its WorldEnvironment)
+			# before the street scene loads. Without this, the house WE persists alongside
+			# the street WE, causing environment conflicts.
+			GameManager.current_scene = house
 
 		# Call reveal helper if available
 		if house.has_method("reveal_scene"):

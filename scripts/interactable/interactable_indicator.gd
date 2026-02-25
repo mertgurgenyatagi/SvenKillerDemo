@@ -28,6 +28,7 @@ func _ready() -> void:
 	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.pixel_size = pixel_size
 	sprite.modulate = Color(1, 1, 1, 0)
+	sprite.no_depth_test = true
 	sprite.visible = false
 	add_child(sprite)
 
@@ -44,8 +45,13 @@ func _process(delta: float) -> void:
 		sprite.visible = false
 		return
 
-	var player: Node3D = _find_player(camera)
 	var object_pos: Vector3 = get_parent().global_position
+
+	if not camera.is_position_in_frustum(object_pos):
+		sprite.visible = false
+		return
+
+	var player: Node3D = _find_player(camera)
 	var camera_pos: Vector3 = camera.global_position
 	var cam_distance: float = camera_pos.distance_to(object_pos)
 

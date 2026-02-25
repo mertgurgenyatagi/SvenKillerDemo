@@ -15,7 +15,16 @@
       "Bash(git push:*)",
       "Bash(git checkout:*)",
       "Bash(pip install:*)",
-      "Bash(python audio_config_editor.py:*)"
+      "Bash(python audio_config_editor.py:*)",
+      "Bash(grep -l '\"\"role\"\":\"\"assistant\"\"' \"C:/Users/Mert/.claude/projects/c--Users-Mert-Desktop-repos-SvenKillerDemo/\"*.jsonl)",
+      "Bash(grep -l -i '\"\"fog\"\"' \"C:/Users/Mert/.claude/projects/c--Users-Mert-Desktop-repos-SvenKillerDemo/\"*.jsonl)",
+      "Bash(grep -l -i 'fog' \"C:/Users/Mert/.claude/projects/c--Users-Mert-Desktop-repos-SvenKillerDemo/\"*.jsonl)",
+      "Bash(grep -h -i 'fog' \"C:/Users/Mert/.claude/projects/c--Users-Mert-Desktop-repos-SvenKillerDemo/\"*.jsonl)",
+      "Bash(python3 -c \" import sys, json for line in sys.stdin: line = line.strip\\(\\) try: obj = json.loads\\(line\\) msg = obj.get\\(''message'', {}\\) role = msg.get\\(''role'', ''''\\) content = msg.get\\(''content'', ''''\\) if isinstance\\(content, list\\): for block in content: if isinstance\\(block, dict\\) and block.get\\(''type''\\) == ''text'': text = block.get\\(''text'', ''''\\) if ''fog'' in text.lower\\(\\): print\\(f''[{role}]: ...{text[:300]}...''\\) print\\(''---''\\) elif isinstance\\(content, str\\) and ''fog'' in content.lower\\(\\): print\\(f''[{role}]: ...{content[:300]}...''\\) print\\(''---''\\) except: pass \")",
+      "Bash(grep -rh -i '\\\\bfog\\\\b' \"C:/Users/Mert/.claude/projects/c--Users-Mert-Desktop-repos-SvenKillerDemo/\"*.jsonl)",
+      "Bash(grep -rh 'fog' \"C:/Users/Mert/.claude/projects/c--Users-Mert-Desktop-repos-SvenKillerDemo/\"*.jsonl)",
+      "Bash(python3 -c \":*)",
+      "Bash(python -c \":*)"
     ]
   }
 }

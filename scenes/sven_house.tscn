@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c80av8q3xh2k7"]
 
-[ext_resource type="PackedScene" uid="uid://tsnwf28pnf1n" path="res://assets/models/environments/modern_apartment_interior.glb" id="1_house_model"]
+[ext_resource type="PackedScene" uid="uid://b46yirmybsjsi" path="res://assets/models/environments/modern_apartment_interior.glb" id="1_house_model"]
 [ext_resource type="Script" uid="uid://dxk1k2biwemn5" path="res://scripts/collision/house_collision_generator.gd" id="2_collision"]
 [ext_resource type="PackedScene" uid="uid://y56shyqj6rfg" path="res://scenes/player/player_house_version.tscn" id="3_v6mjv"]
 [ext_resource type="PackedScene" uid="uid://fd2yi2f4ip80" path="res://assets/models/props/maya_arm_chair.glb" id="4_chair"]
@@ -8,12 +8,12 @@
 [ext_resource type="Script" uid="uid://boh871xs6yy2c" path="res://scripts/interactable/interactable_indicator.gd" id="6_indicator"]
 [ext_resource type="Script" uid="uid://0n0d7h2cs0cx" path="res://scripts/interactable/phone_interactable.gd" id="7_phone"]
 [ext_resource type="Script" uid="uid://d2y8dt5fny2vm" path="res://scripts/interactable/light_switch_interactable.gd" id="8_aoyq6"]
-[ext_resource type="Script" uid="uid://c5q2emd8idsa2" path="res://scenes/sven_house_boot.gd" id="9_boot"]
-[ext_resource type="Texture2D" uid="uid://xydyxdu7hmpk" path="res://assets/textures/ChatGPT Image Feb 14, 2026, 05_36_44 AM.png" id="10_qhurl"]
+[ext_resource type="Script" uid="uid://cta7w3r0pxvs8" path="res://scenes/sven_house_boot.gd" id="9_boot"]
+[ext_resource type="Texture2D" uid="uid://wxbogkqqwl7k" path="res://assets/textures/ChatGPT Image Feb 14, 2026, 05_36_44 AM.png" id="10_qhurl"]
 [ext_resource type="Script" uid="uid://ccumsxypmn8ps" path="res://scripts/interactable/newspaper_clipping.gd" id="11_newspaper"]
 [ext_resource type="Script" uid="uid://5q0woxk0wlwq" path="res://scripts/ui/mission_statement.gd" id="12_mission"]
 [ext_resource type="PackedScene" uid="uid://bm6won1b2mitx" path="res://assets/models/environments/door_with_frame.glb" id="13_ue67j"]
-[ext_resource type="Script" path="res://scripts/interactable/door_interactable.gd" id="14_door"]
+[ext_resource type="Script" uid="uid://bns0ydg1evhsm" path="res://scripts/interactable/door_interactable.gd" id="14_door"]
 
 [sub_resource type="Environment" id="Environment_moonlight"]
 background_mode = 1
@@ -36,12 +36,12 @@ size = Vector3(0.3, 0.3, 0.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_LightSwitchBox"]
 size = Vector3(0.2, 0.3, 0.2)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_DoorBox"]
-size = Vector3(1.0, 2.2, 0.3)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6klm2"]
 blend_mode = 4
 albedo_texture = ExtResource("10_qhurl")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_DoorBox"]
+size = Vector3(1, 2.2, 0.3)
 
 [node name="SvenHouse" type="Node3D" unique_id=137629843]
 script = ExtResource("9_boot")
@@ -61,7 +61,7 @@ shadow_blur = 7.944
 [node name="HouseModel" parent="." unique_id=144816368 instance=ExtResource("1_house_model")]
 transform = Transform3D(0.002, 0, 0, 0, 0.002, 0, 0, 0, 0.002, 15.24885, 0, 5.704932)
 
-[node name="@StaticBody3D@19993" type="StaticBody3D" parent="HouseModel" unique_id=1388936075]
+[node name="HouseCollision" type="StaticBody3D" parent="HouseModel" unique_id=1536148516]
 collision_mask = 0
 
 [node name="CollisionGenerator" type="Node3D" parent="." unique_id=2090534873]
@@ -170,18 +170,18 @@ script = ExtResource("11_newspaper")
 [node name="MissionStatement" type="Node" parent="." unique_id=876543210]
 script = ExtResource("12_mission")
 
-[node name="DoorInteractableBox" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -9.03)
+[node name="DoorInteractableBox" type="StaticBody3D" parent="." unique_id=1779499253]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6326752, -9.03)
 collision_layer = 4
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorInteractableBox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorInteractableBox" unique_id=318193531]
 shape = SubResource("BoxShape3D_DoorBox")
 
-[node name="DoorInteractable" type="Node3D" parent="DoorInteractableBox"]
+[node name="DoorInteractable" type="Node3D" parent="DoorInteractableBox" unique_id=1865651996]
 script = ExtResource("14_door")
 
-[node name="InteractableIndicator" type="Node3D" parent="DoorInteractableBox"]
+[node name="InteractableIndicator" type="Node3D" parent="DoorInteractableBox" unique_id=1201791939]
 script = ExtResource("6_indicator")
 
 [node name="Sketchfab_Scene" parent="." unique_id=416760073 instance=ExtResource("13_ue67j")]

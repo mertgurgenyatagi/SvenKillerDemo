@@ -157,11 +157,16 @@ func hard_cut_to_scene(scene_path: String) -> void:
 		start_background_preload(scene_path)
 
 	# Free the old scene immediately (we're behind black).
-	# Fall back to get_tree().current_scene when GameManager.current_scene isn't set
-	# (e.g. when testing a scene directly without going through main.tscn).
-	var scene_to_free: Node = current_scene if current_scene else get_tree().current_scene
-	if scene_to_free:
-		scene_to_free.queue_free()
+	# Always free both GameManager.current_scene AND get_tree().current_scene when they
+	# differ — they can diverge if the native scene switcher (get_tree().change_scene_to_*)
+	# was used, leaving GameManager's tracked scene and Godot's tracked scene out of sync.
+	var gm_scene: Node = current_scene if is_instance_valid(current_scene) else null
+	var tree_scene: Node = get_tree().current_scene
+
+	if gm_scene:
+		gm_scene.queue_free()
+	if is_instance_valid(tree_scene) and tree_scene != gm_scene:
+		tree_scene.queue_free()
 	current_scene = null
 
 	# Calculate blackout duration:
@@ -185,7 +190,7 @@ func hard_cut_to_scene(scene_path: String) -> void:
 	var packed: PackedScene = ResourceLoader.load_threaded_get(scene_path)
 	if packed:
 		current_scene = packed.instantiate()
-		var scene_added = false
+		var scene_added: bool = false
 
 		if is_instance_valid(main_node):
 			var scene_parent = main_node.get_node_or_null("CurrentScene")

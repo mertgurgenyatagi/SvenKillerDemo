@@ -20,6 +20,8 @@ const _CHAR_SCENE_2: PackedScene = preload(
 		"res://assets/npc_assets/npc_group_2.fbx")
 const _CHAR_SCENE_3: PackedScene = preload(
 		"res://assets/npc_assets/npc_group_3.fbx")
+const _AUDIO_STREAM: AudioStream = preload(
+		"res://assets/audio/sfx/npc/npc_audio_group.ogg")
 
 ## Walking speed in metres per second.
 @export var walk_speed: float = 1.0
@@ -53,6 +55,7 @@ var _char3: Node3D = null  # right wing
 var _anim1: AnimationPlayer = null
 var _anim2: AnimationPlayer = null
 var _anim3: AnimationPlayer = null
+var _audio: AudioStreamPlayer3D = null
 
 # ── lifecycle ─────────────────────────────────────────────────────────────────
 
@@ -125,6 +128,12 @@ func _spawn_characters() -> void:
 	_anim2 = _find_anim_player(_char2)
 	_anim3 = _find_anim_player(_char3)
 	_update_world_transforms(0.0)
+	_audio = AudioStreamPlayer3D.new()
+	_audio.stream = _AUDIO_STREAM
+	_audio.volume_db = -20.0
+	_audio.finished.connect(_audio.play)
+	_char1.add_child(_audio)
+	_audio.play()
 
 
 func _find_anim_player(node: Node) -> AnimationPlayer:
@@ -218,7 +227,6 @@ func _update_world_transforms(delta: float) -> void:
 	else:
 		blended_basis = target_basis
 
-	# ── triangle positions ────────────────────────────────────────────────────
 	if _char1:
 		_char1.global_position = center + fwd * fore_offset
 		_char1.global_basis    = blended_basis

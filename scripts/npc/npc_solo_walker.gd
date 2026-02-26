@@ -162,25 +162,25 @@ func _strip_root_motion(anim: Animation) -> void:
 # ── movement & rotation ───────────────────────────────────────────────────────
 
 func _update_world_transform(delta: float) -> void:
-	var pos: Vector3 = _curve.sample_baked(_offset)
+	var center: Vector3 = _curve.sample_baked(_offset)
 
 	const TANGENT_DIST: float = 0.2
 	var a: float = clampf(_offset - TANGENT_DIST, 0.0, _curve_length)
 	var b: float = clampf(_offset + TANGENT_DIST, 0.0, _curve_length)
-	var fwd: Vector3 = (_curve.sample_baked(b) - _curve.sample_baked(a)).normalized()
+	var raw_tangent: Vector3 = (_curve.sample_baked(b) - _curve.sample_baked(a)).normalized()
 
-	if fwd.length_squared() < 0.001:
+	if raw_tangent.length_squared() < 0.001:
 		return
 
-	if _direction < 0.0:
-		fwd = -fwd
+	var right: Vector3 = Vector3.UP.cross(raw_tangent).normalized()
+	var fwd:   Vector3 = raw_tangent if _direction > 0.0 else -raw_tangent
 
 	var target_basis: Basis = Basis.looking_at(fwd, Vector3.UP, false)
 	if not is_zero_approx(facing_offset_deg):
 		target_basis = target_basis.rotated(Vector3.UP, deg_to_rad(facing_offset_deg))
 
 	if _char:
-		_char.global_position = pos
+		_char.global_position = center
 		if delta > 0.0 and rotation_smooth > 0.0:
 			_char.global_basis = _char.global_basis.slerp(
 					target_basis, clampf(rotation_smooth * delta, 0.0, 1.0))

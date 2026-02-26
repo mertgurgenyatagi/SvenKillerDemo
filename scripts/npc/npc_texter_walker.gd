@@ -168,25 +168,24 @@ func _strip_root_motion(anim: Animation) -> void:
 # ── movement & rotation ──────────────────────────────────────────────────────
 
 func _update_world_transform(delta: float) -> void:
-	global_position = _curve.sample_baked(_offset)
+	var center: Vector3 = _curve.sample_baked(_offset)
 
 	# Build the forward direction from a short tangent window around _offset.
 	const TANGENT_DIST: float = 0.2
 	var a: float = clampf(_offset - TANGENT_DIST, 0.0, _curve_length)
 	var b: float = clampf(_offset + TANGENT_DIST, 0.0, _curve_length)
-	var fwd: Vector3 = (_curve.sample_baked(b) - _curve.sample_baked(a)).normalized()
+	# Raw tangent (un-flipped) used for the stable right/lateral axis.
+	var raw_tangent: Vector3 = (_curve.sample_baked(b) - _curve.sample_baked(a)).normalized()
 
-	if fwd.length_squared() < 0.001:
+	if raw_tangent.length_squared() < 0.001:
 		return
 
-	if _direction < 0.0:
-		fwd = -fwd
+	var right: Vector3 = Vector3.UP.cross(raw_tangent).normalized()
+	var fwd: Vector3   = raw_tangent if _direction > 0.0 else -raw_tangent
 
-	# Basis.looking_at(fwd, up, use_model_front=false) → local -Z faces fwd.
-	# If the mesh faces +Z (common for Mixamo), set facing_offset_deg = 180
-	# in the Inspector to flip it.
+	global_position = center
+
 	var target_basis: Basis = Basis.looking_at(fwd, Vector3.UP, false)
-
 	if not is_zero_approx(facing_offset_deg):
 		target_basis = target_basis.rotated(Vector3.UP, deg_to_rad(facing_offset_deg))
 

@@ -13,6 +13,8 @@ const _CHAR_SCENE_1: PackedScene = preload(
 		"res://assets/npc_assets/npc_friend_1.fbx")
 const _CHAR_SCENE_2: PackedScene = preload(
 		"res://assets/npc_assets/npc_friend_2.fbx")
+const _AUDIO_STREAM: AudioStream = preload(
+		"res://assets/audio/sfx/npc/npc_audio_friends.ogg")
 
 ## Walking speed in metres per second.
 @export var walk_speed: float = 1.3
@@ -38,6 +40,7 @@ var _char1: Node3D = null
 var _char2: Node3D = null
 var _anim1: AnimationPlayer = null
 var _anim2: AnimationPlayer = null
+var _audio: AudioStreamPlayer3D = null
 
 # ── lifecycle ─────────────────────────────────────────────────────────────────
 
@@ -107,6 +110,12 @@ func _spawn_characters() -> void:
 	_anim1 = _find_anim_player(_char1)
 	_anim2 = _find_anim_player(_char2)
 	_update_world_transforms(0.0)
+	_audio = AudioStreamPlayer3D.new()
+	_audio.stream = _AUDIO_STREAM
+	_audio.volume_db = -20.0
+	_audio.finished.connect(_audio.play)
+	_char1.add_child(_audio)
+	_audio.play()
 
 
 func _find_anim_player(node: Node) -> AnimationPlayer:
@@ -210,5 +219,5 @@ func _update_world_transforms(delta: float) -> void:
 		_char1.global_position = center + right * side_offset
 		_char1.global_basis    = blended_basis
 	if _char2:
-		_char2.global_position = center - right * side_offset
+		_char2.global_position = center + right * (-side_offset)
 		_char2.global_basis    = blended_basis

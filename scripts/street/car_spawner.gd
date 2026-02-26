@@ -16,9 +16,11 @@ extends Node3D
 @export var player_z_threshold: float = 74.0
 
 ## Z value at which SP2 cars (travelling in −Z) begin their right-hand curve.
-@export var turn_trigger_z: float = 30
+@export var turn_trigger_z_sp2: float = 30
+## Z value at which SP1 cars (travelling in +Z) begin their left-hand curve.
+@export var turn_trigger_z_sp1: float = 130
 ## Continuous turn rate in degrees per second once the curve begins.
-@export var turn_rate_deg: float = 13.0
+@export var turn_rate_deg: float = 19.5
 
 @onready var _car1_sp1: Node3D = $CarPool/Car1SP1
 @onready var _car2_sp1: Node3D = $CarPool/Car2SP1
@@ -107,19 +109,19 @@ func _step_cars(delta: float) -> void:
 		if not car_data["turning"]:
 			car.position += dir_vec * car_speed * delta
 
-			# SP2 cars (dir_vec.z < 0) begin curving once they cross turn_trigger_z.
-			if dir_vec.z < 0.0 and car.position.z <= turn_trigger_z:
+			# SP2 cars (dir_vec.z < 0) begin curving once they cross turn_trigger_z_sp2.
+			# SP1 cars (dir_vec.z > 0) begin curving once they cross turn_trigger_z_sp1.
+			if dir_vec.z < 0.0 and car.position.z <= turn_trigger_z_sp2:
+				car_data["turning"] = true
+			elif dir_vec.z > 0.0 and car.position.z >= turn_trigger_z_sp1:
 				car_data["turning"] = true
 		else:
-			# Rotate movement vector clockwise around Y = right-hand turn.
-			# Negative angle on Vector3.rotated = clockwise for a −Z-facing car.
+			# Both cars turn right from their own POV: negative rotation around Y.
 			dir_vec = dir_vec.rotated(Vector3.UP, -turn_step)
 			car_data["dir_vec"] = dir_vec
 			car.position += dir_vec * car_speed * delta
 
 			# Match the car's visual orientation to the updated heading.
-			# Positive rotate_y is consistent with the negative rotated() above —
-			# both resolve to the same world-space direction.
 			car.rotate_y(-turn_step)
 
 	for item: Dictionary in to_remove:

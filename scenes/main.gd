@@ -56,7 +56,7 @@ func run_splash_sequence() -> void:
 	# But first set up transition layer to be black
 	transition_fade.color = Color(0, 0, 0, 1)
 	transition_layer.visible = true
-	transition_layer.layer = 5  # Below splash but above menu
+	transition_layer.layer = 200  # Above all UI, subtitles, and effects
 	
 	# Now hide splash
 	splash_screen.visible = false

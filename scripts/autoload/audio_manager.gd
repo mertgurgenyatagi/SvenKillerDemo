@@ -51,6 +51,25 @@ func _ready() -> void:
 	_load_config()
 	_load_audio_library()
 	_create_player_pools()
+	_setup_noe_prompt_bus()
+
+
+func _setup_noe_prompt_bus() -> void:
+	## Create a dedicated "NoePrompt" audio bus with reverb if it doesn't exist.
+	## Using a separate bus keeps the reverb isolated from other SFX.
+	if AudioServer.get_bus_index("NoePrompt") != -1:
+		return  # Already configured (e.g., via project bus layout)
+	AudioServer.add_bus()
+	var idx: int = AudioServer.get_bus_count() - 1
+	AudioServer.set_bus_name(idx, "NoePrompt")
+	AudioServer.set_bus_send(idx, "Master")
+	var reverb := AudioEffectReverb.new()
+	reverb.room_size = 0.8
+	reverb.damping = 0.5
+	reverb.spread = 1.0
+	reverb.wet = 0.6
+	reverb.dry = 1.0
+	AudioServer.add_bus_effect(idx, reverb)
 
 
 func _load_config() -> void:

@@ -489,7 +489,7 @@ func _on_button_hover() -> void:
 
 func _on_button_pressed() -> void:
 	# Play click sound (15% volume)
-	AudioManager.play_sfx(AudioManager.AudioID.MENU_CLICK, linear_to_db(0.15))
+	AudioManager.play_sfx(AudioManager.AudioID.MENU_CLICK, 4.0)
 
 
 # --- Styling Helpers ---

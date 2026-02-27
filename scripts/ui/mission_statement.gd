@@ -28,7 +28,7 @@ func _ready() -> void:
 
 func _build_ui() -> void:
 	_canvas = CanvasLayer.new()
-	_canvas.layer = 15
+	_canvas.layer = 128  # Above motion blur (127) so text is never blurred
 	add_child(_canvas)
 
 	_label = Label.new()

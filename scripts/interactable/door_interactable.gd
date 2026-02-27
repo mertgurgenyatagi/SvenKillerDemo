@@ -51,4 +51,24 @@ func _play_door_sfx() -> void:
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
 	add_child(player)
+
+	# Try to find a matching AudioEntry in AudioManager config to apply its volume_db
+	var applied: bool = false
+	if Engine.has_singleton("AudioManager"):
+		var am = AudioManager
+		if am and am.config and am.config.entries:
+			for key in am.config.entries.keys():
+				var e = am.config.entries[key]
+				if e and e.path == door_sfx_path:
+					player.volume_db = e.volume_db
+					applied = true
+					break
+
+	# If no entry found, apply a sensible default for interior door
+	if not applied:
+		var fname: String = door_sfx_path.get_file()
+		if fname == "door_open_interior.ogg":
+			player.volume_db = 20.0
+		# otherwise leave default (0 dB)
+
 	player.play()

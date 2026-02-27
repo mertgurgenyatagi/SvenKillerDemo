@@ -175,7 +175,7 @@ func _setup_ambient_audio() -> void:
 	_ambient_player = AudioStreamPlayer.new()
 	_ambient_player.stream = AudioManager.get_audio_stream(AudioManager.AudioID.AMB_RAIN)
 	_ambient_player.bus = "SFX"
-	_ambient_player.volume_db = -14.0  # 2x louder than -20 dB
+	_ambient_player.volume_db = -10.0
 	_ambient_player.finished.connect(_ambient_player.play)  # loop on finish
 	add_child(_ambient_player)
 	_ambient_player.play()

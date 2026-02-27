@@ -151,8 +151,14 @@ func _start_video() -> void:
 	# Play SFX 0.16 seconds before prompt appears with 0.14s fade in
 	var noe_sfx_player: AudioStreamPlayer = AudioManager.play_sfx(AudioManager.AudioID.NOE_PROMPT, -80.0)
 	if noe_sfx_player:
+		noe_sfx_player.bus = "NoePrompt"  # Use reverb bus
+		var target_db: float = 24.0
+		if Engine.has_singleton("AudioManager") and AudioManager and AudioManager.config and AudioManager.config.entries.has(AudioManager.AudioID.NOE_PROMPT):
+			var entry = AudioManager.config.entries[AudioManager.AudioID.NOE_PROMPT]
+			if entry:
+				target_db = clamp(entry.volume_db, -80.0, 24.0)
 		var sfx_tween: Tween = create_tween()
-		sfx_tween.tween_property(noe_sfx_player, "volume_db", 4.0, 0.14).set_ease(Tween.EASE_IN)
+		sfx_tween.tween_property(noe_sfx_player, "volume_db", target_db, 0.14).set_ease(Tween.EASE_IN)
 	await get_tree().create_timer(0.16).timeout
 
 	# Show Noé prompt
@@ -197,15 +203,21 @@ func _show_noe_prompt() -> void:
 
 	# After 3 seconds, snap out the prompt and reveal preloaded house scene
 	# Start the second Noé SFX slightly before the reveal (same offset as the first: 0.16s)
-	var pre_reveal_delay: float = 3.0 - 0.16
+	var pre_reveal_delay: float = 2.25 - 0.16
 	if pre_reveal_delay > 0.0:
 		await get_tree().create_timer(pre_reveal_delay).timeout
 
 	# Play the prompt SFX 0.16s before revealing, fade in over 0.14s
 	var noe_sfx_player2: AudioStreamPlayer = AudioManager.play_sfx(AudioManager.AudioID.NOE_PROMPT, -80.0)
 	if noe_sfx_player2:
+		noe_sfx_player2.bus = "NoePrompt"  # Use reverb bus
+		var target_db2: float = 24.0
+		if Engine.has_singleton("AudioManager") and AudioManager and AudioManager.config and AudioManager.config.entries.has(AudioManager.AudioID.NOE_PROMPT):
+			var entry2 = AudioManager.config.entries[AudioManager.AudioID.NOE_PROMPT]
+			if entry2:
+				target_db2 = clamp(entry2.volume_db, -80.0, 24.0)
 		var sfx_tween2: Tween = create_tween()
-		sfx_tween2.tween_property(noe_sfx_player2, "volume_db", 4.0, 0.14).set_ease(Tween.EASE_IN)
+		sfx_tween2.tween_property(noe_sfx_player2, "volume_db", target_db2, 0.14).set_ease(Tween.EASE_IN)
 
 	# Wait the same offset used earlier so sfx leads the reveal by ~0.16s
 	await get_tree().create_timer(0.16).timeout

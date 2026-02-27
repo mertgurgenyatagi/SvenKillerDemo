@@ -136,6 +136,9 @@ func hard_cut_to_scene(scene_path: String) -> void:
 	var master_idx: int = AudioServer.get_bus_index("Master")
 	AudioServer.set_bus_mute(master_idx, true)
 
+	# Clear subtitle slot so new scene starts with a clean state
+	_subtitle_bottom_owner = null
+
 	# If stored references are invalid, try to recover or create fallback
 	if not is_instance_valid(transition_fade) or not is_instance_valid(main_node):
 		_recover_main_references()

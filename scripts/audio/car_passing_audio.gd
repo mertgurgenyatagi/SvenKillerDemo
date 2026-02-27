@@ -39,6 +39,8 @@ func _play() -> void:
 	var ap := AudioStreamPlayer.new()
 	add_child(ap)
 	ap.stream = STREAM
+	# Ensure the car passing is heard at desired level
+	ap.volume_db = -2.0
 	ap.play()
 	ap.finished.connect(ap.queue_free)
 

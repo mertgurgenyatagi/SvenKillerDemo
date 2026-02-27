@@ -70,7 +70,7 @@ func _ready() -> void:
 
 func _setup_subtitles() -> void:
 	subtitle_canvas = CanvasLayer.new()
-	subtitle_canvas.layer = 10
+	subtitle_canvas.layer = 128  # Above motion blur (127) so subtitles are never blurred
 	add_child(subtitle_canvas)
 
 	subtitle_label = Label.new()

@@ -1,0 +1,24 @@
+file_path,configured_in,configured_volume_db,spatial,bus,code_override_file,code_volume_db,notes
+assets/audio/voiceover/voicemail.ogg,resources/audio_config.tres,7.0,true,Voice,,,"Configured in audio_config.tres (AudioID.VOICEMAIL). PhoneInteractable uses AudioManager.get_audio_stream() but does not apply entry.volume_db to its player."
+assets/audio/sfx/npc/npc_audio_phone_guy.ogg,script:scripts/npc/npc_phone_guy.gd,-16.5,true,,scripts/npc/npc_phone_guy.gd,-16.5,"Volume set in code: audio.volume_db = -16.5."
+assets/audio/sfx/npc/npc_audio_group.ogg,script:scripts/npc/npc_group_walker.gd,-16.5,true,,scripts/npc/npc_group_walker.gd,-16.5,"Volume set in code: audio.volume_db = -16.5."
+assets/audio/sfx/npc/npc_audio_friends.ogg,script:scripts/npc/npc_friends_walker.gd,-16.5,true,,scripts/npc/npc_friends_walker.gd,-16.5,"Volume set in code: audio.volume_db = -16.5."
+assets/audio/sfx/npc/car_passing.ogg,none,,,,scripts/audio/car_passing_audio.gd,,"Played by car_passing_audio.gd with a local AudioStreamPlayer; no explicit volume_db set. Relies on default player/bus."
+assets/audio/sfx/footsteps/wood_footstep_7.ogg,resources/audio_config.tres,-8.0,true,SFX,,,"Configured in audio_config.tres (FOOTSTEP_WOOD_7)."
+assets/audio/sfx/interactions/lightswitch_sfx.ogg,resources/audio_config.tres,19.0,true,SFX,,,"Configured in audio_config.tres (LIGHTSWITCH)."
+assets/audio/sfx/footsteps/wood_footstep_6.ogg,resources/audio_config.tres,-8.0,true,SFX,,,
+assets/audio/sfx/interactions/door_open_interior.ogg,none,,,,scripts/interactable/door_interactable.gd,,"Used by DoorInteractable; playback creates a local AudioStreamPlayer without setting volume_db."
+assets/audio/sfx/ambient/amb_rain.ogg,resources/audio_config.tres,18.0,true,SFX,scripts/effects/rain_system.gd,-14.0,"Configured in audio_config.tres (AMB_RAIN = 18.0) but RainSystem sets ambient player to -14.0 in code (override)."
+assets/audio/sfx/interactions/door_open_front.ogg,none,,,,scripts/interactable/door_interactable.gd,,"Used as default door_sfx_path in DoorInteractable; playback does not set volume_db."
+assets/audio/sfx/footsteps/wood_footstep_5.ogg,resources/audio_config.tres,-8.0,true,SFX,,,
+assets/audio/sfx/footsteps/wood_footstep_4.ogg,resources/audio_config.tres,-8.0,true,SFX,,,
+assets/audio/sfx/ambient/ambient_main_menu.ogg,resources/audio_config.tres,27.0,false,SFX,scripts/ui/main_menu.gd,-60.0,"Configured in audio_config.tres (AMBIENT_MAIN_MENU = 27.0). main_menu.gd starts ambient at -60 then tweens to ambient_volume_db."
+assets/audio/sfx/footsteps/wood_footstep_3.ogg,resources/audio_config.tres,-8.0,true,SFX,,,
+assets/audio/sfx/interactions/menu_click.ogg,resources/audio_config.tres,2.8,false,SFX,,,"Configured in audio_config.tres (MENU_CLICK = 2.8). UI code sometimes overrides with linear_to_db."
+assets/audio/sfx/ambient/house_hum.ogg,resources/audio_config.tres,12.5,true,SFX,scripts/interactable/light_switch_interactable.gd,0.0,"Configured in audio_config.tres (HOUSE_HUM = 12.5) but LightSwitch sets hum_player.volume_db = hum_volume_on/hum_volume_off."
+assets/audio/sfx/footsteps/wood_footstep_2.ogg,resources/audio_config.tres,-8.0,true,SFX,,,
+assets/audio/sfx/interactions/menu_hover.ogg,resources/audio_config.tres,18.0,false,SFX,,,"Configured in audio_config.tres (MENU_HOVER = 18.0)."
+assets/audio/sfx/footsteps/wood_footstep_1.ogg,resources/audio_config.tres,-8.0,true,SFX,,,
+assets/audio/sfx/interactions/noe_prompt_sfx.ogg,resources/audio_config.tres,50.0,false,SFX,scripts/gameplay/opening_sequence.gd,-80.0->4.0,"Configured (NOE_PROMPT = 50.0). opening_sequence plays it with override -80 then tweens to 4.0."
+assets/audio/sfx/interactions/phone_button_press_sfx.ogg,resources/audio_config.tres,21.0,true,SFX,,,"Configured in audio_config.tres (PHONE_BUTTON_PRESS = 21.0, spatial)."
+assets/audio/music/sven_killer.ogg,resources/audio_config.tres,10.4,false,Music,scripts/ui/main_menu.gd,-60.0->-4.0,"Configured in audio_config.tres (MUSIC_MAIN = 10.4). main_menu.gd starts music at -60 then tweens to -4.0."

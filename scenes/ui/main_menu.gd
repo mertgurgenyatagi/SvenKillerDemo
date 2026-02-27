@@ -29,8 +29,8 @@ var ambient_audio: AudioStream
 var music_audio: AudioStream
 
 # Config values
-var ambient_volume_db: float = 4.0 # Remove config usage, use direct values
-var music_volume_db: float = -4.0
+var ambient_volume_db: float = 5.0 # target ambient volume in dB
+var music_volume_db: float = -7.0
 var background_video_scale: float = 1.0
 
 func _ready() -> void:
@@ -298,8 +298,8 @@ func _on_button_unhover(button: Button) -> void:
 		hover_tweens[button] = tween
 
 func _on_button_pressed() -> void:
-	# Play click sound (15% volume)
-	AudioManager.play_sfx(AudioManager.AudioID.MENU_CLICK, linear_to_db(0.15))
+	# Play click sound at explicit 4 dB
+	AudioManager.play_sfx(AudioManager.AudioID.MENU_CLICK, 4.0)
 
 func _on_new_game_pressed() -> void:
 	# Lock the hover rectangle (prevent unhover)

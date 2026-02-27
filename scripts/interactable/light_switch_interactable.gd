@@ -5,7 +5,7 @@ extends Node3D
 
 @export var is_on: bool = true  # Lights start on by default
 @export var light_group: String = "house_lights"  ## Which group of lights this switch controls
-@export var hum_volume_on: float = 0.0  ## Volume in dB when lights are on
+@export var hum_volume_on: float = -4.0  ## Volume in dB when lights are on
 @export var hum_volume_off: float = -12.0  ## Volume in dB when lights are off (~25%)
 @export var hum_fade_time: float = 0.2  ## Seconds to fade hum volume
 

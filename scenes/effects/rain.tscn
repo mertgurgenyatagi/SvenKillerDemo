@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dqvr8t3np1xk6"]
+
+[ext_resource type="Script" uid="uid://bshbobxme7601" path="res://scripts/effects/rain_system.gd" id="1_rain"]
+
+[node name="RainSystem" type="Node3D" unique_id=1031789608]
+script = ExtResource("1_rain")
+intensity = 1.0
+drop_speed = 31.5
+wind = Vector3(15, 0, 0.4)
+drop_length = 0.77
+drop_width = 0.005
+drop_color = Color(0.9411765, 0.972549, 1, 0.019607844)

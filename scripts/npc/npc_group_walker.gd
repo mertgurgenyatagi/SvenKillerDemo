@@ -57,6 +57,11 @@ var _anim2: AnimationPlayer = null
 var _anim3: AnimationPlayer = null
 var _audio: AudioStreamPlayer3D = null
 
+# Footstep audio
+var _footstep_timer: float = 0.0
+var _footstep_interval: float = 0.5  # seconds between footsteps at standard walk speed
+var _last_footstep_index: int = -1
+
 # ── lifecycle ─────────────────────────────────────────────────────────────────
 
 func _ready() -> void:
@@ -81,6 +86,13 @@ func _process(delta: float) -> void:
 		_direction = 1.0
 
 	_update_world_transforms(delta)
+
+	# Trigger footsteps
+	_footstep_timer += delta
+	var interval := _footstep_interval / (walk_speed / 1.3)  # scale by relative walk speed
+	if _footstep_timer >= interval:
+		_footstep_timer = 0.0
+		_play_footstep()
 
 # ── curve construction ────────────────────────────────────────────────────────
 
@@ -130,7 +142,7 @@ func _spawn_characters() -> void:
 	_update_world_transforms(0.0)
 	_audio = AudioStreamPlayer3D.new()
 	_audio.stream = _AUDIO_STREAM
-	_audio.volume_db = -20.0
+	_audio.volume_db = -16.5  # 1.5x louder than original -20 dB
 	_audio.finished.connect(_audio.play)
 	_char1.add_child(_audio)
 	_audio.play()
@@ -236,3 +248,29 @@ func _update_world_transforms(delta: float) -> void:
 	if _char3:
 		_char3.global_position = center - fwd * trail_offset - right * side_offset
 		_char3.global_basis    = blended_basis
+
+
+func _play_footstep() -> void:
+	## Play a random footstep sound from the character's current position.
+	var footstep_ids: Array[AudioManager.AudioID] = [
+		AudioManager.AudioID.FOOTSTEP_WOOD_1,
+		AudioManager.AudioID.FOOTSTEP_WOOD_2,
+		AudioManager.AudioID.FOOTSTEP_WOOD_3,
+		AudioManager.AudioID.FOOTSTEP_WOOD_4,
+		AudioManager.AudioID.FOOTSTEP_WOOD_5,
+		AudioManager.AudioID.FOOTSTEP_WOOD_6,
+		AudioManager.AudioID.FOOTSTEP_WOOD_7,
+	]
+
+	# Pick random, avoid repeating the last one
+	var index: int = randi_range(0, footstep_ids.size() - 1)
+	while index == _last_footstep_index and footstep_ids.size() > 1:
+		index = randi_range(0, footstep_ids.size() - 1)
+
+	_last_footstep_index = index
+
+	# Play from character 1's position
+	if _char1:
+		var player := AudioManager.play_3d_sfx(footstep_ids[index], _char1.global_position)
+		if player:
+			player.pitch_scale = randf_range(0.95, 1.05)

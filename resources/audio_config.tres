@@ -48,53 +48,60 @@ path = "res://assets/audio/sfx/ambient/house_hum.ogg"
 volume_db = 12.5
 bus = "SFX"
 
+[sub_resource type="Resource" id="Resource_rain"]
+script = ExtResource("1_i3eh0")
+name = "AMB_RAIN"
+path = "res://assets/audio/sfx/ambient/amb_rain.ogg"
+volume_db = 18.0
+bus = "SFX"
+
 [sub_resource type="Resource" id="Resource_ay7i4"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_1"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_1.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_x4q4d"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_2"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_2.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_bpwt1"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_3"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_3.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_010wa"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_4"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_4.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_srr0y"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_5"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_5.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_4e0jg"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_6"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_6.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_bdtc2"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_7"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_7.ogg"
-volume_db = 3.3
+volume_db = -8.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_fqam2"]
@@ -133,14 +140,15 @@ entries = {
 3: SubResource("Resource_ued2d"),
 4: SubResource("Resource_lj333"),
 5: SubResource("Resource_54173"),
-6: SubResource("Resource_ay7i4"),
-7: SubResource("Resource_x4q4d"),
-8: SubResource("Resource_bpwt1"),
-9: SubResource("Resource_010wa"),
-10: SubResource("Resource_srr0y"),
-11: SubResource("Resource_4e0jg"),
-12: SubResource("Resource_bdtc2"),
-13: SubResource("Resource_fqam2"),
-14: SubResource("Resource_4xuin"),
-15: SubResource("Resource_gbrqi")
+6: SubResource("Resource_rain"),
+7: SubResource("Resource_ay7i4"),
+8: SubResource("Resource_x4q4d"),
+9: SubResource("Resource_bpwt1"),
+10: SubResource("Resource_010wa"),
+11: SubResource("Resource_srr0y"),
+12: SubResource("Resource_4e0jg"),
+13: SubResource("Resource_bdtc2"),
+14: SubResource("Resource_fqam2"),
+15: SubResource("Resource_4xuin"),
+16: SubResource("Resource_gbrqi")
 }

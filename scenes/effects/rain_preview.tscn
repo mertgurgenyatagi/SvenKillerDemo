@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bm2s0ilpihhi"]
+
+[ext_resource type="PackedScene" uid="uid://dqvr8t3np1xk6" path="res://scenes/effects/rain.tscn" id="1_rain"]
+
+[sub_resource type="Environment" id="Env_preview"]
+background_mode = 1
+background_color = Color(0.04, 0.05, 0.09, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.14, 0.17, 0.26, 1)
+ambient_light_energy = 0.6
+fog_enabled = true
+fog_light_color = Color(0.07, 0.09, 0.14, 1)
+fog_density = 0.025
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(40, 40)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.11, 0.12, 0.14, 1)
+metallic_specular = 0.25
+roughness = 0.85
+
+[node name="RainPreview" type="Node3D" unique_id=33310468]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=583609570]
+environment = SubResource("Env_preview")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1571647135]
+transform = Transform3D(1, 0, 0, 0, 0.707, 0.707, 0, -0.707, 0.707, 0, 10, 0)
+light_color = Color(0.55, 0.62, 0.82, 1)
+light_energy = 0.25
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1270785582]
+mesh = SubResource("PlaneMesh_ground")
+surface_material_override/0 = SubResource("Mat_ground")
+
+[node name="PreviewAnchor" type="Node3D" parent="." unique_id=349778249]
+
+[node name="RainSystem" parent="." unique_id=996393295 instance=ExtResource("1_rain")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+max_particles = 5000
+drop_speed = 31.5
+wind = Vector3(15, 0, 0.4)
+drop_length = 0.77
+drop_width = 0.005
+follow_target_path = NodePath("../PreviewAnchor")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=811447596]
+transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, 0, 3, 13)
+fov = 65.0

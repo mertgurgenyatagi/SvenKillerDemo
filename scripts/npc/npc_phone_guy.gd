@@ -17,7 +17,7 @@ func _ready() -> void:
 
 	var audio := AudioStreamPlayer3D.new()
 	audio.stream = _AUDIO_STREAM
-	audio.volume_db = -20.0
+	audio.volume_db = -16.5  # 1.5x louder than original -20 dB
 	audio.finished.connect(audio.play)
 	add_child(audio)
 	audio.play()

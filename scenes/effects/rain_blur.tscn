@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://rain_blur_effect"]
+
+[ext_resource type="Script" path="res://scripts/effects/rain_blur.gd" id="1_rb"]
+[ext_resource type="Shader" path="res://assets/shaders/rain_blur.gdshader" id="2_rb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMat_rb"]
+shader = ExtResource("2_rb")
+shader_parameter/blur_direction = Vector2(0.01, 0.04)
+shader_parameter/intensity = 0.5
+
+[node name="RainBlur" type="CanvasLayer"]
+layer = 126
+script = ExtResource("1_rb")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+material = SubResource("ShaderMat_rb")

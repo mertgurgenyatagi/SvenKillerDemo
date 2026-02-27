@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c7p2xn4vr8bk1"]
+
+[ext_resource type="Script" path="res://scripts/effects/motion_blur.gd" id="1_mb"]
+[ext_resource type="Shader" path="res://assets/shaders/motion_blur.gdshader" id="2_mb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMat_mb"]
+shader = ExtResource("2_mb")
+shader_parameter/velocity = Vector2(0, 0)
+shader_parameter/intensity = 0.5
+
+[node name="MotionBlur" type="CanvasLayer"]
+layer = 127
+script = ExtResource("1_mb")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+material = SubResource("ShaderMat_mb")

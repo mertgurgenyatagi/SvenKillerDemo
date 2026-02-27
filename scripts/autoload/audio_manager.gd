@@ -18,6 +18,7 @@ enum AudioID {
 	MUSIC_MAIN,
 	NOE_PROMPT,
 	HOUSE_HUM,
+	AMB_RAIN,
 
 	# Footsteps
 	FOOTSTEP_WOOD_1,

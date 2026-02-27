@@ -59,49 +59,49 @@ bus = "SFX"
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_1"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_1.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_x4q4d"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_2"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_2.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_bpwt1"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_3"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_3.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_010wa"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_4"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_4.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_srr0y"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_5"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_5.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_4e0jg"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_6"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_6.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_bdtc2"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_7"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_7.ogg"
-volume_db = -12.0
+volume_db = -17.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_fqam2"]

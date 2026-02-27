@@ -280,19 +280,50 @@ scenes/player/
 
 ## Next Steps (In Priority Order)
 
-1. **Implement PlayerController** — CharacterBody3D, WASD movement, AnimationTree, camera
-2. **Create House Interior Scene** — Load sven_home.glb, set up lighting, spawn points, surface zones
-3. **Build Interactable Base Class** — Raycast detection, E key handling, visual feedback
-4. **Add Light Switch Interactable** — Toggle house lights, SFX, hierarchy template for others
-5. **Set Up Surface Zone System** — Detect walking surfaces, trigger footstep audio selection
-6. **Implement Door Interactable** — Entry doors load scenes; exit door triggers cutscene
-7. **Add Seat/Sitting System** — Couch/chairs, sit/stand animations, interaction prompts
-8. **Build Street Scene** — Load street_scene.glb, pedestrian spawner, car spawner, death mechanic
-
-*Estimated time: Phases 1-3 can be completed in 1-2 weeks with focused effort.*
+1. **Bus station scene** — create scene, position girl character, trigger dialogue on approach
+2. **Second half content** — post-bus-station narrative, second Noé prompt placement, ending
+3. **Concrete footsteps** — street currently uses wood footstep sounds; needs pavement variants
+4. **AnimationTree wiring** — Sven animations exist but are not blended; wire up idle/walk/strafe
+5. **Credits / end screen** — not yet created
 
 ---
 
-**Last Updated:** Feb 4, 2026
-**Branch:** main-menu-tweaks → development
-**Contact AI:** AI integration removed — use external tools or scripts instead
+## Audio Architecture — Important
+
+**Two sources of truth for volume.** Always grep for the actual call site before editing `audio_config.tres`.
+
+`play_sfx(AudioID, volume_override)` — if the second argument is anything other than `-999.0`, it overrides the config value entirely. Several sounds use hardcoded overrides:
+
+| Sound | Controlled in |
+|-------|--------------|
+| MENU_CLICK | `main_menu.gd` and `settings_menu.gd` — hardcoded override |
+| NOE_PROMPT | `opening_sequence.gd` (×2) and `street_manager.gd` — hardcoded target in tween |
+| Opening voiceover video | `opening_sequence.gd` — `video_player.volume_db` directly |
+
+Editing `audio_config.tres` for these will have no effect.
+
+**NoePrompt bus** is created dynamically in `AudioManager._ready()`. Reverb settings live there, not in the project bus layout.
+
+**CanvasLayer order is load-bearing:**
+- Layer 127: motion blur shader
+- Layer 128: all subtitle/mission statement CanvasLayers (must be > 127)
+- Layer 200: scene transition fade (must be > 128)
+
+Breaking this order causes subtitles to appear through black transition screens or to get blurred.
+
+---
+
+## Working with Claude — Style Notes
+
+- **Be direct.** Short commands only — no need to explain context Claude already has.
+- **Audio tuning is iterative.** Use extreme test values (-60 dB) to verify the right code path, then dial in.
+- **When something isn't working,** say so immediately rather than guessing. Claude should identify root causes, not retry the same edit.
+- **grep before editing.** If unsure where a value is actually controlled, search first. Never assume config files are the source of truth.
+- **One change at a time is fine,** but batching multiple related tweaks ("reduce X by 2, increase Y by 1.5, change Z duration") in a single message is preferred.
+- **No summaries of what was just done** unless something unexpected happened.
+
+---
+
+**Last Updated:** Feb 27, 2026
+**Branch:** finalizing-street → development
+**Handover doc:** `docs/HANDOVER.md`

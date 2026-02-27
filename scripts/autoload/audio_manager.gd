@@ -52,6 +52,24 @@ func _ready() -> void:
 	_load_audio_library()
 	_create_player_pools()
 	_setup_noe_prompt_bus()
+	_setup_house_exterior_bus()
+
+
+func _setup_house_exterior_bus() -> void:
+	## Low-pass filtered bus for exterior sounds heard through house walls.
+	if AudioServer.get_bus_index("HouseExterior") != -1:
+		return
+	AudioServer.add_bus()
+	var idx: int = AudioServer.get_bus_count() - 1
+	AudioServer.set_bus_name(idx, "HouseExterior")
+	AudioServer.set_bus_send(idx, "Master")
+	# Low-pass filter: walls block high frequencies (cutoff ~800 Hz)
+	var lpf := AudioEffectLowPassFilter.new()
+	lpf.cutoff_hz = 800.0
+	lpf.resonance = 0.3
+	AudioServer.add_bus_effect(idx, lpf)
+	# Overall bus attenuation on top of per-sound volumes
+	AudioServer.set_bus_volume_db(idx, -4.0)
 
 
 func _setup_noe_prompt_bus() -> void:
@@ -64,10 +82,10 @@ func _setup_noe_prompt_bus() -> void:
 	AudioServer.set_bus_name(idx, "NoePrompt")
 	AudioServer.set_bus_send(idx, "Master")
 	var reverb := AudioEffectReverb.new()
-	reverb.room_size = 0.8
-	reverb.damping = 0.5
-	reverb.spread = 1.0
-	reverb.wet = 0.6
+	reverb.room_size = 0.3
+	reverb.damping = 0.8
+	reverb.spread = 0.5
+	reverb.wet = 0.12
 	reverb.dry = 1.0
 	AudioServer.add_bus_effect(idx, reverb)
 

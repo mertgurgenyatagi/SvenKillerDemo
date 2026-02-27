@@ -2,7 +2,7 @@ extends Node3D
 
 # Minimal boot helper: press 'E' while scene runs hidden if preloaded.
 
-@export var enabled: bool = false
+@export var enabled: bool = true
 @export var background_preload: bool = false
 
 var _hidden_visuals: Array = []
@@ -176,6 +176,10 @@ func _start_ambient_audio() -> void:
 	for node in get_tree().get_nodes_in_group("house_ambient_audio"):
 		if (node is AudioStreamPlayer or node is AudioStreamPlayer3D) and not node.playing:
 			node.play()
+
+	for node in get_tree().get_nodes_in_group("house_ambient_scripts"):
+		if node.has_method("start"):
+			node.start()
 
 	background_preload = false
 

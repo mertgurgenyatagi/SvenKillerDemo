@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://5q0woxk0wlwq" path="res://scripts/ui/mission_statement.gd" id="12_mission"]
 [ext_resource type="PackedScene" uid="uid://bm6won1b2mitx" path="res://assets/models/environments/door_with_frame.glb" id="13_ue67j"]
 [ext_resource type="Script" uid="uid://bns0ydg1evhsm" path="res://scripts/interactable/door_interactable.gd" id="14_door"]
+[ext_resource type="Script" path="res://scripts/audio/house_exterior_ambient.gd" id="15_houseext"]
 
 [sub_resource type="Environment" id="Environment_moonlight"]
 background_mode = 1
@@ -186,5 +187,8 @@ script = ExtResource("6_indicator")
 
 [node name="Sketchfab_Scene" parent="." unique_id=416760073 instance=ExtResource("13_ue67j")]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0.163, -9.030104)
+
+[node name="HouseExteriorAmbient" type="Node" parent="."]
+script = ExtResource("15_houseext")
 
 [editable path="HouseModel"]

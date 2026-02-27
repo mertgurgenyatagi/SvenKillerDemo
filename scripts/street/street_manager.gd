@@ -12,7 +12,7 @@ const BOUNDARY_X_MAX: float = 17.79
 const BOUNDARY_X_MIN: float = -2.35
 
 const NOE_TRIGGER_Z: float = 60.0
-const NOE_DURATION: float = 2.25
+const NOE_DURATION: float = 3.25
 
 # ── Private vars ───────────────────────────────────────────────────────────────
 
@@ -22,6 +22,9 @@ var _player_start_transform: Transform3D
 var _death_active: bool = false
 var _noe_active: bool = false
 var _noe_triggered: bool = false
+
+var _death_zone_boxes: Array[CSGBox3D] = []
+var _mission_label: Label = null
 
 # Overlay UI (black screen + Noé prompt)
 var _canvas: CanvasLayer
@@ -37,7 +40,9 @@ var _mission_font: Font = preload("res://assets/fonts/roboto_condensed_medium.tt
 # ── Lifecycle ──────────────────────────────────────────────────────────────────
 
 func _ready() -> void:
+	add_to_group("street_manager")
 	_find_player()
+	_find_death_zone_boxes()
 	_build_overlay_ui()
 	_show_mission_after_delay()
 
@@ -56,6 +61,12 @@ func _process(_delta: float) -> void:
 		_trigger_death()
 		return
 
+	# Car death zone check
+	for box: CSGBox3D in _death_zone_boxes:
+		if is_instance_valid(box) and _point_in_box(pos, box):
+			_trigger_death()
+			return
+
 	# Noé prompt fires the first time the player's z drops to or below 60
 	if not _noe_triggered and pos.z <= NOE_TRIGGER_Z:
 		_noe_triggered = true
@@ -72,6 +83,29 @@ func _find_player() -> void:
 			_player = nodes[0] as CharacterBody3D
 	if _player:
 		_player_start_transform = _player.global_transform
+
+
+func _find_death_zone_boxes() -> void:
+	## Collect all CSGBox3D descendants of CarPool for per-frame overlap testing.
+	var car_pool: Node = get_parent().get_node_or_null("CarPool")
+	if not car_pool:
+		return
+	var stack: Array[Node] = [car_pool]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if node is CSGBox3D:
+			_death_zone_boxes.append(node as CSGBox3D)
+		for child in node.get_children():
+			stack.append(child)
+
+
+func _point_in_box(point: Vector3, box: CSGBox3D) -> bool:
+	## Returns true when world-space point is inside the CSGBox3D volume.
+	## Works with any rotation/scale baked into the transform.
+	var local: Vector3 = box.global_transform.affine_inverse() * point
+	var half: Vector3 = box.size * 0.5
+	return abs(local.x) <= half.x and abs(local.y) <= half.y and abs(local.z) <= half.z
+
 
 
 func _build_overlay_ui() -> void:
@@ -141,10 +175,19 @@ func _show_mission_after_delay() -> void:
 	label.offset_bottom = 345
 	label.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	canvas.add_child(label)
+	_mission_label = label
 
 	AudioManager.play_sfx(AudioManager.AudioID.MENU_HOVER, linear_to_db(0.35))
 	var tween := create_tween()
 	tween.tween_property(label, "modulate:a", 1.0, 1.2)
+
+
+func dismiss_mission_statement() -> void:
+	## Called by EliseDialogue when player reaches Elise — fades out the mission label.
+	if not is_instance_valid(_mission_label) or _mission_label.modulate.a <= 0.0:
+		return
+	var tween := create_tween()
+	tween.tween_property(_mission_label, "modulate:a", 0.0, 1.0)
 
 
 # ── Death boundary ─────────────────────────────────────────────────────────────
@@ -159,7 +202,7 @@ func _trigger_death() -> void:
 	var master_idx: int = AudioServer.get_bus_index("Master")
 	AudioServer.set_bus_mute(master_idx, true)
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.6).timeout
 
 	# Teleport player back to scene start
 	if is_instance_valid(_player):
@@ -223,5 +266,5 @@ func _play_noe_sfx() -> void:
 	add_child(player)
 	player.play()
 	var t := create_tween()
-	t.tween_property(player, "volume_db", 4.0, 0.14).set_ease(Tween.EASE_IN)
+	t.tween_property(player, "volume_db", 3.0, 0.14).set_ease(Tween.EASE_IN)
 	player.finished.connect(player.queue_free)

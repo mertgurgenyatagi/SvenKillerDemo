@@ -1,0 +1,210 @@
+[gd_scene format=4 uid="uid://dmpxwbkc02mdl"]
+
+[ext_resource type="PackedScene" uid="uid://okx4p36e7bfr" path="res://assets/models/environments/cafe_model.glb" id="1_q7x64"]
+[ext_resource type="PackedScene" uid="uid://bj2v1x8w551x0" path="res://assets/models/characters/sven_sitting.fbx" id="2_0bgol"]
+[ext_resource type="PackedScene" uid="uid://ccpndlrxyp5mk" path="res://assets/npc_assets/elise_sitting.fbx" id="3_gc0ao"]
+[ext_resource type="Script" uid="uid://c18i8gyu2cb8c" path="res://scripts/scenes/cafe_boot.gd" id="4_cafe_boot"]
+[ext_resource type="Script" uid="uid://pwh5vugry21g" path="res://scripts/scenes/cafe_camera.gd" id="5_cafe_cam"]
+[ext_resource type="PackedScene" uid="uid://c7p2xn4vr8bk1" path="res://scenes/effects/motion_blur.tscn" id="6_motion_blur"]
+[ext_resource type="Script" uid="uid://q7fklqa3b7sn" path="res://scripts/scenes/cafe_dialogue.gd" id="7_cafe_dialogue"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0bgol"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_gc0ao"]
+_surfaces = [{
+"aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
+"format": 34359738391,
+"material": SubResource("StandardMaterial3D_0bgol"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAPwAAAL8AAAC/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
+}]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vew18"]
+data = PackedVector3Array(-0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0bgol"]
+sky_top_color = Color(0.12, 0.14, 0.22, 1)
+sky_horizon_color = Color(0.25, 0.22, 0.28, 1)
+sky_curve = 0.08
+sky_energy_multiplier = 0.3
+ground_bottom_color = Color(0.08, 0.08, 0.1, 1)
+ground_horizon_color = Color(0.2, 0.18, 0.22, 1)
+ground_curve = 0.05
+ground_energy_multiplier = 0.2
+
+[sub_resource type="Sky" id="Sky_evening"]
+sky_material = SubResource("ProceduralSkyMaterial_0bgol")
+
+[sub_resource type="Environment" id="Environment_gc0ao"]
+background_mode = 2
+sky = SubResource("Sky_evening")
+ambient_light_source = 2
+ambient_light_color = Color(0.18039216, 0.2, 0.32156864, 1)
+ambient_light_energy = 0.04
+tonemap_mode = 2
+tonemap_white = 1.2
+ssao_radius = 3.0
+ssil_radius = 8.0
+ssil_intensity = 0.8
+glow_enabled = true
+glow_intensity = 0.4
+glow_bloom = 0.15
+fog_enabled = true
+fog_light_color = Color(0.2, 0.22, 0.3, 1)
+fog_light_energy = 0.3
+fog_density = 0.0191
+fog_aerial_perspective = 0.7
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0507
+volumetric_fog_albedo = Color(0.22, 0.24, 0.32, 1)
+volumetric_fog_emission = Color(0.1, 0.1, 0.14, 1)
+volumetric_fog_emission_energy = 0.2
+volumetric_fog_length = 120.0
+
+[node name="CafeInterior" type="Node3D" unique_id=1553640304]
+script = ExtResource("4_cafe_boot")
+
+[node name="MotionBlur" parent="." unique_id=1097417791 instance=ExtResource("6_motion_blur")]
+
+[node name="CameraCafe" type="Node3D" parent="." unique_id=397508428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7195435, 1.2480489, 1.0478895)
+script = ExtResource("5_cafe_cam")
+
+[node name="CafeDialogue" type="Node" parent="CameraCafe" unique_id=112233445]
+script = ExtResource("7_cafe_dialogue")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraCafe" unique_id=209432117]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1.0000001, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+spring_length = 0.25
+
+[node name="Camera3D" type="Camera3D" parent="CameraCafe/SpringArm3D" unique_id=1343571568]
+
+[node name="cafe_model" parent="." unique_id=1273388447 instance=ExtResource("1_q7x64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7028348, 1.1920929e-07, 1.8324912)
+
+[node name="Player" parent="." unique_id=1007643025 instance=ExtResource("2_0bgol")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.751, 0, 1.241)
+
+[node name="npc_elise" parent="." unique_id=871815733 instance=ExtResource("3_gc0ao")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.15, 0, 1.151)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=686400062]
+transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, -0.1, 0)
+visible = false
+material = SubResource("StandardMaterial3D_0bgol")
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="CSGBox3D" unique_id=908254926]
+mesh = SubResource("ArrayMesh_gc0ao")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D/CSGBakedMeshInstance3D" unique_id=2039977674]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CSGBox3D/CSGBakedMeshInstance3D/StaticBody3D" unique_id=653285901]
+shape = SubResource("ConcavePolygonShape3D_vew18")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=366250935]
+environment = SubResource("Environment_gc0ao")
+
+[node name="Lighting" type="Node3D" parent="." unique_id=1804601350]
+
+[node name="CeilingLamp1" type="OmniLight3D" parent="Lighting" unique_id=996759392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9183044, 2.0390115, -0.70677346)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="CeilingLamp2" type="OmniLight3D" parent="Lighting" unique_id=628503799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2840993, 2.0390115, -0.6910665)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="CeilingLamp3" type="OmniLight3D" parent="Lighting" unique_id=7311062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6371199, 2.0390115, -0.6910665)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="LanternLamp1" type="OmniLight3D" parent="Lighting" unique_id=1663168358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.823144, 1.989016, -0.9143574)
+light_color = Color(1, 0.671, 0.322, 1)
+light_energy = 0.07
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 2.0
+omni_attenuation = 2.0
+
+[node name="CeilingLamp4" type="OmniLight3D" parent="Lighting" unique_id=611203029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38187766, 2.0390115, -1.6432275)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="CeilingLamp5" type="OmniLight3D" parent="Lighting" unique_id=453452712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0160828, 2.0390115, -1.6275204)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="CeilingLamp6" type="OmniLight3D" parent="Lighting" unique_id=247438863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6630622, 2.0390115, -1.6275204)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="LanternLamp2" type="OmniLight3D" parent="Lighting" unique_id=1852257756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7359946, 1.989016, 1.2099165)
+light_color = Color(1, 0.671, 0.322, 1)
+light_energy = 0.07
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 2.0
+omni_attenuation = 2.0
+
+[node name="LanternLamp3" type="OmniLight3D" parent="Lighting" unique_id=1634880658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.301109, 1.989016, 1.2000886)
+light_color = Color(1, 0.671, 0.322, 1)
+light_energy = 0.07
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 2.0
+omni_attenuation = 2.0
+
+[node name="CeilingLamp7" type="OmniLight3D" parent="Lighting" unique_id=618763889]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4515066, 2.748144, 0.21633655)
+light_color = Color(1, 0.902, 0.706, 1)
+light_energy = 0.1
+shadow_enabled = true
+shadow_opacity = 0.7
+shadow_blur = 10.0
+omni_range = 4.0
+omni_attenuation = 2.0

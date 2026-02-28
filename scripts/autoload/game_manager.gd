@@ -16,7 +16,7 @@ var preloaded_scene: Node = null
 var _fallback_black_layer: CanvasLayer = null  # Created if original fade is destroyed
 
 # Background preload tracking
-const PRELOAD_MINIMUM_SECONDS: float = 20.0
+const PRELOAD_MINIMUM_SECONDS: float = 15.0
 var _preload_scene_path: String = ""
 var _preload_start_time: float = -1.0
 
@@ -117,8 +117,12 @@ func start_background_preload(scene_path: String) -> void:
 	## Begin background loading of a scene as soon as the player has control.
 	## Called from the house scene when the player gains control.
 	## The preload is intentionally spread over PRELOAD_MINIMUM_SECONDS.
+	if _preload_scene_path == scene_path:
+		return  # Already started for this same scene
 	if not _preload_scene_path.is_empty():
-		return  # Already started
+		# A different scene was being preloaded — replace it with the new request.
+		_preload_scene_path = ""
+		_preload_start_time = -1.0
 	_preload_scene_path = scene_path
 	_preload_start_time = Time.get_ticks_msec() / 1000.0
 	# use_sub_threads=false: single background thread, minimal performance impact
@@ -152,6 +156,12 @@ func hard_cut_to_scene(scene_path: String) -> void:
 		transition_fade.color.a = 1.0
 	else:
 		_create_fallback_black_overlay()
+
+	# If a preload was started for a DIFFERENT scene (e.g. street was preloaded from the
+	# house, but now we need the cafe), reset the stale tracking so we start fresh here.
+	if not _preload_scene_path.is_empty() and _preload_scene_path != scene_path:
+		_preload_scene_path = ""
+		_preload_start_time = -1.0
 
 	# If preload wasn't started proactively (e.g. testing directly), kick it off now.
 	# Track whether we started late so we can skip the long minimum-wait below.
@@ -191,6 +201,8 @@ func hard_cut_to_scene(scene_path: String) -> void:
 		await get_tree().process_frame
 
 	var packed: PackedScene = ResourceLoader.load_threaded_get(scene_path)
+	_preload_scene_path = ""
+	_preload_start_time = -1.0
 	if packed:
 		current_scene = packed.instantiate()
 		var scene_added: bool = false

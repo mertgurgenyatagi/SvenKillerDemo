@@ -45,6 +45,11 @@ func _ready() -> void:
 	_find_death_zone_boxes()
 	_build_overlay_ui()
 	_show_mission_after_delay()
+	# Preload the cafe scene 5 seconds after street starts, giving it 15 seconds
+	# to load in the background well before the player can reach Elise.
+	get_tree().create_timer(5.0).timeout.connect(func() -> void:
+		GameManager.start_background_preload("res://assets/models/environments/cafe_interior.tscn")
+	)
 
 
 func _process(_delta: float) -> void:

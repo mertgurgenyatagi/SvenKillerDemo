@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://c2x7bdp0fmiwi"]
+
+[ext_resource type="PackedScene" uid="uid://yc68c3cmurxy" path="res://assets/models/environments/cinema_interior.glb" id="1_ildqi"]
+[ext_resource type="PackedScene" uid="uid://c3m8cenmuite3" path="res://assets/npc_assets/npc_sitting_1.glb" id="2_aiqkm"]
+[ext_resource type="PackedScene" uid="uid://cdfnpksbctryv" path="res://assets/npc_assets/npc_sitting_2.glb" id="3_swq5e"]
+[ext_resource type="Script" uid="uid://bwa7h7lhvl86t" path="res://scripts/scenes/cinema_boot.gd" id="4_cinema_boot"]
+[ext_resource type="PackedScene" uid="uid://bvcd3d2wth3rd" path="res://assets/npc_assets/npc_sitting_3.glb" id="5_aockf"]
+[ext_resource type="PackedScene" uid="uid://ctxk0d0pbflwq" path="res://assets/npc_assets/npc_sitting_5.glb" id="6_gbqqx"]
+[ext_resource type="PackedScene" uid="uid://3ef5tdaem46v" path="res://assets/npc_assets/npc_sitting_6.glb" id="7_ob22s"]
+[ext_resource type="PackedScene" uid="uid://ba8qlw4qmxjxw" path="res://assets/npc_assets/npc_sitting_7.glb" id="8_0fdqj"]
+[ext_resource type="PackedScene" uid="uid://dporr0l11lgsu" path="res://assets/npc_assets/npc_sitting_9.glb" id="9_wvvsn"]
+[ext_resource type="PackedScene" uid="uid://bj2v1x8w551x0" path="res://assets/models/characters/sven_sitting.fbx" id="10_sven_sit"]
+[ext_resource type="Script" uid="uid://pwh5vugry21g" path="res://scripts/scenes/cafe_camera.gd" id="11_cafe_cam"]
+
+[sub_resource type="Environment" id="Environment_cinema"]
+background_mode = 1
+ambient_light_color = Color(0.1, 0.1, 0.12, 1)
+ambient_light_energy = 0.08
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 2.0
+glow_strength = 1.5
+glow_bloom = 1.2
+glow_blend_mode = 2
+glow_hdr_threshold = 0.5
+
+[node name="CinemaInterior" type="Node3D" unique_id=776417773]
+script = ExtResource("4_cinema_boot")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1099887770]
+environment = SubResource("Environment_cinema")
+
+[node name="CinemaParent" type="Node3D" parent="." unique_id=1015852571]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="cinema_interior" parent="CinemaParent" unique_id=1060106043 instance=ExtResource("1_ildqi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.51953, 0, 25.977966)
+
+[node name="wall_screen" parent="CinemaParent/cinema_interior/cinema" parent_id_path=PackedInt32Array(1060106043, 1821412541) index="9" unique_id=1302299517]
+visible = false
+
+[node name="npc_sitting_1" parent="CinemaParent" unique_id=507340318 instance=ExtResource("2_aiqkm")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.34300002, -0.5, 0.09798232)
+
+[node name="npc_sitting_2" parent="CinemaParent" unique_id=758812592 instance=ExtResource("3_swq5e")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.10897955, -0.5, 0.08898231)
+
+[node name="npc_sitting_3" parent="CinemaParent" unique_id=1667596922 instance=ExtResource("5_aockf")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.56200194, -0.5, 0.08999995)
+
+[node name="npc_sitting_4" parent="CinemaParent" unique_id=1260029762 instance=ExtResource("6_gbqqx")]
+transform = Transform3D(-0.35, 0, -5.284853e-08, 0, 0.35, 0, 5.284853e-08, 0, -0.35, -0.9775276, -0.016343772, 0.30377546)
+
+[node name="npc_sitting_5" parent="CinemaParent" unique_id=269748549 instance=ExtResource("7_ob22s")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.4091961, -0.61716235, -0.28095904)
+
+[node name="npc_sitting_6" parent="CinemaParent" unique_id=1137396539 instance=ExtResource("8_0fdqj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8828443, 0.6869126, 2.0315473)
+
+[node name="npc_sitting_7" parent="CinemaParent" unique_id=414511019 instance=ExtResource("9_wvvsn")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -2.2766333, -0.5, 0.0899998)
+
+[node name="npc_sitting_8" parent="CinemaParent" unique_id=2006533549 instance=ExtResource("2_aiqkm")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.0375948, -0.21229762, -0.8425907)
+
+[node name="npc_sitting_9" parent="CinemaParent" unique_id=955142402 instance=ExtResource("3_swq5e")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.4895744, -0.21229762, -0.85159063)
+
+[node name="npc_sitting_10" parent="CinemaParent" unique_id=1572085019 instance=ExtResource("5_aockf")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.9425968, -0.21229762, -0.850573)
+
+[node name="npc_sitting_11" parent="CinemaParent" unique_id=1763262200 instance=ExtResource("6_gbqqx")]
+transform = Transform3D(-0.35, 0, -5.284853e-08, 0, 0.35, 0, 5.284853e-08, 0, -0.35, -2.3581226, 0.2713586, -0.6367975)
+
+[node name="npc_sitting_12" parent="CinemaParent" unique_id=1992829503 instance=ExtResource("7_ob22s")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.35868204, -0.31541663, -1.2215317)
+
+[node name="npc_sitting_13" parent="CinemaParent" unique_id=1267324830 instance=ExtResource("8_0fdqj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11496625, 0.8599137, 1.0909747)
+
+[node name="npc_sitting_14" parent="CinemaParent" unique_id=708126737 instance=ExtResource("9_wvvsn")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.5456744, -0.07820898, -0.9247461)
+
+[node name="npc_sitting_15" parent="CinemaParent" unique_id=507010393 instance=ExtResource("3_swq5e")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.3541434, 0.2546069, -1.7053901)
+
+[node name="npc_sitting_16" parent="CinemaParent" unique_id=648258029 instance=ExtResource("5_aockf")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.09887895, 0.2546069, -1.7043724)
+
+[node name="npc_sitting_17" parent="CinemaParent" unique_id=1844365544 instance=ExtResource("6_gbqqx")]
+transform = Transform3D(-0.35, 0, -5.284853e-08, 0, 0.35, 0, 5.284853e-08, 0, -0.35, -0.51440465, 0.73826313, -1.4905969)
+
+[node name="npc_sitting_18" parent="CinemaParent" unique_id=2108341749 instance=ExtResource("2_aiqkm")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.4530191, -0.016480863, -1.6566924)
+
+[node name="Player" parent="." unique_id=1099887766 instance=ExtResource("10_sven_sit")]
+transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0.9861654, 0.43480378, 1.7751954)
+
+[node name="CameraCafe" type="Node3D" parent="." unique_id=1099887767]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.218812, 1.0794939, 1.7971961)
+script = ExtResource("11_cafe_cam")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraCafe" unique_id=1099887768]
+transform = Transform3D(0.9188873, 0, 0.39451918, 0, 1.0000001, 0, -0.39451918, 0, 0.9188873, -0.11528838, -0.04657817, -0.12274051)
+spring_length = 0.25
+
+[node name="Camera3D" type="Camera3D" parent="CameraCafe/SpringArm3D" unique_id=1099887769]
+
+[node name="ProjectorLight" type="SpotLight3D" parent="." unique_id=1406578672]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0.016428232, 1.7594419, -3.5354216)
+light_energy = 4.254
+shadow_enabled = true
+spot_range = 6.511
+spot_angle = 90.0
+spot_angle_attenuation = 0.5
+
+[node name="ScreenBox" type="CSGBox3D" parent="." unique_id=1284244800]
+transform = Transform3D(4.075, 0, 0, 0, 2.293, 0, 0, 0, 0.01, 0, 1.709317, -3.1024642)
+
+[editable path="CinemaParent/cinema_interior"]

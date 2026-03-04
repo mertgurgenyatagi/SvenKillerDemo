@@ -59,49 +59,98 @@ bus = "SFX"
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_1"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_1.ogg"
-volume_db = -17.0
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_x4q4d"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_2"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_2.ogg"
-volume_db = -17.0
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_bpwt1"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_3"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_3.ogg"
-volume_db = -17.0
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_010wa"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_4"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_4.ogg"
-volume_db = -17.0
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_srr0y"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_5"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_5.ogg"
-volume_db = -17.0
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_4e0jg"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_6"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_6.ogg"
-volume_db = -17.0
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_bdtc2"]
 script = ExtResource("1_i3eh0")
 name = "FOOTSTEP_WOOD_7"
 path = "res://assets/audio/sfx/footsteps/wood_footstep_7.ogg"
-volume_db = -17.0
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand1"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_1"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_1.ogg"
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand2"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_2"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_2.ogg"
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand3"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_3"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_3.ogg"
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand4"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_4"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_4.ogg"
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand5"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_5"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_5.ogg"
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand6"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_6"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_6.ogg"
+volume_db = -23.0
+spatial = true
+
+[sub_resource type="Resource" id="Resource_sand7"]
+script = ExtResource("1_i3eh0")
+name = "FOOTSTEP_SAND_7"
+path = "res://assets/audio/sfx/footsteps/sand_footstep_7.ogg"
+volume_db = -23.0
 spatial = true
 
 [sub_resource type="Resource" id="Resource_fqam2"]
@@ -148,7 +197,14 @@ entries = {
 11: SubResource("Resource_srr0y"),
 12: SubResource("Resource_4e0jg"),
 13: SubResource("Resource_bdtc2"),
-14: SubResource("Resource_fqam2"),
-15: SubResource("Resource_4xuin"),
-16: SubResource("Resource_gbrqi")
+14: SubResource("Resource_sand1"),
+15: SubResource("Resource_sand2"),
+16: SubResource("Resource_sand3"),
+17: SubResource("Resource_sand4"),
+18: SubResource("Resource_sand5"),
+19: SubResource("Resource_sand6"),
+20: SubResource("Resource_sand7"),
+21: SubResource("Resource_fqam2"),
+22: SubResource("Resource_4xuin"),
+23: SubResource("Resource_gbrqi")
 }

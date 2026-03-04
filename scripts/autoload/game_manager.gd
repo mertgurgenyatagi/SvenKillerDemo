@@ -270,5 +270,64 @@ func _create_fallback_black_overlay() -> void:
 	get_tree().get_root().add_child(_fallback_black_layer)
 
 
+func hard_cut_to_preinstantiated(scene_node: Node, scene_path: String) -> void:
+	## Hard cut to a scene that was pre-instantiated and running hidden in the tree.
+	## Identical to hard_cut_to_scene but skips ResourceLoader — the scene_node is
+	## already in the tree with visible=false. Reveals it with a standard 1-second blackout.
+	if not is_instance_valid(scene_node):
+		push_error("GameManager.hard_cut_to_preinstantiated: scene_node is invalid")
+		return
+
+	emit_signal("transition_started")
+
+	AudioManager.stop_all()
+	var master_idx: int = AudioServer.get_bus_index("Master")
+	AudioServer.set_bus_mute(master_idx, true)
+
+	_subtitle_bottom_owner = null
+	_preload_scene_path = ""
+	_preload_start_time = -1.0
+
+	if not is_instance_valid(transition_fade) or not is_instance_valid(main_node):
+		_recover_main_references()
+
+	if is_instance_valid(transition_fade):
+		var transition_layer = transition_fade.get_parent()
+		if transition_layer:
+			transition_layer.visible = true
+		transition_fade.color = Color.BLACK
+		transition_fade.color.a = 1.0
+	else:
+		_create_fallback_black_overlay()
+
+	# Free the old scene (cinema) while we're behind black.
+	# Unlike hard_cut_to_scene we deliberately do NOT touch get_tree().current_scene —
+	# this game uses GameManager's custom scene system, so current_scene is the only
+	# tracked reference. Freeing get_tree().current_scene would free Main's root node.
+	if is_instance_valid(current_scene):
+		current_scene.queue_free()
+	current_scene = scene_node
+
+	# Reveal the pre-instantiated scene and re-enable its camera.
+	scene_node.visible = true
+	var cam := scene_node.find_child("Camera3D", true, false) as Camera3D
+	if cam:
+		cam.current = true
+
+	# 2-second curtain — matches the minimum blackout of hard_cut_to_scene.
+	await get_tree().create_timer(2.0).timeout
+
+	AudioServer.set_bus_mute(master_idx, false)
+	if is_instance_valid(transition_fade):
+		var transparent = Color.BLACK
+		transparent.a = 0.0
+		transition_fade.color = transparent
+	elif is_instance_valid(_fallback_black_layer):
+		_fallback_black_layer.visible = false
+
+	emit_signal("transition_finished")
+	emit_signal("scene_changed", scene_path)
+
+
 func set_state(new_state: GameState) -> void:
 	current_state = new_state

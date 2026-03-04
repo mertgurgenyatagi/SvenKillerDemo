@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://beach_preview_test"]
+
+[ext_resource type="PackedScene" uid="uid://2kne02jh5jce" path="res://scenes/penulti.tscn" id="1_penulti"]
+
+[node name="BeachPreview" type="Node"]
+
+[node name="Penulti" parent="." instance=ExtResource("1_penulti")]
+debug_skip_to_beach = true

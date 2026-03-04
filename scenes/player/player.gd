@@ -31,6 +31,7 @@ var skeleton: Skeleton3D
 var current_speed: float = 0.0
 var footstep_timer: float = 0.0
 var last_footstep_index: int = -1
+var _on_sand: bool = false
 var animation_tree: AnimationTree
 var is_turning: bool = false
 var turn_target_angle: float = 0.0
@@ -106,9 +107,9 @@ func _ready() -> void:
 
 	# CharacterBody3D physics — tuned for a walking game to avoid catching on geometry
 	floor_max_angle = deg_to_rad(65.0)    # Default 45°: walk over slightly steeper surfaces without stopping
-	floor_snap_length = 0.1               # Default 0.1: stay grounded over steps and uneven edges
-	wall_min_slide_angle = deg_to_rad(15.0) # Default 15°: slide along walls instead of catching on them
-	max_slides = 4                         # Default 4: more collision iterations per frame for tighter corners
+	floor_snap_length = 0.5               # Increased: bridge over gaps between floorboards
+	wall_min_slide_angle = deg_to_rad(45.0) # Increased: slide past edges rather than catching
+	max_slides = 6                         # Increased: more collision iterations for complex bridge geometry
 
 	# Find hand bones for debug tracking
 	if skeleton:
@@ -284,8 +285,10 @@ func _load_animation(anim_name: String, fbx_path: String) -> void:
 	instance.queue_free()
 
 func _play_footstep() -> void:
-	# Array of wood footstep audio IDs
-	var footstep_ids: Array[AudioManager.AudioID] = [
+	# Don't emit audio while running hidden (e.g. during penulti LR phase inside cinema).
+	if not is_visible_in_tree():
+		return
+	var wood_ids: Array[AudioManager.AudioID] = [
 		AudioManager.AudioID.FOOTSTEP_WOOD_1,
 		AudioManager.AudioID.FOOTSTEP_WOOD_2,
 		AudioManager.AudioID.FOOTSTEP_WOOD_3,
@@ -294,6 +297,16 @@ func _play_footstep() -> void:
 		AudioManager.AudioID.FOOTSTEP_WOOD_6,
 		AudioManager.AudioID.FOOTSTEP_WOOD_7,
 	]
+	var sand_ids: Array[AudioManager.AudioID] = [
+		AudioManager.AudioID.FOOTSTEP_SAND_1,
+		AudioManager.AudioID.FOOTSTEP_SAND_2,
+		AudioManager.AudioID.FOOTSTEP_SAND_3,
+		AudioManager.AudioID.FOOTSTEP_SAND_4,
+		AudioManager.AudioID.FOOTSTEP_SAND_5,
+		AudioManager.AudioID.FOOTSTEP_SAND_6,
+		AudioManager.AudioID.FOOTSTEP_SAND_7,
+	]
+	var footstep_ids: Array[AudioManager.AudioID] = sand_ids if _on_sand else wood_ids
 
 	# Pick a random footstep, avoiding repeating the same one
 	var index: int = randi_range(0, footstep_ids.size() - 1)

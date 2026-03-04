@@ -20,6 +20,9 @@ func _ready() -> void:
 	# this gives ~51 seconds of background load time before the hard cut.
 	get_tree().create_timer(1.0).timeout.connect(func() -> void:
 		GameManager.start_background_preload("res://scenes/cinema_interior.tscn")
+		# Penulti preload runs concurrently — gives it the full cafe + cinema window
+		# (~63 s) before the cinema hard cut, well above the 20-second minimum.
+		ResourceLoader.load_threaded_request("res://scenes/penulti.tscn", "", false)
 	)
 
 

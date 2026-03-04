@@ -3,6 +3,12 @@ extends Node3D
 ## Cinema scene boot.
 ## npc_sitting_1.glb and npc_sitting_2.glb are Sketchfab models with sitting poses baked in.
 ## Play their first animation on ready so the pose is applied.
+##
+## Penulti preload strategy:
+##   penulti.tscn is instantiated immediately at cinema start (hidden, camera disabled).
+##   Its LR sequence runs for 15 s in the background.
+##   After _HARD_CUT_AT seconds (12 s content + 15 s LR buffer), a standard 1-second
+##   hard cut reveals the already-running penulti scene.
 
 @onready var _npcs: Array[Node3D] = [
 	$Player,
@@ -26,6 +32,11 @@ const _FREEZE_NPCS: Array[StringName] = [&"npc_sitting_3", &"npc_sitting_10", &"
 
 var _projector: SpotLight3D = null
 var _noise: FastNoiseLite = null
+var _cut_triggered: bool = false
+var _penulti_instance: Node = null
+
+## 12 s of cinema content + 15 s for the penulti LR sequence to complete hidden.
+const _HARD_CUT_AT: float = 27.0
 
 
 func _ready() -> void:
@@ -37,6 +48,9 @@ func _ready() -> void:
 	_noise = FastNoiseLite.new()
 	_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	_noise.seed = randi()
+	get_tree().create_timer(_HARD_CUT_AT).timeout.connect(_trigger_hard_cut)
+	# Start penulti in the background so its LR sequence finishes before the hard cut.
+	_init_penulti()
 
 
 func _process(_delta: float) -> void:
@@ -46,6 +60,54 @@ func _process(_delta: float) -> void:
 	var t: float = Time.get_ticks_msec() / 1000.0 * 12.0
 	var n: float = _noise.get_noise_1d(t)  # -1.0 .. 1.0
 	_projector.light_energy = 4.25 + n * 2.5
+
+
+func _init_penulti() -> void:
+	## Instantiates penulti.tscn hidden in the scene tree so its LR sequence runs
+	## concurrently with the cinema. The scene is not visible until the hard cut.
+	const PENULTI_PATH: String = "res://scenes/penulti.tscn"
+
+	# Wait for the background load (started in cafe_boot.gd) to finish.
+	while ResourceLoader.load_threaded_get_status(PENULTI_PATH) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+
+	var packed := ResourceLoader.load_threaded_get(PENULTI_PATH) as PackedScene
+	if not packed:
+		push_warning("cinema_boot: penulti.tscn not in ResourceLoader cache, loading synchronously")
+		packed = load(PENULTI_PATH)
+	if not packed:
+		push_error("cinema_boot: failed to load penulti.tscn")
+		return
+
+	_penulti_instance = packed.instantiate()
+	_penulti_instance.visible = false
+
+	# Add penulti as a sibling of cinema (both under CurrentScene).
+	var scene_parent: Node = null
+	if is_instance_valid(GameManager.main_node):
+		scene_parent = GameManager.main_node.get_node_or_null("CurrentScene")
+	if not is_instance_valid(scene_parent):
+		scene_parent = get_parent()
+	scene_parent.add_child(_penulti_instance)
+
+	# Disable penulti's Camera3D so it doesn't override the cinema camera.
+	# _ready() runs synchronously inside add_child, so this happens in the same frame,
+	# before rendering, preventing any single-frame glitch.
+	var penulti_cam := _penulti_instance.find_child("Camera3D", true, false) as Camera3D
+	if penulti_cam:
+		penulti_cam.current = false
+
+
+func _trigger_hard_cut() -> void:
+	if _cut_triggered:
+		return
+	_cut_triggered = true
+	if not is_instance_valid(_penulti_instance):
+		# Fallback: standard hard cut if pre-instantiation failed.
+		push_warning("cinema_boot: penulti not pre-instantiated, falling back to hard_cut_to_scene")
+		GameManager.hard_cut_to_scene("res://scenes/penulti.tscn")
+		return
+	GameManager.hard_cut_to_preinstantiated(_penulti_instance, "res://scenes/penulti.tscn")
 
 
 func _start_ambient_audio() -> void:

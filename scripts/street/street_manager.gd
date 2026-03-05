@@ -143,8 +143,8 @@ func _build_overlay_ui() -> void:
 	_subtitle_label.add_theme_font_size_override("font_size", 34)
 	_subtitle_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.9, 1.0))
 	_subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	_subtitle_label.offset_top = -200
-	_subtitle_label.offset_bottom = -100
+	_subtitle_label.offset_top = -248
+	_subtitle_label.offset_bottom = -148
 	_subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_subtitle_label.visible = false

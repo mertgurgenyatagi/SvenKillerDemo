@@ -36,8 +36,8 @@ func _ready() -> void:
 	_subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	_subtitle_label.offset_top = -200
-	_subtitle_label.offset_bottom = -100
+	_subtitle_label.offset_top = -248
+	_subtitle_label.offset_bottom = -148
 	_subtitle_label.visible = false
 	_subtitle_canvas.add_child(_subtitle_label)
 
@@ -69,12 +69,12 @@ func _process(_delta: float) -> void:
 				var at_bottom: bool = GameManager.claim_subtitle_bottom(self)
 				if at_bottom:
 					_subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-					_subtitle_label.offset_top = -200
-					_subtitle_label.offset_bottom = -100
-				else:
-					_subtitle_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-					_subtitle_label.offset_top = 100
-					_subtitle_label.offset_bottom = 200
+					_subtitle_label.offset_top = -248
+					_subtitle_label.offset_bottom = -148
+					else:
+						_subtitle_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+						_subtitle_label.offset_top = 148
+						_subtitle_label.offset_bottom = 248
 				_subtitle_label.text = sub["text"]
 				_subtitle_label.visible = true
 				_current_subtitle_index = i

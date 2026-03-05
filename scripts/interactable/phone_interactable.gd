@@ -59,8 +59,8 @@ func _setup_subtitles() -> void:
 	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	# Default to bottom — _position_label() will move it to top if the slot is taken
 	subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	subtitle_label.offset_top = -200
-	subtitle_label.offset_bottom = -100
+	subtitle_label.offset_top = -248
+	subtitle_label.offset_bottom = -148
 
 	subtitle_label.visible = false
 	subtitle_canvas.add_child(subtitle_label)
@@ -101,12 +101,12 @@ func _hide_subtitles() -> void:
 func _position_label(at_bottom: bool) -> void:
 	if at_bottom:
 		subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		subtitle_label.offset_top = -200
-		subtitle_label.offset_bottom = -100
+		subtitle_label.offset_top = -248
+		subtitle_label.offset_bottom = -148
 	else:
 		subtitle_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		subtitle_label.offset_top = 100
-		subtitle_label.offset_bottom = 200
+		subtitle_label.offset_top = 148
+		subtitle_label.offset_bottom = 248
 
 func activate() -> void:
 	if is_playing:

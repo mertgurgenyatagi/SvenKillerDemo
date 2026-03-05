@@ -57,8 +57,8 @@ func _setup_subtitle_label() -> void:
 	subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 	subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	subtitle_label.offset_top = -200
-	subtitle_label.offset_bottom = -100
+	subtitle_label.offset_top = -248
+	subtitle_label.offset_bottom = -148
 
 func _setup_noe_prompt() -> void:
 	# Massive text prompt (Gaspar Noé style)

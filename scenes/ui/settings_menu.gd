@@ -15,8 +15,12 @@ var tab_buttons: Array[Button] = []
 var content_container: VBoxContainer = null
 var _controls: Dictionary = {}
 
+# Stored label nodes for live language refresh
+var _header_title: Label = null
+var _reset_btn: Button = null
+var _back_btn: Button = null
+
 # Constants
-const TABS: Array[String] = ["GENERAL", "VIDEO", "GRAPHICS", "AUDIO", "SUBTITLES"]
 const PANEL_WIDTH: int = 920
 const PANEL_HEIGHT: int = 580
 
@@ -24,6 +28,7 @@ const PANEL_HEIGHT: int = 580
 func _ready() -> void:
 	_build_ui()
 	_switch_tab(0)
+	LocaleManager.game_language_changed.connect(_on_language_changed)
 
 	# Fade in
 	modulate.a = 0.0
@@ -31,8 +36,18 @@ func _ready() -> void:
 	tween.tween_property(self, "modulate:a", 1.0, 0.2).set_ease(Tween.EASE_OUT)
 
 
+func _get_tab_labels() -> Array[String]:
+	return [
+		LocaleManager.g("ui_tab_general"),
+		LocaleManager.g("ui_tab_video"),
+		LocaleManager.g("ui_tab_graphics"),
+		LocaleManager.g("ui_tab_audio"),
+		LocaleManager.g("ui_tab_subtitles"),
+	]
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("pause") or (event is InputEventKey and event.keycode == KEY_K and event.pressed and not event.echo):
 		get_viewport().set_input_as_handled()
 		_on_back_pressed()
 
@@ -135,7 +150,8 @@ func _build_header(parent: VBoxContainer) -> void:
 	title_settings.shadow_color = Color(0, 0, 0, 0.4)
 	title_settings.shadow_offset = Vector2(2, 2)
 	title.label_settings = title_settings
-	title.text = "SETTINGS"
+	title.text = LocaleManager.g("ui_settings")
+	_header_title = title
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
 
@@ -159,9 +175,10 @@ func _build_tab_sidebar(parent: HBoxContainer) -> void:
 	sidebar.add_theme_constant_override("separation", 4)
 	parent.add_child(sidebar)
 
-	for i in TABS.size():
+	var tab_labels := _get_tab_labels()
+	for i in tab_labels.size():
 		var btn: Button = Button.new()
-		btn.text = TABS[i]
+		btn.text = tab_labels[i]
 		btn.flat = true
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -195,18 +212,18 @@ func _build_footer(parent: VBoxContainer) -> void:
 	footer.add_theme_constant_override("separation", 10)
 	parent.add_child(footer)
 
-	var reset_btn: Button = _create_footer_button("Reset Defaults")
-	reset_btn.pressed.connect(_on_reset_defaults_pressed)
-	footer.add_child(reset_btn)
+	_reset_btn = _create_footer_button(LocaleManager.g("ui_reset_defaults"))
+	_reset_btn.pressed.connect(_on_reset_defaults_pressed)
+	footer.add_child(_reset_btn)
 
 	# Spacer
 	var spacer: Control = Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	footer.add_child(spacer)
 
-	var back_btn: Button = _create_footer_button("Back")
-	back_btn.pressed.connect(_on_back_pressed)
-	footer.add_child(back_btn)
+	_back_btn = _create_footer_button(LocaleManager.g("ui_back"))
+	_back_btn.pressed.connect(_on_back_pressed)
+	footer.add_child(_back_btn)
 
 
 func _create_footer_button(text: String) -> Button:
@@ -283,41 +300,42 @@ func _update_tab_visuals() -> void:
 # --- Tab Builders ---
 
 func _build_general_tab() -> void:
-	_add_option_row("Language", "general/language",
+	_add_option_row(LocaleManager.g("setting_language"), "general/language",
 		SettingsManager.LANGUAGE_LABELS, SettingsManager.LANGUAGE_CODES)
 
 
 func _build_video_tab() -> void:
-	_add_option_row("Display Mode", "video/display_mode",
-		SettingsManager.DISPLAY_MODE_LABELS, SettingsManager.DISPLAY_MODE_VALUES)
-	_add_option_row("Resolution", "video/resolution_index",
+	_add_option_row(LocaleManager.g("setting_display_mode"), "video/display_mode",
+		[LocaleManager.g("opt_fullscreen"), LocaleManager.g("opt_windowed"), LocaleManager.g("opt_borderless_windowed")],
+		SettingsManager.DISPLAY_MODE_VALUES)
+	_add_option_row(LocaleManager.g("setting_resolution"), "video/resolution_index",
 		SettingsManager.RESOLUTION_LABELS)
-	_add_toggle_row("VSync", "video/vsync")
-	_add_option_row("FPS Limit", "video/fps_limit",
-		SettingsManager.FPS_LIMIT_LABELS, SettingsManager.FPS_LIMIT_OPTIONS)
-	_add_slider_row("Brightness", "video/brightness", 0.5, 1.5, 0.05)
+	_add_toggle_row(LocaleManager.g("setting_vsync"), "video/vsync")
+	_add_option_row(LocaleManager.g("setting_fps_limit"), "video/fps_limit",
+		[LocaleManager.g("opt_fps_unlimited"), "30", "60", "120", "144", "240"],
+		SettingsManager.FPS_LIMIT_OPTIONS)
+	_add_slider_row(LocaleManager.g("setting_brightness"), "video/brightness", 0.5, 1.5, 0.05)
 
 
 func _build_graphics_tab() -> void:
-	_add_option_row("Anti-Aliasing", "graphics/anti_aliasing",
-		SettingsManager.AA_LABELS)
-	_add_option_row("Anisotropic Filtering", "graphics/anisotropic_filtering",
-		SettingsManager.ANISO_LABELS, SettingsManager.ANISO_VALUES)
+	_add_option_row(LocaleManager.g("setting_anti_aliasing"), "graphics/anti_aliasing",
+		[LocaleManager.g("opt_aa_off"), LocaleManager.g("opt_fxaa"),
+		LocaleManager.g("opt_msaa_2x"), LocaleManager.g("opt_msaa_4x"), LocaleManager.g("opt_msaa_8x")])
 
 
 func _build_audio_tab() -> void:
-	_add_slider_row("Master Volume", "audio/master_volume", 0.0, 1.0, 0.01, true)
-	_add_slider_row("Music Volume", "audio/music_volume", 0.0, 1.0, 0.01, true)
-	_add_slider_row("SFX Volume", "audio/sfx_volume", 0.0, 1.0, 0.01, true)
-	_add_slider_row("Voice Volume", "audio/voice_volume", 0.0, 1.0, 0.01, true)
+	_add_slider_row(LocaleManager.g("setting_master_volume"), "audio/master_volume", 0.0, 1.0, 0.01, true)
+	_add_slider_row(LocaleManager.g("setting_music_volume"), "audio/music_volume", 0.0, 1.0, 0.01, true)
+	_add_slider_row(LocaleManager.g("setting_sfx_volume"), "audio/sfx_volume", 0.0, 1.0, 0.01, true)
+	_add_slider_row(LocaleManager.g("setting_voice_volume"), "audio/voice_volume", 0.0, 1.0, 0.01, true)
 
 
 func _build_subtitles_tab() -> void:
-	_add_toggle_row("Subtitles", "subtitles/enabled")
-	_add_option_row("Language", "subtitles/language",
+	_add_toggle_row(LocaleManager.g("setting_subtitles"), "subtitles/enabled")
+	_add_option_row(LocaleManager.g("setting_language"), "subtitles/language",
 		SettingsManager.LANGUAGE_LABELS, SettingsManager.LANGUAGE_CODES)
-	_add_option_row("Text Size", "subtitles/text_size",
-		SettingsManager.SUBTITLE_SIZE_LABELS)
+	_add_option_row(LocaleManager.g("setting_text_size"), "subtitles/text_size",
+		[LocaleManager.g("opt_small"), LocaleManager.g("opt_medium"), LocaleManager.g("opt_large")])
 
 
 # --- Control Builders ---
@@ -480,6 +498,23 @@ func _on_back_pressed() -> void:
 func _on_reset_defaults_pressed() -> void:
 	SettingsManager.reset_to_defaults()
 	_load_current_values()
+
+
+func _on_language_changed(_lang_code: String) -> void:
+	_refresh_ui_text()
+
+
+func _refresh_ui_text() -> void:
+	if _header_title:
+		_header_title.text = LocaleManager.g("ui_settings")
+	if _reset_btn:
+		_reset_btn.text = LocaleManager.g("ui_reset_defaults")
+	if _back_btn:
+		_back_btn.text = LocaleManager.g("ui_back")
+	var labels := _get_tab_labels()
+	for i in tab_buttons.size():
+		tab_buttons[i].text = labels[i]
+	_switch_tab(current_tab)
 
 
 func _on_button_hover() -> void:

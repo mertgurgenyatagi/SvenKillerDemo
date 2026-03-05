@@ -1,0 +1,114 @@
+{
+    "opening_vo": [
+        {"start": 2.159, "end": 5.719,  "text": "I like to focus on the sensation."},
+        {"start": 7.505, "end": 12.245, "text": "It's quite a tremendous thing, how you can just snuff it out."},
+        {"start": 13.253, "end": 16.684, "text": "It feels like, I don't know"},
+        {"start": 17.074, "end": 22.884, "text": "like being at a beautiful beach with the birds and the sea."},
+        {"start": 23.844, "end": 27.062, "text": "That's how it feels like, I focus on that."}
+    ],
+
+    "voicemail": [
+        {"start": 0.0,   "end": 1.0,   "text": "Hey, Sven."},
+        {"start": 2.01,  "end": 6.55,  "text": "I called but you didn't pick up.\nI guess you're sleeping again."},
+        {"start": 7.77,  "end": 11.58, "text": "Uh\u2026 your father sent you\nsome money."},
+        {"start": 12.88, "end": 14.89, "text": "It's the twentieth today, right?"},
+        {"start": 16.67, "end": 22.72, "text": "So\u2026 yeah. If you ever need\nextra money, just call."},
+        {"start": 23.86, "end": 29.67, "text": "You can call the house too.\nJohan will probably answer."},
+        {"start": 29.67, "end": 31.15, "text": "I sent Erika home\nfor a few days."},
+        {"start": 31.2,  "end": 37.72, "text": "So yeah. You can tell your father,\nor just call his cell."},
+        {"start": 39.59, "end": 45.09, "text": "Anyway, he also said \u2014\nI know you don't want to hear this \u2014"},
+        {"start": 46.24, "end": 51.15, "text": "But he wants to talk about you\nmaybe joining the company someday."},
+        {"start": 52.33, "end": 56.25, "text": "We both really think\nyou'd fit in there."},
+        {"start": 57.32, "end": 62.35, "text": "Karl is retiring soon,\nso maybe\u2026 you know\u2026"},
+        {"start": 63.73, "end": 65.21, "text": "But, yeah\u2026 I guess."},
+        {"start": 66.28, "end": 68.16, "text": "Call if you need anything."},
+        {"start": 69.41, "end": 69.9,  "text": "Bye!"}
+    ],
+
+    "newspaper": [
+        {"start": 0.0,  "end": 4.5,  "text": "\"TWO KILLED IN STABBING ATTACKS ON LINN\u00c9GATAN\""},
+        {"start": 5.5,  "end": 12.0, "text": "\"Two people have been killed in separate stabbing attacks\non Linn\u00e9gatan during the past two weeks.\""},
+        {"start": 13.0, "end": 21.0, "text": "\"First, a homeless man in his 50s was found seriously injured\noutdoors late in the evening and later died\nfrom his injuries at the hospital.\""},
+        {"start": 22.0, "end": 29.5, "text": "\"Earlier this week, a young girl who was reportedly\nbegging in the area was found dead\nnear a building entrance.\""},
+        {"start": 30.5, "end": 37.5, "text": "\"Police are investigating the cases and examining\nwhether there is any connection between the incidents,\""},
+        {"start": 38.0, "end": 42.5, "text": "\"but no suspect has been arrested yet.\""}
+    ],
+
+    "cafe_dialogue": [
+        {"start": 1.760,  "end": 8.210,  "text": "I don't get that stubborn idea that we have\nto marry our \u2013 our job and our happiness."},
+        {"start": 9.130,  "end": 12.310, "text": "I mean, you do something\nto make a living because\u2026"},
+        {"start": 12.710, "end": 14.720, "text": "you're good at it, or like \u2013"},
+        {"start": 15.170, "end": 17.810, "text": "good enough at it to earn money,"},
+        {"start": 18.420, "end": 20.270, "text": "because this is a consumer world,"},
+        {"start": 20.690, "end": 23.240, "text": "you need money to live, that's it."},
+        {"start": 23.940, "end": 26.810, "text": "And that thing doesn't have to be\nwhat gives you meaning."},
+        {"start": 27.710, "end": 29.730, "text": "When I was growing up\neveryone always said:"},
+        {"start": 30.250, "end": 32.190, "text": "\"you have to work with something you love,\""},
+        {"start": 32.900, "end": 33.490, "text": "and you're just like \u2013"},
+        {"start": 34.020, "end": 35.670, "text": "how many accountants or \u2013"},
+        {"start": 36.080, "end": 38.740, "text": "or lawyers actually love their jobs?"},
+        {"start": 39.450, "end": 41.490, "text": "Sure, you can love your job,"},
+        {"start": 41.810, "end": 42.920, "text": "I love my job,"},
+        {"start": 43.360, "end": 44.820, "text": "I find a lot of joy in it,"},
+        {"start": 45.720, "end": 47.670, "text": "but the thing that really gives me meaning"},
+        {"start": 47.980, "end": 50.220, "text": "is like making music or drawing,"},
+        {"start": 50.800, "end": 53.520, "text": "and it's not really the same thing \u2013\nI don't know."}
+    ],
+
+    "penulti_part1": [
+        {"start": 1.360,  "end": 5.150,  "text": "how you can kind of slide into a role\nwithout really noticing it."},
+        {"start": 6.280,  "end": 11.570, "text": "You wake up, do what you're supposed to,\nsay the right things, smile at the right moments."},
+        {"start": 12.650, "end": 16.320, "text": "It's not fake exactly.\nJust\u2026 rehearsed."},
+        {"start": 17.180, "end": 18.610, "text": "Very rehearsed."},
+        {"start": 19.660, "end": 22.890, "text": "And suddenly you're good at it.\nAlmost too good."},
+        {"start": 24.000, "end": 27.290, "text": "And I don't mean it's tragic.\nIt's not tragic."},
+        {"start": 27.780, "end": 29.470, "text": "It's just\u2026 smooth."},
+        {"start": 30.230, "end": 30.970, "text": "Practiced."},
+        {"start": 31.870, "end": 33.930, "text": "You become efficient at being yourself."},
+        {"start": 34.710, "end": 36.730, "text": "Or, well, a version of yourself."},
+        {"start": 38.310, "end": 40.170, "text": "I used to think everything\nhad to hold together."},
+        {"start": 40.950, "end": 44.870, "text": "That what you feel inside and what you do\non the outside should match perfectly,"},
+        {"start": 45.430, "end": 46.400, "text": "otherwise something is wrong."},
+        {"start": 47.570, "end": 48.500, "text": "But now I don't know."},
+        {"start": 49.510, "end": 51.730, "text": "Maybe it's okay if there's\na space in between."},
+        {"start": 52.500, "end": 53.070, "text": "A small one."},
+        {"start": 53.800, "end": 54.690, "text": "Or a bigger one."}
+    ],
+
+    "penulti_alley": [
+        {"start": 50.0,  "end": 53.5,  "text": "That was\u2026 I don't know. I had a really good time."},
+        {"start": 55.0,  "end": 57.0,  "text": "Like, a really good time."},
+        {"start": 59.5,  "end": 62.0,  "text": "Sorry, I'm bad at this."},
+        {"start": 64.0,  "end": 67.5,  "text": "I always say the wrong thing at the end of the night."},
+        {"start": 69.5,  "end": 72.0,  "text": "You're easy to talk to, though."},
+        {"start": 73.5,  "end": 74.5,  "text": "That helps."},
+        {"start": 77.0,  "end": 81.0,  "text": "I kept thinking \u2014 halfway through the film \u2014\nthat I was glad you suggested it."},
+        {"start": 83.5,  "end": 85.5,  "text": "The cinema, I mean."},
+        {"start": 87.0,  "end": 90.0,  "text": "I almost said no, actually."},
+        {"start": 92.0,  "end": 94.5,  "text": "I almost said I had plans."},
+        {"start": 97.0,  "end": 100.5, "text": "I didn't, obviously."},
+        {"start": 103.0, "end": 106.0, "text": "I just get nervous sometimes."},
+        {"start": 108.0, "end": 110.0, "text": "Anyway. Thank you."}
+    ],
+
+    "ending_vo": [
+        {"start": 1.190,  "end": 2.010,  "text": "So that was..."},
+        {"start": 4.040,  "end": 5.300,  "text": "...uh..."},
+        {"start": 5.520,  "end": 6.500,  "text": "...the 27th?"},
+        {"start": 6.740,  "end": 8.040,  "text": "No that was a week before."},
+        {"start": 8.330,  "end": 8.800,  "text": "Okay."},
+        {"start": 9.910,  "end": 12.220, "text": "And, what did you-\ndid you just leave--"},
+        {"start": 12.220, "end": 13.820, "text": "No no, I, uh..."},
+        {"start": 14.770, "end": 19.000, "text": "That was really close to the Slottsskogen.\nSo I just went there, to the marsh."},
+        {"start": 19.480, "end": 19.980, "text": "Okay."},
+        {"start": 21.490, "end": 22.110, "text": "Uh..."},
+        {"start": 23.540, "end": 25.170, "text": "Did you plan that beforehand?"},
+        {"start": 25.170, "end": 25.680, "text": "Yeah, yeah."},
+        {"start": 28.400, "end": 30.420, "text": "It's not really how you guys think it is."},
+        {"start": 31.560, "end": 33.000, "text": "It's not like a compulsion really."},
+        {"start": 33.910, "end": 34.760, "text": "It's just really..."},
+        {"start": 35.340, "end": 37.100, "text": "It feels fun and interesting."},
+        {"start": 38.180, "end": 39.200, "text": "It's exciting."},
+        {"start": 39.930, "end": 41.410, "text": "So you just keep doing it."}
+    ]
+}

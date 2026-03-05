@@ -225,6 +225,12 @@ func setup_buttons() -> void:
 	new_game_button.pressed.connect(_on_new_game_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 
+	new_game_button.text = LocaleManager.g("ui_new_game")
+	settings_button.text = LocaleManager.g("ui_settings_btn")
+
+	# Connect locale refresh
+	LocaleManager.game_language_changed.connect(_on_game_language_changed)
+
 	# Defer panel sizing until layout is done
 	await get_tree().process_frame
 	_update_hover_panels()
@@ -373,6 +379,11 @@ func _on_settings_closed() -> void:
 	settings_overlay = null
 	new_game_button.disabled = false
 	settings_button.disabled = false
+
+
+func _on_game_language_changed(_lang_code: String) -> void:
+	new_game_button.text = LocaleManager.g("ui_new_game")
+	settings_button.text = LocaleManager.g("ui_settings_btn")
 
 
 func setup_vignette() -> void:

@@ -51,43 +51,11 @@ const _BEACH_DURATION:  float = 15.0
 ## At 40 s: hide BeachMegaNode + CityMegaNode.
 const _OUTRO_DURATION: float = 40.0
 
-## Subtitles for penulti_part_1.ogg. Times are seconds from audio start (= scene visible snap-in).
-const _PART1_SUBTITLES: Array[Dictionary] = [
-	{start = 1.360,  end = 5.150,  text = "how you can kind of slide into a role\nwithout really noticing it."},
-	{start = 6.280,  end = 11.570, text = "You wake up, do what you're supposed to,\nsay the right things, smile at the right moments."},
-	{start = 12.650, end = 16.320, text = "It's not fake exactly.\nJust\u2026 rehearsed."},
-	{start = 17.180, end = 18.610, text = "Very rehearsed."},
-	{start = 19.660, end = 22.890, text = "And suddenly you're good at it.\nAlmost too good."},
-	{start = 24.000, end = 27.290, text = "And I don't mean it's tragic.\nIt's not tragic."},
-	{start = 27.780, end = 29.470, text = "It's just\u2026 smooth."},
-	{start = 30.230, end = 30.970, text = "Practiced."},
-	{start = 31.870, end = 33.930, text = "You become efficient at being yourself."},
-	{start = 34.710, end = 36.730, text = "Or, well, a version of yourself."},
-	{start = 38.310, end = 40.170, text = "I used to think everything\nhad to hold together."},
-	{start = 40.950, end = 44.870, text = "That what you feel inside and what you do\non the outside should match perfectly,"},
-	{start = 45.430, end = 46.400, text = "otherwise something is wrong."},
-	{start = 47.570, end = 48.500, text = "But now I don't know."},
-	{start = 49.510, end = 51.730, text = "Maybe it's okay if there's\na space in between."},
-	{start = 52.500, end = 53.070, text = "A small one."},
-	{start = 53.800, end = 54.690, text = "Or a bigger one."},
-]
+## Subtitles for penulti_part_1.ogg — loaded from subtitle locale in _ready().
+var _part1_subtitles: Array[Dictionary] = []
 
-## Subtitles for the alley auto-walk segment. Times are autowalk-elapsed seconds (t=0 = auto_walk start).
-const _ALLEY_SUBTITLES: Array[Dictionary] = [
-	{start = 50.0,  end = 53.5,  text = "That was\u2026 I don't know. I had a really good time."},
-	{start = 55.0,  end = 57.0,  text = "Like, a really good time."},
-	{start = 59.5,  end = 62.0,  text = "Sorry, I'm bad at this."},
-	{start = 64.0,  end = 67.5,  text = "I always say the wrong thing at the end of the night."},
-	{start = 69.5,  end = 72.0,  text = "You're easy to talk to, though."},
-	{start = 73.5,  end = 74.5,  text = "That helps."},
-	{start = 77.0,  end = 81.0,  text = "I kept thinking \u2014 halfway through the film \u2014\nthat I was glad you suggested it."},
-	{start = 83.5,  end = 85.5,  text = "The cinema, I mean."},
-	{start = 87.0,  end = 90.0,  text = "I almost said no, actually."},
-	{start = 92.0,  end = 94.5,  text = "I almost said I had plans."},
-	{start = 97.0,  end = 100.5, text = "I didn't, obviously."},
-	{start = 103.0, end = 106.0, text = "I just get nervous sometimes."},
-	{start = 108.0, end = 110.0, text = "Anyway. Thank you."},
-]
+## Subtitles for the alley auto-walk segment — loaded from subtitle locale in _ready().
+var _alley_subtitles: Array[Dictionary] = []
 
 ## Beach WorldEnvironment targets — ProceduralSkyMaterial (source: beach_test.tscn)
 const _BEACH_SKY_TOP:          Color = Color(0.0, 0.596, 0.747)
@@ -178,6 +146,9 @@ var _alley_subtitle_index: int = -1
 func _ready() -> void:
 	for character in _characters:
 		_play_first_animation(character)
+
+	_part1_subtitles = LocaleManager.s("penulti_part1")
+	_alley_subtitles = LocaleManager.s("penulti_alley")
 
 	# Cache the beach sun's target energy and zero it out — it ramps up during the beach reveal.
 	_beach_sun_energy = _beach_sun.light_energy
@@ -394,8 +365,8 @@ func _process(delta: float) -> void:
 				and is_instance_valid(_part1_player) and _part1_player.playing:
 			var pos: float = _part1_player.get_playback_position()
 			var found: bool = false
-			for i in _PART1_SUBTITLES.size():
-				var sub: Dictionary = _PART1_SUBTITLES[i]
+			for i in _part1_subtitles.size():
+				var sub: Dictionary = _part1_subtitles[i]
 				if pos >= sub.start and pos <= sub.end:
 					if _part1_subtitle_index != i:
 						_subtitle_label.text = sub.text
@@ -415,8 +386,8 @@ func _process(delta: float) -> void:
 			and SettingsManager.get_setting("subtitles/enabled") \
 			and _player.auto_walk and not _part1_player:
 		var found_alley: bool = false
-		for i in _ALLEY_SUBTITLES.size():
-			var sub: Dictionary = _ALLEY_SUBTITLES[i]
+		for i in _alley_subtitles.size():
+			var sub: Dictionary = _alley_subtitles[i]
 			if _autowalk_elapsed >= sub.start and _autowalk_elapsed <= sub.end:
 				if _alley_subtitle_index != i:
 					_subtitle_label.text = sub.text

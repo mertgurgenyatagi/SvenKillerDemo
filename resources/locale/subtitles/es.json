@@ -1,0 +1,114 @@
+{
+    "opening_vo": [
+        {"start": 2.159, "end": 5.719,  "text": "Me gusta centrarme en la sensación."},
+        {"start": 7.505, "end": 12.245, "text": "Es algo tremendo, cómo puedes simplemente apagarla."},
+        {"start": 13.253, "end": 16.684, "text": "Se siente como, no sé."},
+        {"start": 17.074, "end": 22.884, "text": "como estar en una playa preciosa con los pájaros y el mar."},
+        {"start": 23.844, "end": 27.062, "text": "Así es como se siente, en eso intento concentrarme."}
+    ],
+
+    "voicemail": [
+        {"start": 0.0,   "end": 1.0,   "text": "Hola, Sven."},
+        {"start": 2.01,  "end": 6.55,  "text": "Te llamé pero no contestaste. Supongo que estás durmiendo otra vez."},
+        {"start": 7.77,  "end": 11.58, "text": "Eh... tu padre te ha mandado algo de dinero."},
+        {"start": 12.88, "end": 14.89, "text": "Hoy es día veinte, ¿no."},
+        {"start": 16.67, "end": 22.72, "text": "Así que... bueno. Si alguna vez necesitas dinero extra solo llama."},
+        {"start": 23.86, "end": 29.67, "text": "También puedes llamar a casa. Probablemente conteste Johan."},
+        {"start": 29.67, "end": 31.15, "text": "He mandado a Erika a casa unos días."},
+        {"start": 31.2,  "end": 37.72, "text": "Así que sí. Puedes decírselo a tu padre o simplemente llamar a su móvil."},
+        {"start": 39.59, "end": 45.09, "text": "De todos modos, también dijo, ya sé que no quieres oír esto,"},
+        {"start": 46.24, "end": 51.15, "text": "pero quiere hablar de que quizá algún día entres en la empresa."},
+        {"start": 52.33, "end": 56.25, "text": "Los dos pensamos de verdad que encajarías allí."},
+        {"start": 57.32, "end": 62.35, "text": "Karl se jubila pronto, así que quizá... ya sabes..."},
+        {"start": 63.73, "end": 65.21, "text": "Pero bueno... supongo."},
+        {"start": 66.28, "end": 68.16, "text": "Llama si necesitas cualquier cosa."},
+        {"start": 69.41, "end": 69.9,  "text": "Chao."}
+    ],
+
+    "newspaper": [
+        {"start": 0.0,  "end": 4.5,  "text": "DOS MUERTOS EN ATAQUES A CUCHILLADAS EN LINNÉGATAN"},
+        {"start": 5.5,  "end": 12.0, "text": "Dos personas han muerto en ataques con cuchillo separados en Linnégatan durante las dos últimas semanas."},
+        {"start": 13.0, "end": 21.0, "text": "Primero, un hombre sin hogar de unos cincuenta años fue encontrado gravemente herido en la calle tarde por la noche y murió más tarde en el hospital."},
+        {"start": 22.0, "end": 29.5, "text": "A principios de esta semana una joven que, según se informa, pedía en la zona fue hallada muerta cerca de la entrada de un edificio."},
+        {"start": 30.5, "end": 37.5, "text": "La policía investiga los casos y estudia si hay alguna relación entre los incidentes."},
+        {"start": 38.0, "end": 42.5, "text": "Pero todavía no se ha detenido a ningún sospechoso."}
+    ],
+
+    "cafe_dialogue": [
+        {"start": 1.760,  "end": 8.210,  "text": "No entiendo esa idea terca de que tengamos que casar nuestro trabajo y nuestra felicidad."},
+        {"start": 9.130,  "end": 12.310, "text": "Quiero decir, haces algo para ganarte la vida porque..."},
+        {"start": 12.710, "end": 14.720, "text": "se te da bien, o bueno..."},
+        {"start": 15.170, "end": 17.810, "text": "lo bastante bien como para ganar dinero."},
+        {"start": 18.420, "end": 20.270, "text": "porque este es un mundo de consumo."},
+        {"start": 20.690, "end": 23.240, "text": "necesitas dinero para vivir, y ya está."},
+        {"start": 23.940, "end": 26.810, "text": "Y esa cosa no tiene por qué ser lo que te da sentido."},
+        {"start": 27.710, "end": 29.730, "text": "Cuando yo crecía todo el mundo decía:"},
+        {"start": 30.250, "end": 32.190, "text": "tienes que trabajar en algo que ames."},
+        {"start": 32.900, "end": 33.490, "text": "y tú piensas..."},
+        {"start": 34.020, "end": 35.670, "text": "¿cuántos contables o..."},
+        {"start": 36.080, "end": 38.740, "text": "o abogados aman de verdad su trabajo."},
+        {"start": 39.450, "end": 41.490, "text": "Claro, puedes amar tu trabajo."},
+        {"start": 41.810, "end": 42.920, "text": "yo amo mi trabajo."},
+        {"start": 43.360, "end": 44.820, "text": "me da mucha alegría."},
+        {"start": 45.720, "end": 47.670, "text": "pero lo que de verdad me da sentido"},
+        {"start": 47.980, "end": 50.220, "text": "es hacer música o dibujar."},
+        {"start": 50.800, "end": 53.520, "text": "y no es exactamente lo mismo, no sé."}
+    ],
+
+    "penulti_part1": [
+        {"start": 1.360,  "end": 5.150,  "text": "cómo puedes deslizarte en un papel sin darte realmente cuenta."},
+        {"start": 6.280,  "end": 11.570, "text": "Te despiertas, haces lo que se supone que debes hacer, dices lo correcto, sonríes en los momentos adecuados."},
+        {"start": 12.650, "end": 16.320, "text": "No es exactamente falso. Solo... ensayado."},
+        {"start": 17.180, "end": 18.610, "text": "Muy ensayado."},
+        {"start": 19.660, "end": 22.890, "text": "Y de repente se te da bien. Demasiado bien casi."},
+        {"start": 24.000, "end": 27.290, "text": "Y no quiero decir que sea trágico. No es trágico."},
+        {"start": 27.780, "end": 29.470, "text": "Solo es... fluido."},
+        {"start": 30.230, "end": 30.970, "text": "Practicado."},
+        {"start": 31.870, "end": 33.930, "text": "Te vuelves eficiente siendo tú mismo."},
+        {"start": 34.710, "end": 36.730, "text": "O, bueno, una versión de ti mismo."},
+        {"start": 38.310, "end": 40.170, "text": "Antes pensaba que todo tenía que mantenerse unido."},
+        {"start": 40.950, "end": 44.870, "text": "Que lo que sientes por dentro y lo que haces por fuera tenía que coincidir perfectamente."},
+        {"start": 45.430, "end": 46.400, "text": "si no, algo estaba mal."},
+        {"start": 47.570, "end": 48.500, "text": "Pero ahora no lo sé."},
+        {"start": 49.510, "end": 51.730, "text": "Quizá esté bien si hay un espacio entre las dos cosas."},
+        {"start": 52.500, "end": 53.070, "text": "Uno pequeño."},
+        {"start": 53.800, "end": 54.690, "text": "O uno más grande."}
+    ],
+
+    "penulti_alley": [
+        {"start": 50.0,  "end": 53.5,  "text": "Eso fue... no sé. Me lo pasé muy bien."},
+        {"start": 55.0,  "end": 57.0,  "text": "O sea, de verdad muy bien."},
+        {"start": 59.5,  "end": 62.0,  "text": "Perdón, se me da fatal esto."},
+        {"start": 64.0,  "end": 67.5,  "text": "Siempre digo algo equivocado al final de la noche."},
+        {"start": 69.5,  "end": 72.0,  "text": "Pero contigo es fácil hablar."},
+        {"start": 73.5,  "end": 74.5,  "text": "Eso ayuda."},
+        {"start": 77.0,  "end": 81.0,  "text": "No paraba de pensar, como a mitad de la película, que me alegraba de que la hubieras propuesto."},
+        {"start": 83.5,  "end": 85.5,  "text": "El cine, quiero decir."},
+        {"start": 87.0,  "end": 90.0,  "text": "En realidad estuve a punto de decir que no."},
+        {"start": 92.0,  "end": 94.5,  "text": "Estuve a punto de decir que ya tenía planes."},
+        {"start": 97.0,  "end": 100.5, "text": "Obviamente no los tenía."},
+        {"start": 103.0, "end": 106.0, "text": "Es solo que a veces me pongo nerviosa."},
+        {"start": 108.0, "end": 110.0, "text": "En fin. Gracias."}
+    ],
+
+    "ending_vo": [
+        {"start": 1.190,  "end": 2.010,  "text": "Entonces eso fue..."},
+        {"start": 4.040,  "end": 5.300,  "text": "...eh..."},
+        {"start": 5.520,  "end": 6.500,  "text": "...el día 27."},
+        {"start": 6.740,  "end": 8.040,  "text": "No, eso fue una semana antes."},
+        {"start": 8.330,  "end": 8.800,  "text": "Vale."},
+        {"start": 9.910,  "end": 12.220, "text": "Y, ¿qué hiciste, te fuiste sin más."},
+        {"start": 12.220, "end": 13.820, "text": "No, no, yo, eh..."},
+        {"start": 14.770, "end": 19.000, "text": "Estaba muy cerca de Slottsskogen. Así que simplemente fui allí, al pantano."},
+        {"start": 19.480, "end": 19.980, "text": "Vale."},
+        {"start": 21.490, "end": 22.110, "text": "Eh..."},
+        {"start": 23.540, "end": 25.170, "text": "¿Lo habías planeado de antemano."},
+        {"start": 25.170, "end": 25.680, "text": "Sí, sí."},
+        {"start": 28.400, "end": 30.420, "text": "No es exactamente como vosotros pensáis que es."},
+        {"start": 31.560, "end": 33.000, "text": "No es tanto una compulsión realmente."},
+        {"start": 33.910, "end": 34.760, "text": "Es solo que es muy..."},
+        {"start": 35.340, "end": 37.100, "text": "Se siente divertido e interesante."},
+        {"start": 38.180, "end": 39.200, "text": "Es emocionante."},
+        {"start": 39.930, "end": 41.410, "text": "Así que simplemente sigues haciéndolo."}
+    ]
+}

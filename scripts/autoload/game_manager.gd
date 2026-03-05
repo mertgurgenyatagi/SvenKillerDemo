@@ -23,6 +23,11 @@ var _preload_start_time: float = -1.0
 # Subtitle slot tracking — ensures overlapping subtitles stack top/bottom
 var _subtitle_bottom_owner: Object = null
 
+# Pause system
+var _pause_menu: Node = null
+var _pause_busy: bool = false
+var _is_transitioning: bool = false
+
 func claim_subtitle_bottom(owner: Object) -> bool:
 	## Returns true if the caller owns the bottom slot (show at bottom).
 	## Returns false if another system already owns it (show at top instead).
@@ -35,9 +40,18 @@ func release_subtitle_bottom(owner: Object) -> void:
 	if _subtitle_bottom_owner == owner:
 		_subtitle_bottom_owner = null
 
+
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	# We'll grab references after main.tscn loads
 	pass
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause") or (event is InputEventKey and event.keycode == KEY_K and event.pressed and not event.echo):
+		if current_state != GameState.MENU and current_state != GameState.PAUSED and not _is_transitioning and not _pause_busy:
+			get_viewport().set_input_as_handled()
+			pause_game()
 
 func initialize(main: Node) -> void:
 	## Called by Main scene to set up references.
@@ -48,6 +62,8 @@ func initialize(main: Node) -> void:
 
 func change_scene(scene_path: String, fade_duration: float = 0.5) -> void:
 	## Change to a new scene with fade transition.
+	_force_unpause()
+	_is_transitioning = true
 	emit_signal("transition_started")
 	
 	# Fade out
@@ -66,12 +82,16 @@ func change_scene(scene_path: String, fade_duration: float = 0.5) -> void:
 	
 	# Fade in
 	await fade_in(fade_duration)
-	
+
+	_is_transitioning = false
+	_update_state_for_scene(scene_path)
 	emit_signal("transition_finished")
 	emit_signal("scene_changed", scene_path)
 
 func change_scene_no_fade_out(scene_path: String, fade_in_duration: float = 0.5) -> void:
 	## Change to a new scene - only fade in (when already on black).
+	_force_unpause()
+	_is_transitioning = true
 	emit_signal("transition_started")
 	
 	# Ensure we're on black
@@ -93,7 +113,9 @@ func change_scene_no_fade_out(scene_path: String, fade_in_duration: float = 0.5)
 	
 	# Fade in slowly
 	await fade_in(fade_in_duration)
-	
+
+	_is_transitioning = false
+	_update_state_for_scene(scene_path)
 	emit_signal("transition_finished")
 	emit_signal("scene_changed", scene_path)
 
@@ -133,6 +155,8 @@ func hard_cut_to_scene(scene_path: String) -> void:
 	## Hard cut to a new scene with no fade.
 	## Blacks out instantly, waits for the preload window to elapse (minimum 20s from
 	## when the player gained control, minimum 2s from the cut), then pops scene in.
+	_force_unpause()
+	_is_transitioning = true
 	emit_signal("transition_started")
 
 	# Stop all pooled audio immediately, then mute Master to catch anything else
@@ -227,6 +251,8 @@ func hard_cut_to_scene(scene_path: String) -> void:
 	elif is_instance_valid(_fallback_black_layer):
 		_fallback_black_layer.visible = false
 
+	_is_transitioning = false
+	_update_state_for_scene(scene_path)
 	emit_signal("transition_finished")
 	emit_signal("scene_changed", scene_path)
 
@@ -278,6 +304,8 @@ func hard_cut_to_preinstantiated(scene_node: Node, scene_path: String) -> void:
 		push_error("GameManager.hard_cut_to_preinstantiated: scene_node is invalid")
 		return
 
+	_force_unpause()
+	_is_transitioning = true
 	emit_signal("transition_started")
 
 	AudioManager.stop_all()
@@ -325,9 +353,58 @@ func hard_cut_to_preinstantiated(scene_node: Node, scene_path: String) -> void:
 	elif is_instance_valid(_fallback_black_layer):
 		_fallback_black_layer.visible = false
 
+	_is_transitioning = false
+	_update_state_for_scene(scene_path)
 	emit_signal("transition_finished")
 	emit_signal("scene_changed", scene_path)
 
 
 func set_state(new_state: GameState) -> void:
 	current_state = new_state
+
+
+func pause_game() -> void:
+	## Open the pause menu and freeze the game.
+	_pause_busy = true
+	current_state = GameState.PAUSED
+	get_tree().paused = true
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if _pause_menu == null or not is_instance_valid(_pause_menu):
+		_pause_menu = PauseMenu.new()
+		add_child(_pause_menu)
+		_pause_menu.resume_requested.connect(_on_resume_requested)
+	await _pause_menu.animate_in()
+	_pause_busy = false
+
+
+func _on_resume_requested() -> void:
+	## Called when the pause menu emits resume_requested (Resume button or Escape).
+	if _pause_busy:
+		return
+	_pause_busy = true
+	await _pause_menu.animate_out()
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false)
+	get_tree().paused = false
+	current_state = GameState.PLAYING
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_pause_busy = false
+
+
+func _force_unpause() -> void:
+	## Instantly remove the pause overlay with no animation.
+	## Called at the start of every scene transition to guarantee a clean state.
+	if _pause_menu != null and is_instance_valid(_pause_menu):
+		_pause_menu.force_hide()
+	current_state = GameState.PLAYING
+	get_tree().paused = false
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false)
+	_pause_busy = false
+
+
+func _update_state_for_scene(scene_path: String) -> void:
+	## Set current_state based on the scene that was just loaded.
+	if "main_menu" in scene_path:
+		set_state(GameState.MENU)
+	else:
+		set_state(GameState.PLAYING)

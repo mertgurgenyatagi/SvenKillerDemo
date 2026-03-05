@@ -1,0 +1,114 @@
+{
+    "opening_vo": [
+        {"start": 2.159, "end": 5.719,  "text": "Dikkatimi o hissin kendisine vermeyi seviyorum."},
+        {"start": 7.505, "end": 12.245, "text": "Onu bir anda söndürebilmek gerçekten tuhaf bir şey."},
+        {"start": 13.253, "end": 16.684, "text": "Sanki, bilmiyorum."},
+        {"start": 17.074, "end": 22.884, "text": "kuşların ve denizin olduğu güzel bir sahilde olmak gibi."},
+        {"start": 23.844, "end": 27.062, "text": "His tam olarak öyle, ben de ona tutunuyorum."}
+    ],
+
+    "voicemail": [
+        {"start": 0.0,   "end": 1.0,   "text": "Merhaba, Sven."},
+        {"start": 2.01,  "end": 6.55,  "text": "Seni aradım ama açmadın. Sanırım yine uyuyorsun."},
+        {"start": 7.77,  "end": 11.58, "text": "Şey... baban sana biraz para gönderdi."},
+        {"start": 12.88, "end": 14.89, "text": "Bugün ayın yirmisi, değil mi."},
+        {"start": 16.67, "end": 22.72, "text": "Yani... evet. Eğer ekstra paraya ihtiyacın olursa, sadece ara."},
+        {"start": 23.86, "end": 29.67, "text": "Eve de arayabilirsin. Muhtemelen Johan açar."},
+        {"start": 29.67, "end": 31.15, "text": "Erika'yı da birkaç günlük eve gönderdim."},
+        {"start": 31.2,  "end": 37.72, "text": "Yani böyle. Babanla konuşabilirsin ya da direkt cep telefonunu arayabilirsin."},
+        {"start": 39.59, "end": 45.09, "text": "Neyse, o da şunu söyledi, bunu duymak istemediğini biliyorum,"},
+        {"start": 46.24, "end": 51.15, "text": "ama bir gün şirkete girmen konusunu konuşmak istiyor."},
+        {"start": 52.33, "end": 56.25, "text": "İkimiz de oraya çok iyi uyacağını düşünüyoruz."},
+        {"start": 57.32, "end": 62.35, "text": "Karl yakında emekli oluyor, o yüzden belki... biliyorsun..."},
+        {"start": 63.73, "end": 65.21, "text": "Ama evet... sanırım öyle."},
+        {"start": 66.28, "end": 68.16, "text": "Bir şeye ihtiyacın olursa ara."},
+        {"start": 69.41, "end": 69.9,  "text": "Hoşça kal."}
+    ],
+
+    "newspaper": [
+        {"start": 0.0,  "end": 4.5,  "text": "LİNNÉGATAN'DA BIÇAKLI SALDIRILARDA İKİ ÖLÜ"},
+        {"start": 5.5,  "end": 12.0, "text": "Son iki hafta içinde Linnégatan'da meydana gelen ayrı bıçaklı saldırılarda iki kişi hayatını kaybetti."},
+        {"start": 13.0, "end": 21.0, "text": "Önce ellili yaşlarında evsiz bir erkek, gece geç saatlerde dışarıda ağır yaralı bulundu ve daha sonra hastanede yaşamını yitirdi."},
+        {"start": 22.0, "end": 29.5, "text": "Bu haftanın başlarında ise bölgede dilendiği bildirilen genç bir kız, bir bina girişine yakın bir yerde ölü bulundu."},
+        {"start": 30.5, "end": 37.5, "text": "Polis olayları soruşturuyor ve vakalar arasında bir bağlantı olup olmadığını inceliyor."},
+        {"start": 38.0, "end": 42.5, "text": "Ancak şu ana kadar hiçbir şüpheli gözaltına alınmadı."}
+    ],
+
+    "cafe_dialogue": [
+        {"start": 1.760,  "end": 8.210,  "text": "İşimizi mutluluğumuzla evlendirmemiz gerektiğine dair o inatçı fikri hiç anlamıyorum."},
+        {"start": 9.130,  "end": 12.310, "text": "Yani, geçimini sağlamak için bir şeyler yapıyorsun çünkü..."},
+        {"start": 12.710, "end": 14.720, "text": "onda iyisin, ya da en azından..."},
+        {"start": 15.170, "end": 17.810, "text": "yeterince iyisin ki para kazanabiliyorsun."},
+        {"start": 18.420, "end": 20.270, "text": "çünkü burası bir tüketim dünyası."},
+        {"start": 20.690, "end": 23.240, "text": "yaşamak için paraya ihtiyacın var, hepsi bu."},
+        {"start": 23.940, "end": 26.810, "text": "Ve o şey, sana anlam veren şey olmak zorunda değil."},
+        {"start": 27.710, "end": 29.730, "text": "Ben büyürken herkes hep şunu söylerdi:"},
+        {"start": 30.250, "end": 32.190, "text": "sevdiğin bir işle çalışmak zorundasın."},
+        {"start": 32.900, "end": 33.490, "text": "ve sen de diyorsun ki..."},
+        {"start": 34.020, "end": 35.670, "text": "kaç tane muhasebeci ya da..."},
+        {"start": 36.080, "end": 38.740, "text": "kaç tane avukat gerçekten işini seviyor."},
+        {"start": 39.450, "end": 41.490, "text": "Tabii ki işini sevebilirsin."},
+        {"start": 41.810, "end": 42.920, "text": "ben işimi seviyorum."},
+        {"start": 43.360, "end": 44.820, "text": "ondan çok keyif alıyorum."},
+        {"start": 45.720, "end": 47.670, "text": "ama bana gerçekten anlam veren şey"},
+        {"start": 47.980, "end": 50.220, "text": "müzik yapmak ya da resim çizmek gibi şeyler."},
+        {"start": 50.800, "end": 53.520, "text": "ve bu tam olarak aynı şey değil, bilmiyorum."}
+    ],
+
+    "penulti_part1": [
+        {"start": 1.360,  "end": 5.150,  "text": "farkına bile varmadan nasıl yavaşça bir rolün içine kayabildiğin."},
+        {"start": 6.280,  "end": 11.570, "text": "Uyanıyorsun, yapman gerekeni yapıyorsun, doğru şeyleri söylüyorsun, doğru anlarda gülümsüyorsun."},
+        {"start": 12.650, "end": 16.320, "text": "Tam anlamıyla sahte değil. Sadece... prova edilmiş."},
+        {"start": 17.180, "end": 18.610, "text": "Hem de çok prova edilmiş."},
+        {"start": 19.660, "end": 22.890, "text": "Ve birdenbire bunda iyi oluyorsun. Neredeyse fazla iyi."},
+        {"start": 24.000, "end": 27.290, "text": "Ve bunun trajik olduğunu söylemiyorum. Trajik değil."},
+        {"start": 27.780, "end": 29.470, "text": "Sadece... çok akıcı."},
+        {"start": 30.230, "end": 30.970, "text": "Alışılmış."},
+        {"start": 31.870, "end": 33.930, "text": "Kendin olma konusunda verimli hale geliyorsun."},
+        {"start": 34.710, "end": 36.730, "text": "Ya da, şey, kendinin bir versiyonu."},
+        {"start": 38.310, "end": 40.170, "text": "Eskiden her şeyin bir arada durması gerektiğini düşünürdüm."},
+        {"start": 40.950, "end": 44.870, "text": "İçinde ne hissettiğinle dışarıda yaptıklarının tamamen örtüşmesi gerektiğini."},
+        {"start": 45.430, "end": 46.400, "text": "yoksa bir şeyler yanlış demekti."},
+        {"start": 47.570, "end": 48.500, "text": "Ama şimdi emin değilim."},
+        {"start": 49.510, "end": 51.730, "text": "Belki de arada küçük bir boşluk olması sorun değildir."},
+        {"start": 52.500, "end": 53.070, "text": "Küçük bir."},
+        {"start": 53.800, "end": 54.690, "text": "Ya da daha büyük bir."}
+    ],
+
+    "penulti_alley": [
+        {"start": 50.0,  "end": 53.5,  "text": "Bu... bilmiyorum. Gerçekten çok iyi vakit geçirdim."},
+        {"start": 55.0,  "end": 57.0,  "text": "Yani, gerçekten çok iyi."},
+        {"start": 59.5,  "end": 62.0,  "text": "Özür dilerim, bu konularda kötüyüm."},
+        {"start": 64.0,  "end": 67.5,  "text": "Gecenin sonunda hep yanlış şeyleri söylerim."},
+        {"start": 69.5,  "end": 72.0,  "text": "Ama seninle konuşmak kolay."},
+        {"start": 73.5,  "end": 74.5,  "text": "Bu da işe yarıyor."},
+        {"start": 77.0,  "end": 81.0,  "text": "Filmin ortalarına doğru hep şunu düşündüm, iyi ki sen önermişsin diye."},
+        {"start": 83.5,  "end": 85.5,  "text": "Sinemayı kast ediyorum."},
+        {"start": 87.0,  "end": 90.0,  "text": "Aslında neredeyse hayır diyecektim."},
+        {"start": 92.0,  "end": 94.5,  "text": "Neredeyse planlarım var diyecektim."},
+        {"start": 97.0,  "end": 100.5, "text": "Tabii ki yoktu, belli ki."},
+        {"start": 103.0, "end": 106.0, "text": "Sadece bazen çok geriliyorum."},
+        {"start": 108.0, "end": 110.0, "text": "Her neyse. Teşekkür ederim."}
+    ],
+
+    "ending_vo": [
+        {"start": 1.190,  "end": 2.010,  "text": "Demek o..."},
+        {"start": 4.040,  "end": 5.300,  "text": "...şey..."},
+        {"start": 5.520,  "end": 6.500,  "text": "...yirmi yedisi."},
+        {"start": 6.740,  "end": 8.040,  "text": "Hayır, o bir hafta önceydi."},
+        {"start": 8.330,  "end": 8.800,  "text": "Tamam."},
+        {"start": 9.910,  "end": 12.220, "text": "Peki sonra ne yaptın, öylece gittin mi."},
+        {"start": 12.220, "end": 13.820, "text": "Hayır hayır, ben, şey..."},
+        {"start": 14.770, "end": 19.000, "text": "Burası Slottsskogen'e gerçekten çok yakındı. Ben de oraya, bataklığa gittim."},
+        {"start": 19.480, "end": 19.980, "text": "Tamam."},
+        {"start": 21.490, "end": 22.110, "text": "Şey..."},
+        {"start": 23.540, "end": 25.170, "text": "Bunu önceden planlamış mıydın."},
+        {"start": 25.170, "end": 25.680, "text": "Evet, evet."},
+        {"start": 28.400, "end": 30.420, "text": "Aslında tam olarak sizin düşündüğünüz gibi değil."},
+        {"start": 31.560, "end": 33.000, "text": "Öyle gerçek bir dürtü kontrolü meselesi değil."},
+        {"start": 33.910, "end": 34.760, "text": "Sadece gerçekten çok..."},
+        {"start": 35.340, "end": 37.100, "text": "Eğlenceli ve ilginç hissettiriyor."},
+        {"start": 38.180, "end": 39.200, "text": "Heyecan verici."},
+        {"start": 39.930, "end": 41.410, "text": "Ve bu yüzden insan devam edip duruyor."}
+    ]
+}

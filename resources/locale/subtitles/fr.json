@@ -1,0 +1,114 @@
+{
+    "opening_vo": [
+        {"start": 2.159, "end": 5.719,  "text": "J'aime bien me concentrer sur la sensation."},
+        {"start": 7.505, "end": 12.245, "text": "C'est assez dingue, la façon dont on peut simplement l'éteindre."},
+        {"start": 13.253, "end": 16.684, "text": "On dirait, je ne sais pas."},
+        {"start": 17.074, "end": 22.884, "text": "comme être sur une belle plage avec les oiseaux et la mer."},
+        {"start": 23.844, "end": 27.062, "text": "C'est ce que ça fait, je me concentre là dessus."}
+    ],
+
+    "voicemail": [
+        {"start": 0.0,   "end": 1.0,   "text": "Salut, Sven."},
+        {"start": 2.01,  "end": 6.55,  "text": "Je t'ai appelé mais tu n'as pas répondu. Je suppose que tu dors encore."},
+        {"start": 7.77,  "end": 11.58, "text": "Euh... ton père t'a envoyé un peu d'argent."},
+        {"start": 12.88, "end": 14.89, "text": "On est le vingt aujourd'hui, hein."},
+        {"start": 16.67, "end": 22.72, "text": "Donc... oui. Si tu as besoin d'argent en plus, appelle simplement."},
+        {"start": 23.86, "end": 29.67, "text": "Tu peux aussi appeler à la maison. C'est probablement Johan qui répondra."},
+        {"start": 29.67, "end": 31.15, "text": "J'ai renvoyé Erika à la maison pour quelques jours."},
+        {"start": 31.2,  "end": 37.72, "text": "Donc voilà. Tu peux en parler à ton père, ou simplement appeler sur son portable."},
+        {"start": 39.59, "end": 45.09, "text": "En tout cas, il a aussi dit, je sais que tu n'as pas envie d'entendre ça,"},
+        {"start": 46.24, "end": 51.15, "text": "mais il veut parler du fait que tu pourrais peut être rejoindre l'entreprise un jour."},
+        {"start": 52.33, "end": 56.25, "text": "On pense vraiment tous les deux que tu t'y intégrerais bien."},
+        {"start": 57.32, "end": 62.35, "text": "Karl va bientôt partir à la retraite, alors peut être que... tu vois..."},
+        {"start": 63.73, "end": 65.21, "text": "Mais bon... j'imagine."},
+        {"start": 66.28, "end": 68.16, "text": "Appelle si tu as besoin de quelque chose."},
+        {"start": 69.41, "end": 69.9,  "text": "Salut."}
+    ],
+
+    "newspaper": [
+        {"start": 0.0,  "end": 4.5,  "text": "DEUX TUÉS DANS DES ATTAQUES AU COUTEAU SUR LINNÉGATAN"},
+        {"start": 5.5,  "end": 12.0, "text": "Deux personnes ont été tuées lors d'attaques au couteau distinctes sur Linnégatan au cours des deux dernières semaines."},
+        {"start": 13.0, "end": 21.0, "text": "D'abord, un homme sans domicile fixe d'une cinquantaine d'années a été retrouvé grièvement blessé dehors tard le soir et est décédé plus tard de ses blessures à l'hôpital."},
+        {"start": 22.0, "end": 29.5, "text": "Plus tôt cette semaine, une jeune fille qui aurait mendié dans le quartier a été retrouvée morte près d'une entrée d'immeuble."},
+        {"start": 30.5, "end": 37.5, "text": "La police enquête sur les affaires et examine s'il existe un lien entre les incidents."},
+        {"start": 38.0, "end": 42.5, "text": "Mais aucun suspect n'a encore été arrêté."}
+    ],
+
+    "cafe_dialogue": [
+        {"start": 1.760,  "end": 8.210,  "text": "Je ne comprends pas cette idée obstinée selon laquelle on devrait marier notre travail et notre bonheur."},
+        {"start": 9.130,  "end": 12.310, "text": "Je veux dire, tu fais quelque chose pour gagner ta vie parce que..."},
+        {"start": 12.710, "end": 14.720, "text": "tu es doué pour ça, ou, enfin..."},
+        {"start": 15.170, "end": 17.810, "text": "assez doué pour gagner de l'argent avec."},
+        {"start": 18.420, "end": 20.270, "text": "parce qu'on vit dans un monde de consommation."},
+        {"start": 20.690, "end": 23.240, "text": "tu as besoin d'argent pour vivre, c'est tout."},
+        {"start": 23.940, "end": 26.810, "text": "Et cette chose là n'a pas forcément à être ce qui te donne du sens."},
+        {"start": 27.710, "end": 29.730, "text": "Quand je grandissais, tout le monde disait:"},
+        {"start": 30.250, "end": 32.190, "text": "tu dois travailler dans quelque chose que tu aimes."},
+        {"start": 32.900, "end": 33.490, "text": "et toi tu te dis..."},
+        {"start": 34.020, "end": 35.670, "text": "combien de comptables ou..."},
+        {"start": 36.080, "end": 38.740, "text": "ou d'avocats aiment vraiment leur travail."},
+        {"start": 39.450, "end": 41.490, "text": "Bien sûr, tu peux aimer ton travail."},
+        {"start": 41.810, "end": 42.920, "text": "moi j'aime mon travail."},
+        {"start": 43.360, "end": 44.820, "text": "j'y trouve beaucoup de joie."},
+        {"start": 45.720, "end": 47.670, "text": "mais ce qui me donne vraiment du sens"},
+        {"start": 47.980, "end": 50.220, "text": "c'est faire de la musique ou dessiner."},
+        {"start": 50.800, "end": 53.520, "text": "et ce n'est pas tout à fait la même chose, je ne sais pas."}
+    ],
+
+    "penulti_part1": [
+        {"start": 1.360,  "end": 5.150,  "text": "la manière dont tu peux glisser dans un rôle sans vraiment t'en rendre compte."},
+        {"start": 6.280,  "end": 11.570, "text": "Tu te réveilles, tu fais ce que tu es censé faire, tu dis ce qu'il faut, tu souris au bon moment."},
+        {"start": 12.650, "end": 16.320, "text": "Ce n'est pas vraiment faux. Juste... répété."},
+        {"start": 17.180, "end": 18.610, "text": "Très répété."},
+        {"start": 19.660, "end": 22.890, "text": "Et soudain tu es bon à ça. Presque trop bon."},
+        {"start": 24.000, "end": 27.290, "text": "Et je ne veux pas dire que c'est tragique. Ce n'est pas tragique."},
+        {"start": 27.780, "end": 29.470, "text": "C'est juste... fluide."},
+        {"start": 30.230, "end": 30.970, "text": "Rodé."},
+        {"start": 31.870, "end": 33.930, "text": "Tu deviens efficace pour être toi même."},
+        {"start": 34.710, "end": 36.730, "text": "Ou, enfin, une version de toi même."},
+        {"start": 38.310, "end": 40.170, "text": "Avant je pensais que tout devait tenir ensemble."},
+        {"start": 40.950, "end": 44.870, "text": "Que ce que tu ressens à l'intérieur et ce que tu fais à l'extérieur devait parfaitement coïncider."},
+        {"start": 45.430, "end": 46.400, "text": "sinon quelque chose n'allait pas."},
+        {"start": 47.570, "end": 48.500, "text": "Mais maintenant je ne sais plus."},
+        {"start": 49.510, "end": 51.730, "text": "Peut être que c'est acceptable qu'il y ait un espace entre les deux."},
+        {"start": 52.500, "end": 53.070, "text": "Un petit."},
+        {"start": 53.800, "end": 54.690, "text": "Ou un plus grand."}
+    ],
+
+    "penulti_alley": [
+        {"start": 50.0,  "end": 53.5,  "text": "C'était... je ne sais pas. J'ai vraiment passé un très bon moment."},
+        {"start": 55.0,  "end": 57.0,  "text": "Enfin, vraiment très bon."},
+        {"start": 59.5,  "end": 62.0,  "text": "Pardon, je suis nulle pour ce genre de choses."},
+        {"start": 64.0,  "end": 67.5,  "text": "Je dis toujours ce qu'il ne faut pas à la fin de la soirée."},
+        {"start": 69.5,  "end": 72.0,  "text": "Mais toi, c'est facile de te parler."},
+        {"start": 73.5,  "end": 74.5,  "text": "Ça aide."},
+        {"start": 77.0,  "end": 81.0,  "text": "Je n'arrêtais pas de penser, vers le milieu du film, que j'étais contente que tu l'aies proposé."},
+        {"start": 83.5,  "end": 85.5,  "text": "Le cinéma, je veux dire."},
+        {"start": 87.0,  "end": 90.0,  "text": "En fait j'ai presque dit non."},
+        {"start": 92.0,  "end": 94.5,  "text": "J'ai failli dire que j'avais déjà quelque chose de prévu."},
+        {"start": 97.0,  "end": 100.5, "text": "Évidemment, ce n'était pas le cas."},
+        {"start": 103.0, "end": 106.0, "text": "C'est juste que parfois je deviens nerveuse."},
+        {"start": 108.0, "end": 110.0, "text": "Enfin bref. Merci."}
+    ],
+
+    "ending_vo": [
+        {"start": 1.190,  "end": 2.010,  "text": "Donc c'était..."},
+        {"start": 4.040,  "end": 5.300,  "text": "...euh..."},
+        {"start": 5.520,  "end": 6.500,  "text": "...le vingt sept."},
+        {"start": 6.740,  "end": 8.040,  "text": "Non, c'était une semaine avant."},
+        {"start": 8.330,  "end": 8.800,  "text": "D'accord."},
+        {"start": 9.910,  "end": 12.220, "text": "Et qu'est ce que tu as fait, tu es juste parti."},
+        {"start": 12.220, "end": 13.820, "text": "Non non, moi, euh..."},
+        {"start": 14.770, "end": 19.000, "text": "C'était vraiment tout près de Slottsskogen. Alors j'y suis simplement allé, vers le marais."},
+        {"start": 19.480, "end": 19.980, "text": "D'accord."},
+        {"start": 21.490, "end": 22.110, "text": "Euh..."},
+        {"start": 23.540, "end": 25.170, "text": "Tu avais prévu ça à l'avance."},
+        {"start": 25.170, "end": 25.680, "text": "Oui, oui."},
+        {"start": 28.400, "end": 30.420, "text": "Ce n'est pas vraiment comme vous vous l'imaginez."},
+        {"start": 31.560, "end": 33.000, "text": "Ce n'est pas vraiment une compulsion."},
+        {"start": 33.910, "end": 34.760, "text": "C'est juste que c'est très..."},
+        {"start": 35.340, "end": 37.100, "text": "Ça paraît amusant et intéressant."},
+        {"start": 38.180, "end": 39.200, "text": "C'est excitant."},
+        {"start": 39.930, "end": 41.410, "text": "Alors tu continues simplement."}
+    ]
+}

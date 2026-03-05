@@ -10,26 +10,7 @@ var _cut_triggered: bool = false
 # Cut to black midway through the last subtitle (which starts at 50.8s, ends at 53.52s).
 const _CUT_TIME: float = 52.2
 
-var _subtitles: Array[Dictionary] = [
-	{"start": 1.760, "end": 8.210, "text": "I don't get that stubborn idea that we have\nto marry our – our job and our happiness."},
-	{"start": 9.130, "end": 12.310, "text": "I mean, you do something\nto make a living because…"},
-	{"start": 12.710, "end": 14.720, "text": "you're good at it, or like –"},
-	{"start": 15.170, "end": 17.810, "text": "good enough at it to earn money,"},
-	{"start": 18.420, "end": 20.270, "text": "because this is a consumer world,"},
-	{"start": 20.690, "end": 23.240, "text": "you need money to live, that's it."},
-	{"start": 23.940, "end": 26.810, "text": "And that thing doesn't have to be\nwhat gives you meaning."},
-	{"start": 27.710, "end": 29.730, "text": "When I was growing up\neveryone always said:"},
-	{"start": 30.250, "end": 32.190, "text": "\"you have to work with something you love,\""},
-	{"start": 32.900, "end": 33.490, "text": "and you're just like –"},
-	{"start": 34.020, "end": 35.670, "text": "how many accountants or –"},
-	{"start": 36.080, "end": 38.740, "text": "or lawyers actually love their jobs?"},
-	{"start": 39.450, "end": 41.490, "text": "Sure, you can love your job,"},
-	{"start": 41.810, "end": 42.920, "text": "I love my job,"},
-	{"start": 43.360, "end": 44.820, "text": "I find a lot of joy in it,"},
-	{"start": 45.720, "end": 47.670, "text": "but the thing that really gives me meaning"},
-	{"start": 47.980, "end": 50.220, "text": "is like making music or drawing,"},
-	{"start": 50.800, "end": 53.520, "text": "and it's not really the same thing –\nI don't know."},
-]
+var _subtitles: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -61,6 +42,7 @@ func _ready() -> void:
 	_subtitle_canvas.add_child(_subtitle_label)
 
 	_audio_player.play()
+	_subtitles = LocaleManager.s("cafe_dialogue")
 	get_tree().create_timer(_CUT_TIME).timeout.connect(_trigger_cut)
 
 

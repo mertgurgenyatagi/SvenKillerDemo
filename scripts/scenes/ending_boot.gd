@@ -1,26 +1,7 @@
 class_name EndingBoot
 extends Node
 
-const _VO_SUBTITLES: Array[Dictionary] = [
-	{start = 1.190,  end = 2.010,  text = "So that was..."},
-	{start = 4.040,  end = 5.300,  text = "...uh..."},
-	{start = 5.520,  end = 6.500,  text = "...the 27th?"},
-	{start = 6.740,  end = 8.040,  text = "No that was a week before."},
-	{start = 8.330,  end = 8.800,  text = "Okay."},
-	{start = 9.910,  end = 12.220, text = "And, what did you-\ndid you just leave--"},
-	{start = 12.220, end = 13.820, text = "No no, I, uh..."},
-	{start = 14.770, end = 19.000, text = "That was really close to the Slottsskogen.\nSo I just went there, to the marsh."},
-	{start = 19.480, end = 19.980, text = "Okay."},
-	{start = 21.490, end = 22.110, text = "Uh..."},
-	{start = 23.540, end = 25.170, text = "Did you plan that beforehand?"},
-	{start = 25.170, end = 25.680, text = "Yeah, yeah."},
-	{start = 28.400, end = 30.420, text = "It's not really how you guys think it is."},
-	{start = 31.560, end = 33.000, text = "It's not like a compulsion really."},
-	{start = 33.910, end = 34.760, text = "It's just really..."},
-	{start = 35.340, end = 37.100, text = "It feels fun and interesting."},
-	{start = 38.180, end = 39.200, text = "It's exciting."},
-	{start = 39.930, end = 41.410, text = "So you just keep doing it."},
-]
+var _vo_subtitles: Array[Dictionary] = []
 
 var _title_label: Label
 var _subtitle_label: Label
@@ -32,6 +13,7 @@ var _vo_subtitle_index: int = -1
 
 
 func _ready() -> void:
+	_vo_subtitles = LocaleManager.s("ending_vo")
 	_build_black_bg()
 	_build_ui()
 	GameManager.transition_finished.connect(_on_transition_finished, CONNECT_ONE_SHOT)
@@ -123,8 +105,8 @@ func _process(_delta: float) -> void:
 	# Subtitle sync.
 	if SettingsManager.get_setting("subtitles/enabled"):
 		var found: bool = false
-		for i in _VO_SUBTITLES.size():
-			var sub: Dictionary = _VO_SUBTITLES[i]
+		for i in _vo_subtitles.size():
+			var sub: Dictionary = _vo_subtitles[i]
 			if pos >= sub.start and pos <= sub.end:
 				if _vo_subtitle_index != i:
 					_subtitle_label.text = sub.text

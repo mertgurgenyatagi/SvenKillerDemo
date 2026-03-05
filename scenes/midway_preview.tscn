@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://midway_preview_test"]
+[gd_scene format=3 uid="uid://cdn80pxklj7xh"]
 
 [ext_resource type="PackedScene" uid="uid://2kne02jh5jce" path="res://scenes/penulti.tscn" id="1_penulti"]
 
-[node name="MidwayPreview" type="Node"]
+[node name="MidwayPreview" type="Node" unique_id=1453369414]
 
-[node name="Penulti" parent="." instance=ExtResource("1_penulti")]
+[node name="Penulti" parent="." unique_id=917564583 instance=ExtResource("1_penulti")]
 debug_skip_to_beach = true
 debug_player_position = Vector3(-30, 5, 10.85)

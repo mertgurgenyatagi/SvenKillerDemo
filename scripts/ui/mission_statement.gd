@@ -32,7 +32,7 @@ func _build_ui() -> void:
 	add_child(_canvas)
 
 	_label = Label.new()
-	_label.text = "○  Leave the house when you're ready."
+	_label.text = LocaleManager.g("mission_house")
 	_label.add_theme_font_override("font", _font)
 	_label.add_theme_font_size_override("font_size", 24)
 	# Warm off-white — reads clearly against dark interiors without drawing the eye

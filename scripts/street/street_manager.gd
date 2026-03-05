@@ -163,7 +163,7 @@ func _show_mission_after_delay() -> void:
 	add_child(canvas)
 
 	var label := Label.new()
-	label.text = "○  Go left to the bus station. Don't keep her waiting."
+	label.text = LocaleManager.g("mission_street")
 	label.add_theme_font_override("font", _mission_font)
 	label.add_theme_font_size_override("font_size", 24)
 	label.add_theme_color_override("font_color", Color(0.96, 0.94, 0.89, 1.0))
@@ -239,7 +239,7 @@ func _trigger_noe_prompt() -> void:
 
 	# Show text + subtitle immediately
 	_noe_label.text = "LUGNA NER DIG. DET ÄR BARA EN DEJT."
-	_subtitle_label.text = "\"CALM DOWN. IT'S JUST A DATE.\""
+	_subtitle_label.text = LocaleManager.g("noe_2_subtitle")
 	_noe_label.visible = true
 	_subtitle_label.visible = true
 

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://y56shyqj6rfg"]
 
 [ext_resource type="PackedScene" uid="uid://cthugyx0doxam" path="res://assets/models/characters/motusman/MotusMan_v55.fbx" id="1_motusman"]
-[ext_resource type="Script" uid="uid://m3s0n4j4jb8g" path="res://scenes/player/player_house.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://scenes/effects/motion_blur.tscn" id="3_mb"]
+[ext_resource type="Script" uid="uid://fao81ltusudx" path="res://scenes/player/player_house.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://c7p2xn4vr8bk1" path="res://scenes/effects/motion_blur.tscn" id="3_mb"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.3
@@ -34,9 +34,9 @@ margin = 0.2
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=2017370138]
 transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0)
+attributes = SubResource("CameraAttr_mb")
 h_offset = 0.35
 current = true
 fov = 60.0
-attributes = SubResource("CameraAttr_mb")
 
-[node name="MotionBlur" parent="." instance=ExtResource("3_mb")]
+[node name="MotionBlur" parent="." unique_id=1069037700 instance=ExtResource("3_mb")]

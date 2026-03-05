@@ -33,22 +33,15 @@ var video_playing: bool = false
 var video_ended: bool = false
 var current_subtitle_index: int = -1
 
-# Subtitle timing data (times relative to video start)
-# Voice starts 2.159s into the video
-const VO_OFFSET: float = 2.159
-var subtitles: Array[Dictionary] = [
-	{"start": VO_OFFSET + 0.0, "end": VO_OFFSET + 3.56, "text": "I like to focus on the sensation."},
-	{"start": VO_OFFSET + 5.346, "end": VO_OFFSET + 10.086, "text": "It's quite a tremendous thing, how you can just snuff it out."},
-	{"start": VO_OFFSET + 11.094, "end": VO_OFFSET + 14.525, "text": "It feels like, I don't know"},
-	{"start": VO_OFFSET + 14.915, "end": VO_OFFSET + 20.725, "text": "like being at a beautiful beach with the birds and the sea."},
-	{"start": VO_OFFSET + 21.685, "end": VO_OFFSET + 24.903, "text": "That's how it feels like, I focus on that."},
-]
+# Subtitle data: loaded from locale at _ready()
+var subtitles: Array[Dictionary] = []
 
 func _ready() -> void:
 	subtitle_label.visible = false
 	_setup_subtitle_label()
 	_setup_video_system()
 	_setup_noe_prompt()
+	subtitles = LocaleManager.s("opening_vo")
 
 	# Wait 0.7s after scene load (2.0s total from button click at 1.3s scene load)
 	await get_tree().create_timer(0.7).timeout
@@ -193,8 +186,8 @@ func _show_noe_prompt() -> void:
 	noe_prompt_label.text = "VI KOMMER ATT TRÄFFAS VID BUSSTATIONEN"
 	noe_prompt_label.visible = true
 
-	# Show subtitle with English translation
-	subtitle_label.text = "\"WE WILL MEET AT THE BUS STATION\""
+	# Show subtitle with game-language translation
+	subtitle_label.text = LocaleManager.g("noe_1_subtitle")
 	subtitle_label.visible = true
 
 	# After 3 seconds, snap out the prompt and reveal preloaded house scene

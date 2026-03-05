@@ -42,8 +42,6 @@ const SUBTITLE_SIZE_LABELS: Array[String] = ["Small", "Medium", "Large"]
 const SUBTITLE_SIZE_VALUES: Array[int] = [18, 24, 32]
 
 const AA_LABELS: Array[String] = ["Off", "FXAA", "MSAA 2x", "MSAA 4x", "MSAA 8x"]
-const ANISO_LABELS: Array[String] = ["1x (Off)", "2x", "4x", "8x", "16x"]
-const ANISO_VALUES: Array[int] = [1, 2, 4, 8, 16]
 
 const DISPLAY_MODE_LABELS: Array[String] = ["Fullscreen", "Windowed", "Borderless Windowed"]
 const DISPLAY_MODE_VALUES: Array[int] = [
@@ -62,15 +60,16 @@ const DEFAULTS: Dictionary = {
 	"video/brightness": 1.0,
 	# Graphics
 	"graphics/anti_aliasing": 2,  # MSAA 2x
-	"graphics/anisotropic_filtering": 4,
 	# Audio (linear 0.0 - 1.0)
 	"audio/master_volume": 1.0,
 	"audio/music_volume": 0.8,
 	"audio/sfx_volume": 1.0,
 	"audio/voice_volume": 1.0,
+	# Language
+	"general/language": "en",
 	# Subtitles
 	"subtitles/enabled": true,
-	"subtitles/language": "sv",
+	"subtitles/language": "en",
 	"subtitles/text_size": 1,
 }
 
@@ -205,8 +204,6 @@ func _apply_setting(key: String, value: Variant) -> void:
 			_apply_brightness(value as float)
 		"graphics/anti_aliasing":
 			_apply_anti_aliasing(value as int)
-		"graphics/anisotropic_filtering":
-			_apply_anisotropic_filtering(value as int)
 		"audio/master_volume":
 			_set_bus_volume(BUS_MASTER, value as float)
 		"audio/music_volume":
@@ -215,8 +212,8 @@ func _apply_setting(key: String, value: Variant) -> void:
 			_set_bus_volume(BUS_SFX, value as float)
 		"audio/voice_volume":
 			_set_bus_volume(BUS_VOICE, value as float)
-		"subtitles/enabled", "subtitles/language", "subtitles/text_size":
-			pass  # Consumed via get_setting() by subtitle system later
+		"general/language", "subtitles/enabled", "subtitles/language", "subtitles/text_size":
+			pass  # Consumed via get_setting() by LocaleManager/subtitle system later
 
 
 func _apply_display_mode(mode: int) -> void:
@@ -264,12 +261,6 @@ func _apply_anti_aliasing(mode: int) -> void:
 		4:  # MSAA 8x
 			viewport.msaa_3d = Viewport.MSAA_8X
 			viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_DISABLED
-
-
-func _apply_anisotropic_filtering(level: int) -> void:
-	ProjectSettings.set_setting(
-		"rendering/textures/default_filters/anisotropic_filtering_level", level
-	)
 
 
 func _set_bus_volume(bus_name: String, linear: float) -> void:

@@ -15,23 +15,7 @@ var subtitle_canvas: CanvasLayer
 var subtitle_label: Label
 var current_subtitle_index: int = -1
 
-var subtitles: Array[Dictionary] = [
-	{"start": 0.0, "end": 1.0, "text": "Hey, Sven."},
-	{"start": 2.01, "end": 6.55, "text": "I called but you didn't pick up.\nI guess you're sleeping again."},
-	{"start": 7.77, "end": 11.58, "text": "Uh… your father sent you\nsome money."},
-	{"start": 12.88, "end": 14.89, "text": "It's the twentieth today, right?"},
-	{"start": 16.67, "end": 22.72, "text": "So… yeah. If you ever need\nextra money, just call."},
-	{"start": 23.86, "end": 29.67, "text": "You can call the house too.\nJohan will probably answer."},
-	{"start": 29.67, "end": 31.15, "text": "I sent Erika home\nfor a few days."},
-	{"start": 31.2, "end": 37.72, "text": "So yeah. You can tell your father,\nor just call his cell."},
-	{"start": 39.59, "end": 45.09, "text": "Anyway, he also said —\nI know you don't want to hear this —"},
-	{"start": 46.24, "end": 51.15, "text": "But he wants to talk about you\nmaybe joining the company someday."},
-	{"start": 52.33, "end": 56.25, "text": "We both really think\nyou'd fit in there."},
-	{"start": 57.32, "end": 62.35, "text": "Karl is retiring soon,\nso maybe… you know…"},
-	{"start": 63.73, "end": 65.21, "text": "But, yeah… I guess."},
-	{"start": 66.28, "end": 68.16, "text": "Call if you need anything."},
-	{"start": 69.41, "end": 69.9, "text": "Bye!"},
-]
+var subtitles: Array[Dictionary] = []
 
 func _ready() -> void:
 	if get_parent():
@@ -44,6 +28,7 @@ func _ready() -> void:
 
 	_setup_audio()
 	_setup_subtitles()
+	subtitles = LocaleManager.s("voicemail")
 
 func _setup_audio() -> void:
 	# Create voicemail player (needs local instance for .finished signal and .get_playback_position())

@@ -1,0 +1,114 @@
+{
+    "opening_vo": [
+        {"start": 2.159, "end": 5.719,  "text": "Jag gillar att fokusera på själva känslan."},
+        {"start": 7.505, "end": 12.245, "text": "Det är ganska otroligt hur man bara kan släcka ut den."},
+        {"start": 13.253, "end": 16.684, "text": "Det känns som, jag vet inte."},
+        {"start": 17.074, "end": 22.884, "text": "Som att vara på en vacker strand med fåglarna och havet."},
+        {"start": 23.844, "end": 27.062, "text": "Det är så det känns, det är det jag fokuserar på."}
+    ],
+
+    "voicemail": [
+        {"start": 0.0,   "end": 1.0,   "text": "Hej, Sven."},
+        {"start": 2.01,  "end": 6.55,  "text": "Jag ringde men du svarade inte. Jag gissar att du sover igen."},
+        {"start": 7.77,  "end": 11.58, "text": "Eh... din pappa har skickat dig lite pengar."},
+        {"start": 12.88, "end": 14.89, "text": "Det är den tjugonde idag, eller hur."},
+        {"start": 16.67, "end": 22.72, "text": "Så... ja. Om du någon gång behöver extra pengar är det bara att ringa."},
+        {"start": 23.86, "end": 29.67, "text": "Du kan ringa hem också. Johan svarar nog."},
+        {"start": 29.67, "end": 31.15, "text": "Jag skickade hem Erika i några dagar."},
+        {"start": 31.2,  "end": 37.72, "text": "Så ja. Du kan säga till din pappa, eller bara ringa hans mobil."},
+        {"start": 39.59, "end": 45.09, "text": "Hur som helst, han sa också – jag vet att du inte vill höra det här –"},
+        {"start": 46.24, "end": 51.15, "text": "Men han vill prata om att du kanske börjar på företaget någon gång."},
+        {"start": 52.33, "end": 56.25, "text": "Vi båda tycker verkligen att du skulle passa där."},
+        {"start": 57.32, "end": 62.35, "text": "Karl går i pension snart, så kanske... du vet..."},
+        {"start": 63.73, "end": 65.21, "text": "Men, ja... antar jag."},
+        {"start": 66.28, "end": 68.16, "text": "Ring om du behöver något."},
+        {"start": 69.41, "end": 69.9,  "text": "Hejdå."}
+    ],
+
+    "newspaper": [
+        {"start": 0.0,  "end": 4.5,  "text": "TVÅ DÖDA I KNIVATTACKER PÅ LINNÉGATAN"},
+        {"start": 5.5,  "end": 12.0, "text": "Två personer har dödats i separata knivattacker på Linnégatan under de senaste två veckorna."},
+        {"start": 13.0, "end": 21.0, "text": "Först hittades en hemlös man i 50-årsåldern svårt skadad utomhus sent på kvällen och avled senare av sina skador på sjukhuset."},
+        {"start": 22.0, "end": 29.5, "text": "Tidigare i veckan hittades en ung flicka som enligt uppgift bett om pengar i området död nära en portuppgång."},
+        {"start": 30.5, "end": 37.5, "text": "Polisen utreder fallen och undersöker om det finns något samband mellan händelserna."},
+        {"start": 38.0, "end": 42.5, "text": "Men ännu har ingen misstänkt gripits."}
+    ],
+
+    "cafe_dialogue": [
+        {"start": 1.760,  "end": 8.210,  "text": "Jag förstår inte den där envisa idén att vi måste gifta ihop vårt jobb och vår lycka."},
+        {"start": 9.130,  "end": 12.310, "text": "Jag menar, man gör något för att försörja sig för att..."},
+        {"start": 12.710, "end": 14.720, "text": "man är bra på det, eller liksom..."},
+        {"start": 15.170, "end": 17.810, "text": "tillräckligt bra på det för att tjäna pengar."},
+        {"start": 18.420, "end": 20.270, "text": "för att det här är en konsumtionsvärld."},
+        {"start": 20.690, "end": 23.240, "text": "du behöver pengar för att leva, det är allt."},
+        {"start": 23.940, "end": 26.810, "text": "Och den grejen behöver inte vara det som ger dig mening."},
+        {"start": 27.710, "end": 29.730, "text": "När jag växte upp sa alla alltid:"},
+        {"start": 30.250, "end": 32.190, "text": "du måste jobba med något du älskar."},
+        {"start": 32.900, "end": 33.490, "text": "och man är bara så här..."},
+        {"start": 34.020, "end": 35.670, "text": "hur många revisorer eller..."},
+        {"start": 36.080, "end": 38.740, "text": "eller jurister älskar faktiskt sina jobb."},
+        {"start": 39.450, "end": 41.490, "text": "Visst, du kan älska ditt jobb."},
+        {"start": 41.810, "end": 42.920, "text": "jag älskar mitt jobb."},
+        {"start": 43.360, "end": 44.820, "text": "jag hittar mycket glädje i det."},
+        {"start": 45.720, "end": 47.670, "text": "men det som verkligen ger mig mening"},
+        {"start": 47.980, "end": 50.220, "text": "är typ att göra musik eller rita."},
+        {"start": 50.800, "end": 53.520, "text": "och det är inte riktigt samma sak, jag vet inte."}
+    ],
+
+    "penulti_part1": [
+        {"start": 1.360,  "end": 5.150,  "text": "hur man liksom kan glida in i en roll utan att riktigt märka det."},
+        {"start": 6.280,  "end": 11.570, "text": "Du vaknar, gör det du ska, säger rätt saker, ler vid rätt tillfällen."},
+        {"start": 12.650, "end": 16.320, "text": "Det är inte direkt falskt. Bara... inövat."},
+        {"start": 17.180, "end": 18.610, "text": "Väldigt inövat."},
+        {"start": 19.660, "end": 22.890, "text": "Och plötsligt är du bra på det. Nästan för bra."},
+        {"start": 24.000, "end": 27.290, "text": "Och jag menar inte att det är tragiskt. Det är inte tragiskt."},
+        {"start": 27.780, "end": 29.470, "text": "Det är bara... friktionsfritt."},
+        {"start": 30.230, "end": 30.970, "text": "Tränat."},
+        {"start": 31.870, "end": 33.930, "text": "Du blir effektiv på att vara dig själv."},
+        {"start": 34.710, "end": 36.730, "text": "Eller, ja, en version av dig själv."},
+        {"start": 38.310, "end": 40.170, "text": "Jag brukade tänka att allt måste hålla ihop."},
+        {"start": 40.950, "end": 44.870, "text": "Att det du känner inuti och det du gör på utsidan ska stämma helt överens."},
+        {"start": 45.430, "end": 46.400, "text": "annars är något fel."},
+        {"start": 47.570, "end": 48.500, "text": "Men nu vet jag inte."},
+        {"start": 49.510, "end": 51.730, "text": "Kanske är det okej om det finns ett mellanrum däremellan."},
+        {"start": 52.500, "end": 53.070, "text": "Ett litet."},
+        {"start": 53.800, "end": 54.690, "text": "Eller ett större."}
+    ],
+
+    "penulti_alley": [
+        {"start": 50.0,  "end": 53.5,  "text": "Det där var... jag vet inte. Jag hade verkligen jättekul."},
+        {"start": 55.0,  "end": 57.0,  "text": "Alltså, verkligen jättekul."},
+        {"start": 59.5,  "end": 62.0,  "text": "Förlåt, jag är dålig på sånt här."},
+        {"start": 64.0,  "end": 67.5,  "text": "Jag säger alltid fel saker i slutet av kvällen."},
+        {"start": 69.5,  "end": 72.0,  "text": "Fast du är lätt att prata med."},
+        {"start": 73.5,  "end": 74.5,  "text": "Det hjälper."},
+        {"start": 77.0,  "end": 81.0,  "text": "Jag tänkte hela tiden, typ halvvägs in i filmen, att jag var glad att du föreslog den."},
+        {"start": 83.5,  "end": 85.5,  "text": "Bion alltså."},
+        {"start": 87.0,  "end": 90.0,  "text": "Jag var faktiskt nära att säga nej."},
+        {"start": 92.0,  "end": 94.5,  "text": "Jag var nära att säga att jag hade planer."},
+        {"start": 97.0,  "end": 100.5, "text": "Det hade jag ju inte, uppenbarligen."},
+        {"start": 103.0, "end": 106.0, "text": "Jag blir bara nervös ibland."},
+        {"start": 108.0, "end": 110.0, "text": "Hur som helst. Tack."}
+    ],
+
+    "ending_vo": [
+        {"start": 1.190,  "end": 2.010,  "text": "Så det var..."},
+        {"start": 4.040,  "end": 5.300,  "text": "...eh..."},
+        {"start": 5.520,  "end": 6.500,  "text": "...den tjugosjunde?"},
+        {"start": 6.740,  "end": 8.040,  "text": "Nej, det var en vecka innan."},
+        {"start": 8.330,  "end": 8.800,  "text": "Okej."},
+        {"start": 9.910,  "end": 12.220, "text": "Och, vad gjorde du, gick du bara därifrån?"},
+        {"start": 12.220, "end": 13.820, "text": "Nej nej, jag, eh..."},
+        {"start": 14.770, "end": 19.000, "text": "Det var ju väldigt nära Slottsskogen. Så jag gick bara dit, till mossen."},
+        {"start": 19.480, "end": 19.980, "text": "Okej."},
+        {"start": 21.490, "end": 22.110, "text": "Eh..."},
+        {"start": 23.540, "end": 25.170, "text": "Hade du planerat det i förväg?"},
+        {"start": 25.170, "end": 25.680, "text": "Ja, ja."},
+        {"start": 28.400, "end": 30.420, "text": "Det är inte riktigt som ni tror att det är."},
+        {"start": 31.560, "end": 33.000, "text": "Det är inte riktigt som ett tvång."},
+        {"start": 33.910, "end": 34.760, "text": "Det är bara väldigt..."},
+        {"start": 35.340, "end": 37.100, "text": "Det känns roligt och intressant."},
+        {"start": 38.180, "end": 39.200, "text": "Det är spännande."},
+        {"start": 39.930, "end": 41.410, "text": "Så man bara fortsätter."}
+    ]
+}

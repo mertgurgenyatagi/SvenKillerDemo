@@ -31,41 +31,16 @@ var reading_active: bool = false
 var reading_timer: float = 0.0
 var has_been_read: bool = false
 
-# Newspaper text — each block is displayed for its window then cleared.
+# Newspaper text — loaded from subtitle locale at _ready().
 # Times are in seconds relative to reading_timer.
-# Headline shown briefly, then body paragraphs at a comfortable reading pace.
-var subtitles: Array[Dictionary] = [
-	{
-		"start": 0.0, "end": 4.5,
-		"text": "\"TWO KILLED IN STABBING ATTACKS ON LINNÉGATAN\""
-	},
-	{
-		"start": 5.5, "end": 12.0,
-		"text": "\"Two people have been killed in separate stabbing attacks\non Linnégatan during the past two weeks.\""
-	},
-	{
-		"start": 13.0, "end": 21.0,
-		"text": "\"First, a homeless man in his 50s was found seriously injured\noutdoors late in the evening and later died\nfrom his injuries at the hospital.\""
-	},
-	{
-		"start": 22.0, "end": 29.5,
-		"text": "\"Earlier this week, a young girl who was reportedly\nbegging in the area was found dead\nnear a building entrance.\""
-	},
-	{
-		"start": 30.5, "end": 37.5,
-		"text": "\"Police are investigating the cases and examining\nwhether there is any connection between the incidents,\""
-	},
-	{
-		"start": 38.0, "end": 42.5,
-		"text": "\"but no suspect has been arrested yet.\""
-	},
-]
+var subtitles: Array[Dictionary] = []
 
 const READING_TOTAL_TIME: float = 43.5  # Slightly past last subtitle end
 
 
 func _ready() -> void:
 	_setup_subtitles()
+	subtitles = LocaleManager.s("newspaper")
 
 
 func _setup_subtitles() -> void:

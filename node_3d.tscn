@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://f3bk8yeiah1w"]
+
+[ext_resource type="PackedScene" uid="uid://dryry7gut1lvm" path="res://assets/models/environments/breakwater_coast.glb" id="1_noarx"]
+[ext_resource type="PackedScene" uid="uid://y56shyqj6rfg" path="res://scenes/player/player_house_version.tscn" id="2_a0tk4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r3fl7"]
+size = Vector3(400, 0.1, 400)
+
+[node name="Node3D" type="Node3D" unique_id=632178618]
+
+[node name="BeachMegaNode" type="Node3D" parent="." unique_id=1545611846]
+
+[node name="Sketchfab_Scene" parent="BeachMegaNode" unique_id=263682327 instance=ExtResource("1_noarx")]
+transform = Transform3D(-1.7484555e-07, -0.17447755, -3.996193, 0, 3.996193, -0.17447755, 4, -7.626656e-09, -1.7467914e-07, 13.666, -5.807, -3.826)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=665038822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.155, 0)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=100040147]
+transform = Transform3D(0.33540905, 0, 0, 0, 1, 0, 0, 0, 0.30661035, -41.719597, -0.049999997, 0)
+shape = SubResource("BoxShape3D_r3fl7")
+
+[node name="Player" parent="." unique_id=1007643025 instance=ExtResource("2_a0tk4")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.604964, 0.5715307, -3.7752206)

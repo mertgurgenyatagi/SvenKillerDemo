@@ -46,6 +46,49 @@ const _FADE_END:        float = 60.0
 const _FOG_MAX_DENSITY: float = 12.5
 const _BEACH_DURATION:  float = 15.0
 
+## Outro: all env changes run concurrently over 40 s (cubic easing).
+## fog density → 0.2, aerial → 0.0, glow → 8.0, fog light energy → 0.0.
+## At 40 s: hide BeachMegaNode + CityMegaNode.
+const _OUTRO_DURATION: float = 40.0
+
+## Subtitles for penulti_part_1.ogg. Times are seconds from audio start (= scene visible snap-in).
+const _PART1_SUBTITLES: Array[Dictionary] = [
+	{start = 1.360,  end = 5.150,  text = "how you can kind of slide into a role\nwithout really noticing it."},
+	{start = 6.280,  end = 11.570, text = "You wake up, do what you're supposed to,\nsay the right things, smile at the right moments."},
+	{start = 12.650, end = 16.320, text = "It's not fake exactly.\nJust\u2026 rehearsed."},
+	{start = 17.180, end = 18.610, text = "Very rehearsed."},
+	{start = 19.660, end = 22.890, text = "And suddenly you're good at it.\nAlmost too good."},
+	{start = 24.000, end = 27.290, text = "And I don't mean it's tragic.\nIt's not tragic."},
+	{start = 27.780, end = 29.470, text = "It's just\u2026 smooth."},
+	{start = 30.230, end = 30.970, text = "Practiced."},
+	{start = 31.870, end = 33.930, text = "You become efficient at being yourself."},
+	{start = 34.710, end = 36.730, text = "Or, well, a version of yourself."},
+	{start = 38.310, end = 40.170, text = "I used to think everything\nhad to hold together."},
+	{start = 40.950, end = 44.870, text = "That what you feel inside and what you do\non the outside should match perfectly,"},
+	{start = 45.430, end = 46.400, text = "otherwise something is wrong."},
+	{start = 47.570, end = 48.500, text = "But now I don't know."},
+	{start = 49.510, end = 51.730, text = "Maybe it's okay if there's\na space in between."},
+	{start = 52.500, end = 53.070, text = "A small one."},
+	{start = 53.800, end = 54.690, text = "Or a bigger one."},
+]
+
+## Subtitles for the alley auto-walk segment. Times are autowalk-elapsed seconds (t=0 = auto_walk start).
+const _ALLEY_SUBTITLES: Array[Dictionary] = [
+	{start = 50.0,  end = 53.5,  text = "That was\u2026 I don't know. I had a really good time."},
+	{start = 55.0,  end = 57.0,  text = "Like, a really good time."},
+	{start = 59.5,  end = 62.0,  text = "Sorry, I'm bad at this."},
+	{start = 64.0,  end = 67.5,  text = "I always say the wrong thing at the end of the night."},
+	{start = 69.5,  end = 72.0,  text = "You're easy to talk to, though."},
+	{start = 73.5,  end = 74.5,  text = "That helps."},
+	{start = 77.0,  end = 81.0,  text = "I kept thinking \u2014 halfway through the film \u2014\nthat I was glad you suggested it."},
+	{start = 83.5,  end = 85.5,  text = "The cinema, I mean."},
+	{start = 87.0,  end = 90.0,  text = "I almost said no, actually."},
+	{start = 92.0,  end = 94.5,  text = "I almost said I had plans."},
+	{start = 97.0,  end = 100.5, text = "I didn't, obviously."},
+	{start = 103.0, end = 106.0, text = "I just get nervous sometimes."},
+	{start = 108.0, end = 110.0, text = "Anyway. Thank you."},
+]
+
 ## Beach WorldEnvironment targets — ProceduralSkyMaterial (source: beach_test.tscn)
 const _BEACH_SKY_TOP:          Color = Color(0.0, 0.596, 0.747)
 const _BEACH_SKY_HORIZON:      Color = Color(0.95, 0.38, 0.05)
@@ -79,6 +122,11 @@ const _LR_PITCH_DELTA: float = -0.1745  # ~10°
 
 ## Set true in beach_preview.tscn to skip the city phase entirely on F6.
 @export var debug_skip_to_beach: bool = false
+## When non-zero, overrides the player's spawn position in debug_skip_to_beach mode.
+@export var debug_player_position: Vector3 = Vector3.ZERO
+## Scene to hard-cut to when the alley sequence ends (E key or 205 s timeout).
+## Leave empty to simply fade to black.
+@export var alley_end_scene: String = ""
 
 @onready var _characters: Array[Node3D] = [$CityMegaNode/npc_elise]
 @onready var _player = $Player  # player_penulti.gd — accessed via duck-typing
@@ -103,6 +151,28 @@ var _death_active: bool = false
 var _player_start_transform: Transform3D
 var _canvas: CanvasLayer = null
 var _black_screen: ColorRect = null
+var _outro_active: bool = false
+var _outro_cancelled: bool = false
+var _debug_print_timer: float = 0.0
+var _elise_companion: Node3D = null
+
+## Visual distress effects (ramp over auto-walk duration).
+const _DISTRESS_DURATION: float = 67.0
+var _autowalk_elapsed: float = 0.0
+var _distress_canvas: CanvasLayer = null
+var _red_tint: ColorRect = null
+var _grain_rect: ColorRect = null
+var _jitter_yaw: float = 0.0
+var _fidget_timer: float = 0.0
+var _motion_blur: MotionBlurController = null
+var _elise_indicator: Sprite3D = null
+var _elise_indicator_jitter_timer: float = 0.0
+var _hard_cut_triggered: bool = false
+var _elise_faded_in: bool = false
+var _subtitle_label: Label = null
+var _part1_subtitle_index: int = -1
+var _alley_subtitle_index: int = -1
+
 
 
 func _ready() -> void:
@@ -155,6 +225,9 @@ func _ready() -> void:
 
 	_player_start_transform = _player.global_transform
 	_build_overlay_ui()
+	_setup_distress_overlay()
+	_setup_alley_lighting()
+	_setup_elise_companion()
 
 	if debug_skip_to_beach:
 		_skip_to_beach_immediately()
@@ -263,6 +336,9 @@ func _on_transition_finished() -> void:
 # ── Debug skip ────────────────────────────────────────────────────────────────
 
 func _skip_to_beach_immediately() -> void:
+	if debug_player_position != Vector3.ZERO:
+		_player.global_position = debug_player_position
+		_player_start_transform = _player.global_transform
 	$CityMegaNode.visible  = false
 	$BeachMegaNode.visible = true
 	_hide_bench_meshes()
@@ -280,13 +356,77 @@ func _skip_to_beach_immediately() -> void:
 
 # ── Per-frame transition (GR-relative) ────────────────────────────────────────
 
-func _process(_delta: float) -> void:
-	# Death boundary — active once the player has movement control.
+func _process(delta: float) -> void:
+	_debug_print_timer += delta
+	if _debug_print_timer >= 1.0:
+		_debug_print_timer = 0.0
+		print("player x: ", snappedf(_player.global_position.x, 0.01))
+
+	# Death boundary + auto-walk trigger — active once the player has movement control.
 	if _game_ready and not _death_active and not _player.camera_cutscene_active:
 		var pos: Vector3 = _player.global_position
 		if pos.z > 38.0 or pos.z < -40.0 or pos.y < -2.0:
 			_trigger_death()
 			return
+		if not _outro_active and not _player.auto_walk and pos.x <= -45.0:
+			_player.auto_walk = true
+			_run_outro()
+			_crossfade_to_distress()
+
+		# Accumulate auto-walk time and drive distress effects.
+		if _player.auto_walk:
+			_autowalk_elapsed += delta
+			_update_distress_effects(delta)
+
+		# Elise fade-in at t=67.
+		if _player.auto_walk and not _elise_faded_in and _autowalk_elapsed >= 67.0:
+			_elise_faded_in = true
+			_fade_in_elise_companion()
+
+		# E key triggers the hard cut at t ≥ 70 s.
+		if _player.auto_walk and not _hard_cut_triggered and _autowalk_elapsed >= 70.0:
+			if Input.is_action_just_pressed("interact"):
+				_trigger_alley_hard_cut()
+
+	# Subtitle sync for penulti_part_1.ogg.
+	if is_instance_valid(_subtitle_label) and _game_ready and not _death_active:
+		if SettingsManager.get_setting("subtitles/enabled") \
+				and is_instance_valid(_part1_player) and _part1_player.playing:
+			var pos: float = _part1_player.get_playback_position()
+			var found: bool = false
+			for i in _PART1_SUBTITLES.size():
+				var sub: Dictionary = _PART1_SUBTITLES[i]
+				if pos >= sub.start and pos <= sub.end:
+					if _part1_subtitle_index != i:
+						_subtitle_label.text = sub.text
+						_subtitle_label.visible = true
+						_part1_subtitle_index = i
+					found = true
+					break
+			if not found and _subtitle_label.visible:
+				_subtitle_label.visible = false
+				_part1_subtitle_index = -1
+		elif _subtitle_label.visible:
+			_subtitle_label.visible = false
+			_part1_subtitle_index = -1
+
+	# Subtitle sync for alley auto-walk (autowalk-elapsed, t=50→110).
+	if is_instance_valid(_subtitle_label) and _game_ready and not _death_active \
+			and SettingsManager.get_setting("subtitles/enabled") \
+			and _player.auto_walk and not _part1_player:
+		var found_alley: bool = false
+		for i in _ALLEY_SUBTITLES.size():
+			var sub: Dictionary = _ALLEY_SUBTITLES[i]
+			if _autowalk_elapsed >= sub.start and _autowalk_elapsed <= sub.end:
+				if _alley_subtitle_index != i:
+					_subtitle_label.text = sub.text
+					_subtitle_label.visible = true
+					_alley_subtitle_index = i
+				found_alley = true
+				break
+		if not found_alley and _subtitle_label.visible:
+			_subtitle_label.visible = false
+			_alley_subtitle_index = -1
 
 	if not _game_ready or _beach_done:
 		return
@@ -452,25 +592,101 @@ func _build_overlay_ui() -> void:
 	_canvas.add_child(_black_screen)
 
 
+
+func _trigger_alley_hard_cut() -> void:
+	if _hard_cut_triggered:
+		return
+	_hard_cut_triggered = true
+	if not alley_end_scene.is_empty():
+		GameManager.hard_cut_to_scene(alley_end_scene)
+	else:
+		# No destination configured — just go to black permanently.
+		AudioManager.stop_all()
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true)
+		_black_screen.visible = true
+
+
 func _trigger_death() -> void:
 	_death_active = true
+	# Cancel any running outro coroutine before going to black.
+	_outro_cancelled = true
+	_outro_active = false
 	_black_screen.visible = true
 	var master_idx: int = AudioServer.get_bus_index("Master")
 	AudioServer.set_bus_mute(master_idx, true)
 
 	await get_tree().create_timer(1.6).timeout
 
+	if is_instance_valid(_elise_companion):
+		_elise_companion.visible = false
+	_elise_faded_in = false
+	# Reset distress effects before restoring player.
+	if is_instance_valid(_player):
+		_player.target_camera_yaw -= _jitter_yaw
+	_jitter_yaw = 0.0
+	_fidget_timer = 0.0
+	_autowalk_elapsed = 0.0
+	if is_instance_valid(_red_tint):
+		_red_tint.color = Color(0.6, 0.0, 0.0, 0.0)
+	if is_instance_valid(_grain_rect) and _grain_rect.material is ShaderMaterial:
+		(_grain_rect.material as ShaderMaterial).set_shader_parameter("strength", 0.0)
+	if is_instance_valid(_motion_blur):
+		_motion_blur.intensity = 0.0
+	if is_instance_valid(_elise_indicator):
+		_elise_indicator.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		_elise_indicator.position = Vector3(0.0, 1.8, 0.0)
+	_elise_indicator_jitter_timer = 0.0
+	_hard_cut_triggered = false
+	_part1_subtitle_index = -1
+	_alley_subtitle_index = -1
+	if is_instance_valid(_subtitle_label):
+		_subtitle_label.visible = false
 	if is_instance_valid(_player):
 		_player.global_transform = _player_start_transform
 		_player.velocity = Vector3.ZERO
+		_player.auto_walk = false
 
 	if not _beach_done:
 		_skip_to_beach_immediately()
+	else:
+		# Outro may have partially modified the env or hidden BeachMegaNode — restore.
+		$BeachMegaNode.visible = true
+		_apply_beach_env(1.0)
 	_restart_loop_audio()
 
 	AudioServer.set_bus_mute(master_idx, false)
 	_black_screen.visible = false
 	_death_active = false
+
+
+func _crossfade_to_distress() -> void:
+	## Crossfades penulti_loop → amb_distress over 3 s when auto-walk begins.
+	var distress_stream := load("res://assets/audio/sfx/ambient/amb_distress.ogg") as AudioStreamOggVorbis
+	if not distress_stream:
+		push_warning("penulti_boot: amb_distress.ogg not found")
+		return
+	distress_stream.loop = true
+
+	var distress_player := AudioStreamPlayer.new()
+	distress_player.stream = distress_stream
+	distress_player.bus = "Ambient"
+	distress_player.volume_db = -40.0
+	add_child(distress_player)
+	distress_player.play()
+
+	# Update _loop_player before the tween so _restart_loop_audio()
+	# (called on death) targets the new player immediately.
+	var old_loop: AudioStreamPlayer = _loop_player
+	_loop_player = distress_player
+
+	var tween := create_tween().set_parallel(true)
+	if is_instance_valid(old_loop):
+		tween.tween_property(old_loop, "volume_db", -40.0, 3.0)
+	tween.tween_property(distress_player, "volume_db", 0.0, 3.0)
+
+	await tween.finished
+	if is_instance_valid(old_loop):
+		old_loop.queue_free()
 
 
 func _restart_loop_audio() -> void:
@@ -493,6 +709,73 @@ func _restart_loop_audio() -> void:
 	_loop_player.play()
 
 
+# ── Outro: fog engulfs the beach ──────────────────────────────────────────────
+
+func _run_outro() -> void:
+	## All env changes run concurrently over _OUTRO_DURATION seconds (cubic easing).
+	_outro_active = true
+	_outro_cancelled = false
+
+	# Capture starting values at trigger time.
+	var start_fog_density:      float = _city_env.fog_density
+	var start_fog_aerial:       float = _city_env.fog_aerial_perspective
+	var start_fog_light_energy: float = _city_env.fog_light_energy
+	var start_amb_energy:       float = _city_env.ambient_light_energy
+	var start_bg_energy:        float = _city_env.background_energy_multiplier
+	var start_glow:             float = _city_env.glow_intensity
+	var start_bloom:            float = _city_env.glow_bloom
+	var start_exposure:         float = _city_env.tonemap_exposure
+	var start_sky_energy:       float = _sky_mat.sky_energy_multiplier   if _sky_mat else 0.0
+	var start_gnd_energy:       float = _sky_mat.ground_energy_multiplier if _sky_mat else 0.0
+	var start_sun_energy:       float = _beach_sun.light_energy
+
+	var t0: float = Time.get_ticks_msec() / 1000.0
+
+	while true:
+		if _outro_cancelled:
+			return
+		var elapsed: float = Time.get_ticks_msec() / 1000.0 - t0
+		if elapsed >= _OUTRO_DURATION:
+			$BeachMegaNode.visible              = false
+			$CityMegaNode.visible               = false
+			$AlleyMegaNode.visible              = true
+			_city_env.ambient_light_source      = Environment.AMBIENT_SOURCE_COLOR
+			_city_env.ambient_light_color       = Color(0.0, 0.0, 0.0)
+			_city_env.ambient_light_energy      = 0.0
+			break
+		var lt: float = elapsed / _OUTRO_DURATION          # linear 0→1
+		var t2: float = lt * lt                            # ease-in quadratic
+		_city_env.fog_density                    = lerpf(start_fog_density,      0.2, t2)
+		_city_env.fog_aerial_perspective         = lerpf(start_fog_aerial,       0.0, t2)
+		_city_env.fog_light_energy               = lerpf(start_fog_light_energy, 0.0, t2)
+		_city_env.ambient_light_energy           = lerpf(start_amb_energy,       0.0, t2)
+		_city_env.background_energy_multiplier   = lerpf(start_bg_energy,        0.0, t2)
+		_city_env.glow_intensity                 = lerpf(start_glow,             0.0, t2)
+		_city_env.glow_bloom                     = lerpf(start_bloom,            0.0, t2)
+		_city_env.tonemap_exposure               = lerpf(start_exposure,         0.0, t2)
+		_beach_sun.light_energy                  = lerpf(start_sun_energy,       0.0, t2)
+		if _sky_mat:
+			_sky_mat.sky_energy_multiplier    = lerpf(start_sky_energy, 0.0, t2)
+			_sky_mat.ground_energy_multiplier = lerpf(start_gnd_energy, 0.0, t2)
+		await get_tree().process_frame
+
+	# Ramp tonemap_exposure 0 → 1 over 5 s, ease-in quadratic.
+	var ramp_t0: float = Time.get_ticks_msec() / 1000.0
+	while true:
+		if _outro_cancelled:
+			_outro_active = false
+			return
+		var ramp_elapsed: float = Time.get_ticks_msec() / 1000.0 - ramp_t0
+		if ramp_elapsed >= 5.0:
+			_city_env.tonemap_exposure = 1.0
+			break
+		var rt: float = ramp_elapsed / 5.0
+		_city_env.tonemap_exposure = rt * rt
+		await get_tree().process_frame
+
+	_outro_active = false
+
+
 # ── Bench cleanup ─────────────────────────────────────────────────────────────
 
 func _hide_bench_meshes() -> void:
@@ -513,6 +796,210 @@ func _hide_mesh_recursive(node: Node, keep_a: Node, keep_b: Node) -> void:
 		(node as MeshInstance3D).visible = false
 	for child in node.get_children():
 		_hide_mesh_recursive(child, keep_a, keep_b)
+
+
+# ── Distress overlay ─────────────────────────────────────────────────────────
+
+func _setup_distress_overlay() -> void:
+	## CanvasLayer 189 — below the death screen (190) so it vanishes cleanly on death.
+
+	# Motion blur — instantiated at intensity 0; ramped up during the alley walk.
+	var mb_packed := preload("res://scenes/effects/motion_blur.tscn") as PackedScene
+	if mb_packed:
+		_motion_blur = mb_packed.instantiate() as MotionBlurController
+		_motion_blur.intensity = 0.0  # stored before _ready so _ready() writes 0 to shader
+		add_child(_motion_blur)
+
+	_distress_canvas = CanvasLayer.new()
+	_distress_canvas.layer = 189
+	add_child(_distress_canvas)
+
+	# Blood-red tint — starts fully transparent, max alpha ≈ 0.07 at t=123 s.
+	_red_tint = ColorRect.new()
+	_red_tint.color = Color(0.6, 0.0, 0.0, 0.0)
+	_red_tint.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_distress_canvas.add_child(_red_tint)
+
+	# Film grain — a sparse noise overlay driven by a tiny inline shader.
+	_grain_rect = ColorRect.new()
+	_grain_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var grain_shader := Shader.new()
+	grain_shader.code = """
+shader_type canvas_item;
+uniform float strength : hint_range(0.0, 1.0) = 0.0;
+void fragment() {
+	// Step time to 24 fps so grain has a cinematic flicker rather than per-frame noise.
+	float t = floor(TIME * 24.0) / 24.0;
+	float noise = fract(sin(dot(UV + t, vec2(12.9898, 78.233))) * 43758.5453);
+	// Only the upper half of the noise range produces visible grain (sparse).
+	float g = smoothstep(0.5, 1.0, noise);
+	COLOR = vec4(1.0, 1.0, 1.0, g * strength * 0.5);
+}
+"""
+	var mat := ShaderMaterial.new()
+	mat.shader = grain_shader
+	mat.set_shader_parameter("strength", 0.0)
+	_grain_rect.material = mat
+	_distress_canvas.add_child(_grain_rect)
+
+
+func _update_distress_effects(delta: float) -> void:
+	## Called every frame while auto_walk is true.
+	## Uses quadratic ease-in so effects are imperceptible at first and
+	## only become noticeable in the final third of the walk.
+	var norm: float = clampf(_autowalk_elapsed / _DISTRESS_DURATION, 0.0, 1.0)
+	var n2: float = norm * norm  # quadratic ease-in
+
+	# Motion blur — ramps 0 → 1.0 over _DISTRESS_DURATION.
+	if is_instance_valid(_motion_blur):
+		_motion_blur.intensity = n2 * 1.0
+
+	# Red tint — max alpha ≈ 0.21.
+	if is_instance_valid(_red_tint):
+		_red_tint.color = Color(0.6, 0.0, 0.0, n2 * 0.105)
+
+	# Grain strength — max 0.27.
+	if is_instance_valid(_grain_rect) and _grain_rect.material is ShaderMaterial:
+		(_grain_rect.material as ShaderMaterial).set_shader_parameter("strength", n2 * 0.27)
+
+	# Camera fidget — yaw nudge at irregular intervals, max ≈ 4.3°.
+	_fidget_timer += delta
+	var fidget_rate: float = lerpf(0.12, 0.04, norm)
+	if _fidget_timer >= fidget_rate:
+		_fidget_timer = 0.0
+		var mag: float = n2 * 0.0375
+		_player.target_camera_yaw -= _jitter_yaw
+		_jitter_yaw = randf_range(-mag, mag)
+		_player.target_camera_yaw += _jitter_yaw
+
+	# Elise indicator — fades in from t=67 s over 10 s (final opacity at t=77); jitters at 40 Hz.
+	if is_instance_valid(_elise_indicator) and _elise_faded_in:
+		var ind_alpha: float = pow(clampf((_autowalk_elapsed - 67.0) / 10.0, 0.0, 1.0), 3.0) * 0.1
+		_elise_indicator.modulate = Color(1.0, 1.0, 1.0, ind_alpha)
+		if ind_alpha > 0.0:
+			_elise_indicator_jitter_timer += delta
+			if _elise_indicator_jitter_timer >= 0.025:  # 40 Hz
+				_elise_indicator_jitter_timer = 0.0
+				var j: float = 0.05
+				_elise_indicator.position = Vector3(
+					randf_range(-j, j),
+					1.8 + randf_range(-j * 0.4, j * 0.4),
+					randf_range(-j, j)
+				)
+
+	# Auto hard cut at t = 110 s.
+	if _autowalk_elapsed >= 110.0 and not _hard_cut_triggered:
+		_trigger_alley_hard_cut()
+
+
+# ── Alley lighting setup ──────────────────────────────────────────────────────
+
+func _setup_alley_lighting() -> void:
+	## Render-layer separation so the 100 alley spotlights (A) light the player
+	## but not the ground, while a single player-following spotlight (B) lights
+	## the ground but not the player.
+	##
+	## Render layer 1 (default): player and most meshes — lit by spotlights A.
+	## Render layer 2:            ground meshes under Grounds — lit only by spotlight B.
+
+	# Spotlights A: exclude render layer 2 (bit mask 0x2) from their cull mask.
+	var spots_node := get_node_or_null("AlleyMegaNode/SpotLights")
+	if spots_node:
+		for child in spots_node.get_children():
+			if child is SpotLight3D:
+				(child as SpotLight3D).light_cull_mask = 0xFFFFF & ~2
+
+	# Ground meshes: move to render layer 2 so spotlights A ignore them.
+	var grounds := get_node_or_null("AlleyMegaNode/GroundNode")
+	if grounds:
+		_set_render_layer_recursive(grounds, 2)
+
+
+
+func _setup_elise_companion() -> void:
+	## Instantiates the elise_walking FBX as a child of the player, offset 1.5 m in -Z.
+	## Kept invisible until the alley segment begins.
+	var packed := load("res://assets/models/characters/elise_walking.fbx") as PackedScene
+	if not packed:
+		push_warning("penulti_boot: elise_walking.fbx not found")
+		return
+	_elise_companion = packed.instantiate() as Node3D
+	if not _elise_companion:
+		push_warning("penulti_boot: elise_walking.fbx could not be instantiated as Node3D")
+		return
+	_elise_companion.position         = Vector3(0.0, 0.0, 1.0)
+	_elise_companion.rotation_degrees = Vector3(0.0, 90.0, 0.0)
+	_elise_companion.visible          = false
+	_player.add_child(_elise_companion)
+
+	var anim: AnimationPlayer = _elise_find_anim_player(_elise_companion)
+	if not anim:
+		push_warning("penulti_boot: no AnimationPlayer found in elise_walking.fbx")
+		return
+	var anim_name: String = _elise_find_anim_name(anim)
+	if anim_name.is_empty():
+		push_warning("penulti_boot: no animation found in elise_walking.fbx")
+		return
+	var anim_res: Animation = anim.get_animation(anim_name)
+	if anim_res:
+		anim_res.loop_mode = Animation.LOOP_LINEAR
+		_elise_strip_root_motion(anim_res)
+	anim.play(anim_name)
+
+	# Interactable indicator — manually controlled Sprite3D, starts invisible.
+	# Fades in from t=100 s and jitters crazily so the player notices it.
+	_elise_indicator = Sprite3D.new()
+	_elise_indicator.texture = preload("res://assets/textures/ui/interactable_indicator.png")
+	_elise_indicator.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_elise_indicator.pixel_size = 0.00035
+	_elise_indicator.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	_elise_indicator.no_depth_test = true
+	_elise_indicator.position = Vector3(0.0, 1.8, 0.0)
+	_elise_companion.add_child(_elise_indicator)
+
+
+func _elise_find_anim_player(node: Node) -> AnimationPlayer:
+	if node is AnimationPlayer:
+		return node as AnimationPlayer
+	for child: Node in node.get_children():
+		var result: AnimationPlayer = _elise_find_anim_player(child)
+		if result:
+			return result
+	return null
+
+
+func _elise_find_anim_name(anim: AnimationPlayer) -> String:
+	const SKIP: PackedStringArray = ["RESET", "Take 001"]
+	var first_real: String = ""
+	for lib_key: StringName in anim.get_animation_library_list():
+		var lib: AnimationLibrary = anim.get_animation_library(lib_key)
+		for anim_entry: StringName in lib.get_animation_list():
+			if str(anim_entry) in SKIP:
+				continue
+			var full: String = (str(lib_key) + "/" if lib_key != &"" else "") + str(anim_entry)
+			if first_real.is_empty():
+				first_real = full
+			if "walk" in str(anim_entry).to_lower():
+				return full
+	return first_real
+
+
+func _elise_strip_root_motion(anim_res: Animation) -> void:
+	## Zero out X and Z on all position tracks so the character walks in-place
+	## and stays at the offset set on _elise_companion.position.
+	for i: int in range(anim_res.get_track_count()):
+		if anim_res.track_get_type(i) != Animation.TYPE_POSITION_3D:
+			continue
+		for k: int in range(anim_res.track_get_key_count(i)):
+			var pos: Vector3 = anim_res.track_get_key_value(i, k)
+			anim_res.track_set_key_value(i, k, Vector3(0.0, pos.y, 0.0))
+
+
+func _set_render_layer_recursive(node: Node, layer_mask: int) -> void:
+	if node is GeometryInstance3D:
+		(node as GeometryInstance3D).layers = layer_mask
+	for child in node.get_children():
+		_set_render_layer_recursive(child, layer_mask)
 
 
 # ── Fog helpers ───────────────────────────────────────────────────────────────
@@ -553,3 +1040,27 @@ func _play_first_animation(character: Node3D) -> void:
 			target = anim_name
 			break
 	anim_player.play(target)
+
+
+# ── Elise fade-in ─────────────────────────────────────────────────────────────
+
+func _fade_in_elise_companion() -> void:
+	## Shows _elise_companion and tweens all its MeshInstance3D nodes from
+	## fully transparent to opaque over 5 seconds.
+	if not is_instance_valid(_elise_companion):
+		return
+	_elise_companion.visible = true
+	var meshes: Array[MeshInstance3D] = []
+	_collect_meshes_recursive(_elise_companion, meshes)
+	for mesh in meshes:
+		mesh.transparency = 1.0
+	var tween := create_tween()
+	for mesh in meshes:
+		tween.parallel().tween_property(mesh, "transparency", 0.0, 5.0)
+
+
+func _collect_meshes_recursive(node: Node, result: Array[MeshInstance3D]) -> void:
+	if node is MeshInstance3D:
+		result.append(node as MeshInstance3D)
+	for child in node.get_children():
+		_collect_meshes_recursive(child, result)

@@ -177,7 +177,7 @@ func setup_title() -> void:
 	title_settings.outline_color = Color(0, 0, 0, 0.28)
 	title_settings.outline_size = 3
 	title_label.label_settings = title_settings
-	title_label.text = "SVEN KILLER"
+	title_label.text = "SVEN KILLER DEMO"
 
 func setup_buttons() -> void:
 	# Buttons 15% bigger than before

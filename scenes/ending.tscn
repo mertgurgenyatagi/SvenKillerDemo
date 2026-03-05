@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ending_scene"]
+
+[ext_resource type="Script" path="res://scripts/scenes/ending_boot.gd" id="1_ending"]
+
+[node name="Ending" type="Node"]
+script = ExtResource("1_ending")

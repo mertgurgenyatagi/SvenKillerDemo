@@ -1,4 +1,4 @@
-{
+﻿{
     "opening_vo": [
         {"start": 2.159, "end": 5.719,  "text": "Me gusta centrarme en la sensación."},
         {"start": 7.505, "end": 12.245, "text": "Es algo tremendo, cómo puedes simplemente apagarla."},
@@ -75,21 +75,7 @@
         {"start": 53.800, "end": 54.690, "text": "O uno más grande."}
     ],
 
-    "penulti_alley": [
-        {"start": 50.0,  "end": 53.5,  "text": "Eso fue... no sé. Me lo pasé muy bien."},
-        {"start": 55.0,  "end": 57.0,  "text": "O sea, de verdad muy bien."},
-        {"start": 59.5,  "end": 62.0,  "text": "Perdón, se me da fatal esto."},
-        {"start": 64.0,  "end": 67.5,  "text": "Siempre digo algo equivocado al final de la noche."},
-        {"start": 69.5,  "end": 72.0,  "text": "Pero contigo es fácil hablar."},
-        {"start": 73.5,  "end": 74.5,  "text": "Eso ayuda."},
-        {"start": 77.0,  "end": 81.0,  "text": "No paraba de pensar, como a mitad de la película, que me alegraba de que la hubieras propuesto."},
-        {"start": 83.5,  "end": 85.5,  "text": "El cine, quiero decir."},
-        {"start": 87.0,  "end": 90.0,  "text": "En realidad estuve a punto de decir que no."},
-        {"start": 92.0,  "end": 94.5,  "text": "Estuve a punto de decir que ya tenía planes."},
-        {"start": 97.0,  "end": 100.5, "text": "Obviamente no los tenía."},
-        {"start": 103.0, "end": 106.0, "text": "Es solo que a veces me pongo nerviosa."},
-        {"start": 108.0, "end": 110.0, "text": "En fin. Gracias."}
-    ],
+    "penulti_alley": [],
 
     "ending_vo": [
         {"start": 1.190,  "end": 2.010,  "text": "Entonces eso fue..."},

@@ -67,14 +67,16 @@ var last_print_time: float = 0.0
 @export_group("")
 
 
-const ANIM_PATHS: Dictionary = {
-	"idle": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Relaxed_Idle_v2_IPC.fbx",
-	"walk": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Walk_F_Loop_IPC.fbx",
-	"turn_left": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_L_Loop_IPC.fbx",
-	"turn_right": "res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_R_Loop_IPC.fbx",
-	"sit_down": "res://assets/animations/sven/Stand To Sit.fbx",
-	"sitting_idle": "res://assets/animations/sven/Sitting Idle.fbx",
-	"sit_to_stand": "res://assets/animations/sven/Sit To Stand.fbx",
+# preload() guarantees the exporter tracks these files into the PCK.
+# A runtime load(string_var) is invisible to the export scanner.
+const ANIM_SCENES: Dictionary = {
+	"idle":       preload("res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Relaxed_Idle_v2_IPC.fbx"),
+	"walk":       preload("res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Walk_F_Loop_IPC.fbx"),
+	"turn_left":  preload("res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_L_Loop_IPC.fbx"),
+	"turn_right": preload("res://FBX_Mobility_27B_Starter/FBX_Mobility_27B_Starter/Animation/IPC/MOB1_Stand_Rlx_Turn_In_Place_R_Loop_IPC.fbx"),
+	"sit_down":   preload("res://assets/animations/sven/Stand To Sit.fbx"),
+	"sitting_idle": preload("res://assets/animations/sven/Sitting Idle.fbx"),
+	"sit_to_stand": preload("res://assets/animations/sven/Sit To Stand.fbx"),
 }
 
 func _ready() -> void:
@@ -98,8 +100,8 @@ func _ready() -> void:
 
 	# Load animations into our AnimationPlayer
 	animation_player.root_node = animation_player.get_parent().get_path()
-	for anim_name in ANIM_PATHS:
-		_load_animation(anim_name, ANIM_PATHS[anim_name])
+	for anim_name in ANIM_SCENES:
+		_load_animation(anim_name, ANIM_SCENES[anim_name])
 
 	# Set up AnimationTree with StateMachine
 	_setup_animation_tree()
@@ -215,14 +217,9 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 			return result
 	return null
 
-func _load_animation(anim_name: String, fbx_path: String) -> void:
-	if not FileAccess.file_exists(fbx_path):
-		push_error("Animation file not found: ", fbx_path)
-		return
-
-	var scene: PackedScene = load(fbx_path)
+func _load_animation(anim_name: String, scene: PackedScene) -> void:
 	if not scene:
-		push_error("Failed to load FBX: ", fbx_path)
+		push_error("Animation scene is null for: ", anim_name)
 		return
 
 	var instance: Node = scene.instantiate()
@@ -230,7 +227,7 @@ func _load_animation(anim_name: String, fbx_path: String) -> void:
 	# Find AnimationPlayer in FBX
 	var anim_player: AnimationPlayer = instance.find_child("AnimationPlayer", true, false)
 	if not anim_player:
-		push_error("No AnimationPlayer in FBX: ", fbx_path)
+		push_error("No AnimationPlayer found for animation: ", anim_name)
 		instance.queue_free()
 		return
 

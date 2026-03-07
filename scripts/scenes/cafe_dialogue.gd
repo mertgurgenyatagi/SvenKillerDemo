@@ -71,10 +71,10 @@ func _process(_delta: float) -> void:
 					_subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 					_subtitle_label.offset_top = -248
 					_subtitle_label.offset_bottom = -148
-					else:
-						_subtitle_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-						_subtitle_label.offset_top = 148
-						_subtitle_label.offset_bottom = 248
+				else:
+					_subtitle_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+					_subtitle_label.offset_top = 148
+					_subtitle_label.offset_bottom = 248
 				_subtitle_label.text = sub["text"]
 				_subtitle_label.visible = true
 				_current_subtitle_index = i

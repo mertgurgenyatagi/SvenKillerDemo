@@ -131,30 +131,13 @@ func _setup_brightness_overlay() -> void:
 # --- Load / Save / Reset ---
 
 func load_settings() -> void:
+	# No persistence — always start from defaults.
 	current_settings = DEFAULTS.duplicate(true)
-
-	var err: Error = _config.load(SETTINGS_PATH)
-	if err != OK:
-		settings_loaded.emit()
-		return
-
-	for key in DEFAULTS.keys():
-		var parts: PackedStringArray = key.split("/")
-		var section: String = parts[0]
-		var property: String = parts[1]
-		if _config.has_section_key(section, property):
-			current_settings[key] = _config.get_value(section, property)
-
 	settings_loaded.emit()
 
 
 func save_settings() -> void:
-	for key in current_settings.keys():
-		var parts: PackedStringArray = key.split("/")
-		var section: String = parts[0]
-		var property: String = parts[1]
-		_config.set_value(section, property, current_settings[key])
-	_config.save(SETTINGS_PATH)
+	pass  # No persistence — settings are intentionally not saved to disk.
 
 
 func reset_to_defaults() -> void:

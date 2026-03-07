@@ -137,7 +137,9 @@ var _elise_indicator: Sprite3D = null
 var _elise_indicator_jitter_timer: float = 0.0
 var _hard_cut_triggered: bool = false
 var _elise_faded_in: bool = false
+var _subtitle_font: Font = preload("res://assets/fonts/roboto_condensed.ttf")
 var _subtitle_label: Label = null
+var _top_label: Label = null
 var _part1_subtitle_index: int = -1
 var _alley_subtitle_index: int = -1
 
@@ -190,9 +192,10 @@ func _ready() -> void:
 	_noise.frequency = 1.5
 	_noise.seed = randi()
 
-	# Keep the indicator hidden until the worldenv transition is fully complete.
+	# Remove the bench sitting indicator entirely — not used in penulti scene.
 	if is_instance_valid(_indicator):
-		_indicator.call("fade_out")
+		_indicator.queue_free()
+		_indicator = null
 
 	_player_start_transform = _player.global_transform
 	_build_overlay_ui()
@@ -399,6 +402,12 @@ func _process(delta: float) -> void:
 			_subtitle_label.visible = false
 			_alley_subtitle_index = -1
 
+	# "Do it." top-screen prompt — shown from t=74 until the scene ends.
+	if is_instance_valid(_top_label) and _player.auto_walk \
+			and SettingsManager.get_setting("subtitles/enabled") \
+			and not _death_active:
+		_top_label.visible = _autowalk_elapsed >= 74.0
+
 	if not _game_ready or _beach_done:
 		return
 
@@ -562,6 +571,44 @@ func _build_overlay_ui() -> void:
 	_black_screen.visible = false
 	_canvas.add_child(_black_screen)
 
+	var sub_canvas := CanvasLayer.new()
+	sub_canvas.layer = 128
+	add_child(sub_canvas)
+	_subtitle_label = Label.new()
+	_subtitle_label.add_theme_font_override("font", _subtitle_font)
+	var size_index: int = SettingsManager.get_setting("subtitles/text_size")
+	var font_size: int = SettingsManager.SUBTITLE_SIZE_VALUES[
+		clampi(size_index, 0, SettingsManager.SUBTITLE_SIZE_VALUES.size() - 1)
+	]
+	_subtitle_label.add_theme_font_size_override("font_size", font_size)
+	_subtitle_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.9, 1.0))
+	_subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_subtitle_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	_subtitle_label.offset_top = -248
+	_subtitle_label.offset_bottom = -148
+	_subtitle_label.visible = false
+	sub_canvas.add_child(_subtitle_label)
+
+	# Top-screen label for the "Do it." prompt.
+	var top_canvas := CanvasLayer.new()
+	top_canvas.layer = 128
+	add_child(top_canvas)
+	_top_label = Label.new()
+	_top_label.add_theme_font_override("font", _subtitle_font)
+	_top_label.add_theme_font_size_override("font_size", font_size)
+	_top_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.9, 1.0))
+	_top_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_top_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_top_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_top_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_top_label.offset_top = 148
+	_top_label.offset_bottom = 248
+	_top_label.text = LocaleManager.g("do_it")
+	_top_label.visible = false
+	top_canvas.add_child(_top_label)
+
 
 
 func _trigger_alley_hard_cut() -> void:
@@ -612,6 +659,8 @@ func _trigger_death() -> void:
 	_alley_subtitle_index = -1
 	if is_instance_valid(_subtitle_label):
 		_subtitle_label.visible = false
+	if is_instance_valid(_top_label):
+		_top_label.visible = false
 	if is_instance_valid(_player):
 		_player.global_transform = _player_start_transform
 		_player.velocity = Vector3.ZERO

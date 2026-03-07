@@ -1,4 +1,4 @@
-{
+﻿{
     "opening_vo": [
         {"start": 2.159, "end": 5.719,  "text": "Jag gillar att fokusera på själva känslan."},
         {"start": 7.505, "end": 12.245, "text": "Det är ganska otroligt hur man bara kan släcka ut den."},
@@ -75,21 +75,7 @@
         {"start": 53.800, "end": 54.690, "text": "Eller ett större."}
     ],
 
-    "penulti_alley": [
-        {"start": 50.0,  "end": 53.5,  "text": "Det där var... jag vet inte. Jag hade verkligen jättekul."},
-        {"start": 55.0,  "end": 57.0,  "text": "Alltså, verkligen jättekul."},
-        {"start": 59.5,  "end": 62.0,  "text": "Förlåt, jag är dålig på sånt här."},
-        {"start": 64.0,  "end": 67.5,  "text": "Jag säger alltid fel saker i slutet av kvällen."},
-        {"start": 69.5,  "end": 72.0,  "text": "Fast du är lätt att prata med."},
-        {"start": 73.5,  "end": 74.5,  "text": "Det hjälper."},
-        {"start": 77.0,  "end": 81.0,  "text": "Jag tänkte hela tiden, typ halvvägs in i filmen, att jag var glad att du föreslog den."},
-        {"start": 83.5,  "end": 85.5,  "text": "Bion alltså."},
-        {"start": 87.0,  "end": 90.0,  "text": "Jag var faktiskt nära att säga nej."},
-        {"start": 92.0,  "end": 94.5,  "text": "Jag var nära att säga att jag hade planer."},
-        {"start": 97.0,  "end": 100.5, "text": "Det hade jag ju inte, uppenbarligen."},
-        {"start": 103.0, "end": 106.0, "text": "Jag blir bara nervös ibland."},
-        {"start": 108.0, "end": 110.0, "text": "Hur som helst. Tack."}
-    ],
+    "penulti_alley": [],
 
     "ending_vo": [
         {"start": 1.190,  "end": 2.010,  "text": "Så det var..."},

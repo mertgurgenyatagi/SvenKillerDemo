@@ -75,21 +75,7 @@
         {"start": 53.800, "end": 54.690, "text": "Or a bigger one."}
     ],
 
-    "penulti_alley": [
-        {"start": 50.0,  "end": 53.5,  "text": "That was\u2026 I don't know. I had a really good time."},
-        {"start": 55.0,  "end": 57.0,  "text": "Like, a really good time."},
-        {"start": 59.5,  "end": 62.0,  "text": "Sorry, I'm bad at this."},
-        {"start": 64.0,  "end": 67.5,  "text": "I always say the wrong thing at the end of the night."},
-        {"start": 69.5,  "end": 72.0,  "text": "You're easy to talk to, though."},
-        {"start": 73.5,  "end": 74.5,  "text": "That helps."},
-        {"start": 77.0,  "end": 81.0,  "text": "I kept thinking \u2014 halfway through the film \u2014\nthat I was glad you suggested it."},
-        {"start": 83.5,  "end": 85.5,  "text": "The cinema, I mean."},
-        {"start": 87.0,  "end": 90.0,  "text": "I almost said no, actually."},
-        {"start": 92.0,  "end": 94.5,  "text": "I almost said I had plans."},
-        {"start": 97.0,  "end": 100.5, "text": "I didn't, obviously."},
-        {"start": 103.0, "end": 106.0, "text": "I just get nervous sometimes."},
-        {"start": 108.0, "end": 110.0, "text": "Anyway. Thank you."}
-    ],
+    "penulti_alley": [],
 
     "ending_vo": [
         {"start": 1.190,  "end": 2.010,  "text": "So that was..."},

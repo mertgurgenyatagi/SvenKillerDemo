@@ -20,10 +20,10 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://ctru81t2dss32"
 SettingsManager="*res://scripts/autoload/settings_manager.gd"
-LocaleManager="*res://scripts/autoload/locale_manager.gd"
 AudioManager="*res://scripts/autoload/audio_manager.gd"
-CinematicOverlay="*res://scripts/autoload/cinematic_overlay.gd"
 FPSCounter="*res://scenes/ui/fps_counter.tscn"
+LocaleManager="*res://scripts/autoload/locale_manager.gd"
+CinematicOverlay="*res://scripts/autoload/cinematic_overlay.gd"
 
 [display]
 
@@ -107,6 +107,7 @@ look_down={
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 textures/default_filters/anisotropic_filtering_level=4
 anti_aliasing/quality/msaa_3d=2
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

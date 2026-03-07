@@ -1,4 +1,4 @@
-{
+﻿{
     "opening_vo": [
         {"start": 2.159, "end": 5.719,  "text": "J'aime bien me concentrer sur la sensation."},
         {"start": 7.505, "end": 12.245, "text": "C'est assez dingue, la façon dont on peut simplement l'éteindre."},
@@ -75,21 +75,7 @@
         {"start": 53.800, "end": 54.690, "text": "Ou un plus grand."}
     ],
 
-    "penulti_alley": [
-        {"start": 50.0,  "end": 53.5,  "text": "C'était... je ne sais pas. J'ai vraiment passé un très bon moment."},
-        {"start": 55.0,  "end": 57.0,  "text": "Enfin, vraiment très bon."},
-        {"start": 59.5,  "end": 62.0,  "text": "Pardon, je suis nulle pour ce genre de choses."},
-        {"start": 64.0,  "end": 67.5,  "text": "Je dis toujours ce qu'il ne faut pas à la fin de la soirée."},
-        {"start": 69.5,  "end": 72.0,  "text": "Mais toi, c'est facile de te parler."},
-        {"start": 73.5,  "end": 74.5,  "text": "Ça aide."},
-        {"start": 77.0,  "end": 81.0,  "text": "Je n'arrêtais pas de penser, vers le milieu du film, que j'étais contente que tu l'aies proposé."},
-        {"start": 83.5,  "end": 85.5,  "text": "Le cinéma, je veux dire."},
-        {"start": 87.0,  "end": 90.0,  "text": "En fait j'ai presque dit non."},
-        {"start": 92.0,  "end": 94.5,  "text": "J'ai failli dire que j'avais déjà quelque chose de prévu."},
-        {"start": 97.0,  "end": 100.5, "text": "Évidemment, ce n'était pas le cas."},
-        {"start": 103.0, "end": 106.0, "text": "C'est juste que parfois je deviens nerveuse."},
-        {"start": 108.0, "end": 110.0, "text": "Enfin bref. Merci."}
-    ],
+    "penulti_alley": [],
 
     "ending_vo": [
         {"start": 1.190,  "end": 2.010,  "text": "Donc c'était..."},

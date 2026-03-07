@@ -44,7 +44,9 @@ enum AudioID {
 	LIGHTSWITCH,
 }
 
-# Configuration (loaded in _ready() to avoid parse errors if file doesn't exist yet)
+# Preloaded const forces audio_config.tres + its scripts into the export PCK.
+# load(variable) is invisible to the export scanner; preload(literal) is not.
+const _AUDIO_CONFIG_PRELOADED: AudioConfig = preload("res://resources/audio_config.tres")
 var config: AudioConfig = null
 
 # Audio library (preloaded/cached streams)
@@ -57,11 +59,28 @@ const POOL_SIZE: int = 8  # Max concurrent sounds per type
 
 
 func _ready() -> void:
+	print("[AudioManager] _ready() start")
 	_load_config()
 	_load_audio_library()
 	_create_player_pools()
+	_setup_standard_buses()
 	_setup_noe_prompt_bus()
 	_setup_house_exterior_bus()
+	print("[AudioManager] _ready() done — library size: %d, bus count: %d" % [_audio_library.size(), AudioServer.bus_count])
+	for i in AudioServer.bus_count:
+		print("  bus[%d] = '%s'" % [i, AudioServer.get_bus_name(i)])
+
+
+func _setup_standard_buses() -> void:
+	## Create SFX / Music / Voice / Ambient buses if they don't exist.
+	## In exported builds there is no default_bus_layout file, so only Master exists.
+	var needed: PackedStringArray = ["SFX", "Music", "Voice", "Ambient"]
+	for bus_name in needed:
+		if AudioServer.get_bus_index(bus_name) == -1:
+			AudioServer.add_bus()
+			var idx: int = AudioServer.get_bus_count() - 1
+			AudioServer.set_bus_name(idx, bus_name)
+			AudioServer.set_bus_send(idx, "Master")
 
 
 func _setup_house_exterior_bus() -> void:
@@ -100,25 +119,46 @@ func _setup_noe_prompt_bus() -> void:
 
 
 func _load_config() -> void:
-	var config_path: String = "res://resources/audio_config.tres"
-	if FileAccess.file_exists(config_path):
-		config = load(config_path)
+	config = _AUDIO_CONFIG_PRELOADED
+	if config:
+		print("[AudioManager] config loaded OK — %d entries" % config.entries.size())
 	else:
-		push_warning("AudioManager: audio_config.tres not found, using empty config")
+		push_error("[AudioManager] audio_config.tres preload returned null — all volume/bus settings will use fallbacks")
 		config = AudioConfig.new()
 
 
 func _load_audio_library() -> void:
-	if not config:
-		return
-
-	# Preload audio marked for startup
-	for audio_id in config.entries.keys():
-		var entry: AudioEntry = config.entries[audio_id]
-		if entry.preload_on_startup and FileAccess.file_exists(entry.path):
-			var stream: AudioStream = load(entry.path)
-			if stream:
-				_audio_library[audio_id] = stream
+	# Pre-populate library with every stream via preload() literals.
+	# This is the ONLY way the Godot export scanner detects .ogg files:
+	# load(variable) is invisible; only literal preload() / load("string") are scanned.
+	var _preloads: Dictionary = {
+		AudioID.MENU_HOVER:         preload("res://assets/audio/sfx/interactions/menu_hover.ogg"),
+		AudioID.MENU_CLICK:         preload("res://assets/audio/sfx/interactions/menu_click.ogg"),
+		AudioID.AMBIENT_MAIN_MENU:  preload("res://assets/audio/sfx/ambient/ambient_main_menu.ogg"),
+		AudioID.MUSIC_MAIN:         preload("res://assets/audio/music/sven_killer.ogg"),
+		AudioID.NOE_PROMPT:         preload("res://assets/audio/sfx/interactions/noe_prompt_sfx.ogg"),
+		AudioID.HOUSE_HUM:          preload("res://assets/audio/sfx/ambient/house_hum.ogg"),
+		AudioID.AMB_RAIN:           preload("res://assets/audio/sfx/ambient/amb_rain.ogg"),
+		AudioID.FOOTSTEP_WOOD_1:    preload("res://assets/audio/sfx/footsteps/wood_footstep_1.ogg"),
+		AudioID.FOOTSTEP_WOOD_2:    preload("res://assets/audio/sfx/footsteps/wood_footstep_2.ogg"),
+		AudioID.FOOTSTEP_WOOD_3:    preload("res://assets/audio/sfx/footsteps/wood_footstep_3.ogg"),
+		AudioID.FOOTSTEP_WOOD_4:    preload("res://assets/audio/sfx/footsteps/wood_footstep_4.ogg"),
+		AudioID.FOOTSTEP_WOOD_5:    preload("res://assets/audio/sfx/footsteps/wood_footstep_5.ogg"),
+		AudioID.FOOTSTEP_WOOD_6:    preload("res://assets/audio/sfx/footsteps/wood_footstep_6.ogg"),
+		AudioID.FOOTSTEP_WOOD_7:    preload("res://assets/audio/sfx/footsteps/wood_footstep_7.ogg"),
+		AudioID.FOOTSTEP_SAND_1:    preload("res://assets/audio/sfx/footsteps/sand_footstep_1.ogg"),
+		AudioID.FOOTSTEP_SAND_2:    preload("res://assets/audio/sfx/footsteps/sand_footstep_2.ogg"),
+		AudioID.FOOTSTEP_SAND_3:    preload("res://assets/audio/sfx/footsteps/sand_footstep_3.ogg"),
+		AudioID.FOOTSTEP_SAND_4:    preload("res://assets/audio/sfx/footsteps/sand_footstep_4.ogg"),
+		AudioID.FOOTSTEP_SAND_5:    preload("res://assets/audio/sfx/footsteps/sand_footstep_5.ogg"),
+		AudioID.FOOTSTEP_SAND_6:    preload("res://assets/audio/sfx/footsteps/sand_footstep_6.ogg"),
+		AudioID.FOOTSTEP_SAND_7:    preload("res://assets/audio/sfx/footsteps/sand_footstep_7.ogg"),
+		AudioID.PHONE_BUTTON_PRESS: preload("res://assets/audio/sfx/interactions/phone_button_press_sfx.ogg"),
+		AudioID.VOICEMAIL:          preload("res://assets/audio/voiceover/voicemail.ogg"),
+		AudioID.LIGHTSWITCH:        preload("res://assets/audio/sfx/interactions/lightswitch_sfx.ogg"),
+	}
+	for id in _preloads:
+		_audio_library[id] = _preloads[id]
 
 
 func _create_player_pools() -> void:
@@ -208,11 +248,28 @@ func get_audio_stream(audio_id: AudioID) -> AudioStream:
 
 
 ## Get entry config for an audio ID.
+## Returns a fallback entry if config is missing so audio still plays.
 func _get_entry(audio_id: AudioID) -> AudioEntry:
-	if not config or not config.entries.has(audio_id):
-		push_error("AudioManager: Unknown audio ID: %d" % audio_id)
-		return null
-	return config.entries[audio_id]
+	if config and config.entries.has(audio_id):
+		return config.entries[audio_id]
+	# Config missing or ID not found — build a minimal fallback entry so the
+	# preloaded stream can still play.  Spatial IDs get a 3D fallback.
+	var spatial_ids: Array = [
+		AudioID.FOOTSTEP_WOOD_1, AudioID.FOOTSTEP_WOOD_2, AudioID.FOOTSTEP_WOOD_3,
+		AudioID.FOOTSTEP_WOOD_4, AudioID.FOOTSTEP_WOOD_5, AudioID.FOOTSTEP_WOOD_6,
+		AudioID.FOOTSTEP_WOOD_7, AudioID.FOOTSTEP_SAND_1, AudioID.FOOTSTEP_SAND_2,
+		AudioID.FOOTSTEP_SAND_3, AudioID.FOOTSTEP_SAND_4, AudioID.FOOTSTEP_SAND_5,
+		AudioID.FOOTSTEP_SAND_6, AudioID.FOOTSTEP_SAND_7,
+		AudioID.PHONE_BUTTON_PRESS, AudioID.VOICEMAIL, AudioID.LIGHTSWITCH,
+	]
+	var fallback := AudioEntry.new()
+	fallback.volume_db = 0.0
+	fallback.pitch_scale = 1.0
+	fallback.max_distance = 20.0
+	fallback.spatial = audio_id in spatial_ids
+	fallback.bus = "SFX"
+	push_warning("[AudioManager] No config entry for AudioID %d — using fallback (0 dB, SFX bus)" % audio_id)
+	return fallback
 
 
 ## Get audio stream from library or load on-demand.

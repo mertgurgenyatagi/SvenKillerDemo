@@ -1,4 +1,4 @@
-{
+﻿{
     "opening_vo": [
         {"start": 2.159, "end": 5.719,  "text": "Ich mag es, mich auf das Gefühl zu konzentrieren."},
         {"start": 7.505, "end": 12.245, "text": "Es ist schon krass, wie man es einfach auslöschen kann."},
@@ -75,21 +75,7 @@
         {"start": 53.800, "end": 54.690, "text": "Oder ein größerer."}
     ],
 
-    "penulti_alley": [
-        {"start": 50.0,  "end": 53.5,  "text": "Das war... ich weiß nicht. Ich hatte wirklich eine schöne Zeit."},
-        {"start": 55.0,  "end": 57.0,  "text": "Also, wirklich eine sehr schöne Zeit."},
-        {"start": 59.5,  "end": 62.0,  "text": "Sorry, ich bin schlecht in so was."},
-        {"start": 64.0,  "end": 67.5,  "text": "Am Ende des Abends sage ich immer das Falsche."},
-        {"start": 69.5,  "end": 72.0,  "text": "Aber mit dir kann man gut reden."},
-        {"start": 73.5,  "end": 74.5,  "text": "Das hilft."},
-        {"start": 77.0,  "end": 81.0,  "text": "Ich habe die ganze Zeit gedacht, so ungefähr mitten im Film, dass ich froh bin, dass du ihn vorgeschlagen hast."},
-        {"start": 83.5,  "end": 85.5,  "text": "Das Kino meine ich."},
-        {"start": 87.0,  "end": 90.0,  "text": "Ich war eigentlich kurz davor, nein zu sagen."},
-        {"start": 92.0,  "end": 94.5,  "text": "Ich war kurz davor zu sagen, dass ich schon etwas vorhabe."},
-        {"start": 97.0,  "end": 100.5, "text": "Hatte ich natürlich nicht."},
-        {"start": 103.0, "end": 106.0, "text": "Ich werde nur manchmal nervös."},
-        {"start": 108.0, "end": 110.0, "text": "Wie auch immer. Danke."}
-    ],
+    "penulti_alley": [],
 
     "ending_vo": [
         {"start": 1.190,  "end": 2.010,  "text": "Also das war..."},
